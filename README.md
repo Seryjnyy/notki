@@ -8,8 +8,8 @@
 
   <p align="center">
     A better way to view a bunch of txt files.
-    <!-- </br> -->
-    <!-- <a href="#"><strong>Visit the site</strong></a> -->
+    </br>
+    <a href="https://txt-viewer.netlify.app/"><strong>Visit the site</strong></a>
     <br />
     <br />
     <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
