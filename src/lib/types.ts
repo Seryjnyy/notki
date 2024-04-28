@@ -1,4 +1,4 @@
-type Note = {
+export type Note = {
   fileName: string;
   content: string;
   size: number;

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { Note } from "./types";
 
 interface NotesState {
   notes: Note[];
@@ -8,7 +9,7 @@ interface NotesState {
 
 const useNoteStore = create<NotesState>()((set) => ({
   notes: [],
-  setNotes: (newNotes) => set((_) => ({ notes: newNotes })),
+  setNotes: (newNotes) => set(() => ({ notes: newNotes })),
   addNote: (newNote) => set((state) => ({ notes: [...state.notes, newNote] })),
 }));
 

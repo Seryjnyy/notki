@@ -1,30 +1,94 @@
-# React + TypeScript + Vite
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Logo](./Images/logo.png)
 
-Currently, two official plugins are available:
+  <h1>txt-viewer</h1>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  <p align="center">
+    A better way to view a bunch of txt files.
+    <!-- </br> -->
+    <!-- <a href="#"><strong>Visit the site</strong></a> -->
+    <br />
+    <br />
+    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    ·
+    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+  </p>
+</div>
 
-## Expanding the ESLint configuration
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about">About</a>
+      <ul>
+        <li ><a href="#why">Why</a></li>
+      </ul>
+    </li>
+    <li><a href="#built-with">Built with</a></li>
+    <!-- <li><a href="#usage">Usage</a></li> -->
+    <li><a href="#status">Status</a></li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#locally">Locally</a>
+          <ul>
+            <li><a href="#for-development">For development</a></li>
+            <li><a href="#build-and-deploy">Build and deploy</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ol>
+</details>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## About
 
-- Configure the top-level `parserOptions` property like this:
+A better way to deal with text files.
+Simply select or drag in your text files to view them.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+The site runs locally, so all your files stay with you.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Why?
+
+I often use Windows Notepad for quick note-taking, resulting in numerous text files. Managing them in the standard way can get annoying. Windows 10 Notepad's interface is dated with no dark mode, and handling multiple open windows isn't ideal. To address this, I created this minimalistic UI for viewing my notes.
+
+## Built with
+
+- React
+- Vite
+- shadcn/ui
+- Zustand
+
+## Status
+
+The project is still in development.
+
+## Getting started
+
+### Locally
+
+- You will need Node installed.
+
+#### For development
+
+- Run it locally.
+  ```
+  npm run dev
+  ```
+- Then visit [localhost:5173](localhost:5173) to see the site.
+  - Note: Check the console to get the link, as it might use another port.
+
+#### Build and deploy
+
+- Build the site.
+  ```
+  npm run build
+  ```
+  - You should lint before building.
+    ```
+    npm run lint
+    ```

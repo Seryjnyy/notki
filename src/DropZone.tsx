@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { useNoteStore } from "./lib/note-store";
 import { toast } from "./components/ui/use-toast";
+import { useNoteStore } from "./lib/note-store";
+import { Note } from "./lib/types";
 
 export default function DropZone() {
   const setNotes = useNoteStore((state) => state.setNotes);
