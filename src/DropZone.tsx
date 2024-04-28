@@ -1,18 +1,33 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNoteStore } from "./lib/note-store";
+import { toast } from "./components/ui/use-toast";
 
 export default function DropZone() {
   const setNotes = useNoteStore((state) => state.setNotes);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    // console.log(acceptedFiles);
-
     const readInNotes: Note[] = [];
 
     for (const file of acceptedFiles) {
+      console.log(file.type);
+      if (file.type != "text/plain") {
+        console.log("wrong type");
+        toast({
+          variant: "destructive",
+          title: "Wrong type of file provided",
+          description: `Only text/plain files allowed, you added a ${file.type}.`,
+        });
+        continue;
+      }
+
       const txt = await file.text();
-      readInNotes.push({ fileName: file.name, content: txt });
+      readInNotes.push({
+        fileName: file.name,
+        content: txt,
+        size: file.size,
+        lastModified: file.lastModified,
+      });
     }
 
     setNotes(readInNotes.slice());
@@ -22,7 +37,10 @@ export default function DropZone() {
 
   return (
     <>
-      <div {...getRootProps()} className="border">
+      <div
+        {...getRootProps()}
+        className="border p-8 flex justify-center items-center w-full hover:ring ring-primary cursor-pointer rounded-lg"
+      >
         <input {...getInputProps()} className="border" />
         {isDragActive ? (
           <p>Drop the files here ...</p>
