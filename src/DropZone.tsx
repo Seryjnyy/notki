@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "./components/ui/use-toast";
 import { useNoteStore } from "./lib/note-store";
 import { Note } from "./lib/types";
+import { guidGenerator } from "./lib/utils";
 
 export default function DropZone() {
   const setNotes = useNoteStore((state) => state.setNotes);
@@ -24,10 +25,12 @@ export default function DropZone() {
 
       const txt = await file.text();
       readInNotes.push({
+        id: guidGenerator(),
         fileName: file.name,
         content: txt,
         size: file.size,
         lastModified: file.lastModified,
+        characterCount: txt.length,
       });
     }
 
