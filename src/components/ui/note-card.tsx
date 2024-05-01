@@ -42,7 +42,10 @@ export default function NoteCard({
 
   // basis-full, 1/4
   return (
-    <Card className="basis-full">
+    <Card
+      // className="basis-full"
+      className="w-full"
+    >
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle
           className={cn("text-muted-foreground select-none", {
@@ -89,9 +92,15 @@ export default function NoteCard({
           </div>
         )}
       </CardHeader>
-      <CardContent className={`leading-${settings.lineHeight}`}>
+      <CardContent
+        className={`leading-${settings.content.lineHeight} leading-tight  tracking-${settings.content.letterSpacing}`}
+      >
         <ScrollArea>
-          <pre className="pb-6">{note.content}</pre>
+          <pre
+            className={`pb-6 leading-${settings.content.lineHeight} tracking-${settings.content.letterSpacing}`}
+          >
+            {note.content}
+          </pre>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </CardContent>
