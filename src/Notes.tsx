@@ -4,35 +4,46 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Label } from "./components/ui/label";
-import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+import { produce } from "immer";
 
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { GearIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { GearIcon, ReloadIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { ReactNode } from "react";
 import FilterAndSort from "./FilterAndSort";
+import Search from "./Search";
 import { Button, buttonVariants } from "./components/ui/button";
 import { Checkbox } from "./components/ui/checkbox";
+import { Input } from "./components/ui/input";
 import NoteCard from "./components/ui/note-card";
+import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 import { useNoteStore } from "./lib/note-store";
 import { usePreferenceStore } from "./lib/preference-store";
-import { getDefaultPreferences } from "./services/preferences";
-import { LetterSpacing, LineHeight } from "./lib/types";
-import Search from "./Search";
 import { useSearch } from "./lib/search-store";
+import { Note } from "./lib/types";
+import {
+  getDefaultColumns,
+  getDefaultFontSize,
+  getDefaultLetterSpacing,
+  getDefaultLineHeight,
+  getDefaultPaddingBottom,
+  getDefaultPaddingTop,
+  getDefaultPaddingX,
+  getDefaultPreferences,
+} from "./services/preferences";
 
 export default function Notes() {
   const notes = useNoteStore((state) => state.notes);
   const setNotes = useNoteStore((state) => state.setNotes);
   const searchTerm = useSearch((state) => state.searchTerm);
   const setSearchResultCount = useSearch((state) => state.setResultCount);
+  const searchTarget = useSearch((state) => state.searchTarget);
 
   const settings = usePreferenceStore((state) => state.settings);
   const setSettings = usePreferenceStore((state) => state.setSettings);
@@ -46,11 +57,35 @@ export default function Notes() {
   };
 
   const filterSearch = () => {
-    const filtered = notes.filter((note) => note.content.includes(searchTerm));
+    let filtered: Note[] = [];
+
+    switch (searchTarget) {
+      case "content":
+        filtered = notes.filter((note) => note.content.includes(searchTerm));
+        break;
+      case "title":
+        filtered = notes.filter((note) => note.fileName.includes(searchTerm));
+        break;
+      case "all":
+        {
+          const filterSet = new Set<Note>();
+          const combined = [
+            ...notes.filter((note) => note.content.includes(searchTerm)),
+            ...notes.filter((note) => note.fileName.includes(searchTerm)),
+          ];
+          for (const note of combined) {
+            filterSet.add(note);
+          }
+          filtered = Array.from(filterSet);
+        }
+        break;
+    }
 
     setSearchResultCount(filtered.length);
     return filtered;
   };
+
+  const listColumns = `md:grid-cols-${settings.styling.list.columns}`;
 
   return (
     <div className="flex gap-4 flex-col">
@@ -86,20 +121,94 @@ export default function Notes() {
             <SheetHeader>
               <SheetTitle>Settings</SheetTitle>
             </SheetHeader>
-            <div className="pt-12">
+
+            <ScrollArea className="pt-12 h-screen pb-12">
+              <ScrollBar />
               <div className="border p-2">
                 <div className="flex items-center gap-2">
-                  See titles
+                  See header
                   <Checkbox
-                    checked={settings.titles}
+                    checked={settings.header.visible}
                     onCheckedChange={(checked) => {
                       if (checked == "indeterminate") return;
 
-                      setSettings({ ...settings, titles: checked });
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.header.visible = checked;
+                        })
+                      );
                     }}
                   />
                 </div>
+                <div className="pl-4">
+                  <div className="flex items-center gap-2">
+                    See titles
+                    <Checkbox
+                      checked={settings.header.options.title}
+                      onCheckedChange={(checked) => {
+                        if (checked == "indeterminate") return;
+
+                        setSettings(
+                          produce(settings, (draft) => {
+                            draft.header.options.title = checked;
+                          })
+                        );
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    See actions
+                    <Checkbox
+                      checked={settings.header.options.actions.visible}
+                      onCheckedChange={(checked) => {
+                        if (checked == "indeterminate") return;
+
+                        setSettings(
+                          produce(settings, (draft) => {
+                            draft.header.options.actions.visible = checked;
+                          })
+                        );
+                      }}
+                    />
+                  </div>
+                  <div className="pl-4">
+                    <div className="flex items-center gap-2">
+                      See remove action
+                      <Checkbox
+                        checked={settings.header.options.actions.options.remove}
+                        onCheckedChange={(checked) => {
+                          if (checked == "indeterminate") return;
+                          setSettings(
+                            produce(settings, (draft) => {
+                              draft.header.options.actions.options.remove =
+                                checked;
+                            })
+                          );
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      See copy action
+                      <Checkbox
+                        checked={settings.header.options.actions.options.copy}
+                        onCheckedChange={(checked) => {
+                          if (checked == "indeterminate") return;
+
+                          setSettings(
+                            produce(settings, (draft) => {
+                              draft.header.options.actions.options.copy =
+                                checked;
+                            })
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
+
               <div className="border p-2">
                 <div className="flex items-center gap-2">
                   See metadata
@@ -108,15 +217,11 @@ export default function Notes() {
                     onCheckedChange={(checked) => {
                       if (checked == "indeterminate") return;
 
-                      setSettings({
-                        ...settings,
-                        metadata: {
-                          visible: checked,
-                          options: {
-                            ...settings.metadata.options,
-                          },
-                        },
-                      });
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.metadata.visible = checked;
+                        })
+                      );
                     }}
                   />
                 </div>
@@ -129,16 +234,11 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings({
-                          ...settings,
-                          metadata: {
-                            visible: settings.metadata.visible,
-                            options: {
-                              ...settings.metadata.options,
-                              size: checked,
-                            },
-                          },
-                        });
+                        setSettings(
+                          produce(settings, (draft) => {
+                            draft.metadata.options.size = checked;
+                          })
+                        );
                       }}
                     />
                   </div>
@@ -150,16 +250,11 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings({
-                          ...settings,
-                          metadata: {
-                            visible: settings.metadata.visible,
-                            options: {
-                              ...settings.metadata.options,
-                              lastModified: checked,
-                            },
-                          },
-                        });
+                        setSettings(
+                          produce(settings, (draft) => {
+                            draft.metadata.options.lastModified = checked;
+                          })
+                        );
                       }}
                     />
                   </div>
@@ -171,16 +266,11 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings({
-                          ...settings,
-                          metadata: {
-                            visible: settings.metadata.visible,
-                            options: {
-                              ...settings.metadata.options,
-                              characterCount: checked,
-                            },
-                          },
-                        });
+                        setSettings(
+                          produce(settings, (draft) => {
+                            draft.metadata.options.characterCount = checked;
+                          })
+                        );
                       }}
                     />
                   </div>
@@ -188,134 +278,188 @@ export default function Notes() {
               </div>
 
               <div className="border p-2">
-                <div>Line height</div>
-                <RadioGroup
-                  value={settings.content.lineHeight}
-                  onValueChange={(val: LineHeight) =>
-                    setSettings({
-                      ...settings,
-                      content: { ...settings.content, lineHeight: val },
-                    })
-                  }
+                <NumericalSetting
+                  title="Line height"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.content.lineHeight = getDefaultLineHeight();
+                      })
+                    );
+                  }}
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="tight" id="option-tight" />
-                    <Label htmlFor="option-tight">Tight</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="snug" id="option-snug" />
-                    <Label htmlFor="option-snug">Snug</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="normal" id="option-normal" />
-                    <Label htmlFor="option-normal">Normal</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="relaxed" id="option-relaxed" />
-                    <Label htmlFor="option-relaxed">Relaxed</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="loose" id="option-loose" />
-                    <Label htmlFor="option-loose">Loose</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="border p-2">
-                <div>Letter spacing</div>
-                <RadioGroup
-                  value={settings.content.letterSpacing}
-                  onValueChange={(val: LetterSpacing) =>
-                    setSettings({
-                      ...settings,
-                      content: { ...settings.content, letterSpacing: val },
-                    })
-                  }
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="tighter" id="option-tighter" />
-                    <Label htmlFor="option-tighter">Tighter</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="tight" id="option-tight" />
-                    <Label htmlFor="option-tight">Tight</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="normal" id="option-normal" />
-                    <Label htmlFor="option-normal">Normal</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="wide" id="option-wide" />
-                    <Label htmlFor="option-wide">Wide</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="widest" id="option-widest" />
-                    <Label htmlFor="option-widest">Widest</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="border p-2">
-                <div className="flex items-center gap-2">
-                  See actions
-                  <Checkbox
-                    checked={settings.actions.visible}
-                    onCheckedChange={(checked) => {
-                      if (checked == "indeterminate") return;
-
-                      setSettings({
-                        ...settings,
-                        actions: {
-                          visible: checked,
-                          options: { ...settings.actions.options },
-                        },
-                      });
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={settings.content.lineHeight}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.content.lineHeight = Number(e.target.value);
+                        })
+                      );
                     }}
                   />
-                </div>
-                <div className="pl-4">
-                  <div className="flex items-center gap-2">
-                    See remove action
-                    <Checkbox
-                      checked={settings.actions.options.remove}
-                      onCheckedChange={(checked) => {
-                        if (checked == "indeterminate") return;
+                </NumericalSetting>
+              </div>
 
-                        setSettings({
-                          ...settings,
-                          actions: {
-                            visible: settings.actions.visible,
-                            options: {
-                              remove: checked,
-                              copy: settings.actions.options.copy,
-                            },
-                          },
-                        });
-                      }}
-                    />
-                  </div>
+              <div className="border p-2">
+                <NumericalSetting
+                  title="Letter spacing"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.content.letterSpacing = getDefaultLetterSpacing();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={settings.content.letterSpacing}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.content.letterSpacing = Number(e.target.value);
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
+              </div>
 
-                  <div className="flex items-center gap-2">
-                    See copy action
-                    <Checkbox
-                      checked={settings.actions.options.copy}
-                      onCheckedChange={(checked) => {
-                        if (checked == "indeterminate") return;
+              <div className="border p-2">
+                <NumericalSetting
+                  title="Padding x"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.styling.note.paddingX = getDefaultPaddingX();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={settings.styling.note.paddingX}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.styling.note.paddingX = Number(e.target.value);
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
 
-                        setSettings({
-                          ...settings,
-                          actions: {
-                            visible: settings.actions.visible,
-                            options: {
-                              remove: settings.actions.options.remove,
-                              copy: checked,
-                            },
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
+                <NumericalSetting
+                  title="Padding top"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.styling.note.paddingTop = getDefaultPaddingTop();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={settings.styling.note.paddingTop}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.styling.note.paddingTop = Number(
+                            e.target.value
+                          );
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
+
+                <NumericalSetting
+                  title="Padding bottom"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.styling.note.paddingBottom =
+                          getDefaultPaddingBottom();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={settings.styling.note.paddingBottom}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.styling.note.paddingBottom = Number(
+                            e.target.value
+                          );
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
+              </div>
+
+              <div className="border p-2">
+                <NumericalSetting
+                  title="Columns"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.styling.list.columns = getDefaultColumns();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="1"
+                    value={settings.styling.list.columns}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.styling.list.columns = Number(e.target.value);
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
+              </div>
+
+              <div className="border p-2">
+                <NumericalSetting
+                  title="Font size"
+                  reloadAction={() => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.styling.content.fontSize = getDefaultFontSize();
+                      })
+                    );
+                  }}
+                >
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={settings.styling.content.fontSize}
+                    onChange={(e) => {
+                      setSettings(
+                        produce(settings, (draft) => {
+                          draft.styling.content.fontSize = Number(
+                            e.target.value
+                          );
+                        })
+                      );
+                    }}
+                  />
+                </NumericalSetting>
               </div>
 
               <div className="border p-2">
@@ -323,7 +467,7 @@ export default function Notes() {
                   <span>Reset preferences</span> <UpdateIcon />
                 </Button>
               </div>
-            </div>
+            </ScrollArea>
           </SheetContent>
         </Sheet>
 
@@ -331,13 +475,12 @@ export default function Notes() {
         <Search />
       </div>
 
-      <div className="flex gap-4 flex-wrap">
+      <div className={"grid grid-cols-1 gap-4 " + listColumns}>
         {searchTerm != "" &&
           filterSearch().map((note) => (
             <NoteCard
               note={note}
               key={note.id}
-              seeTitles={settings.titles}
               settings={settings}
               handleDelete={handleDelete}
             />
@@ -347,7 +490,6 @@ export default function Notes() {
             <NoteCard
               note={note}
               key={note.id}
-              seeTitles={settings.titles}
               settings={settings}
               handleDelete={handleDelete}
             />
@@ -356,3 +498,25 @@ export default function Notes() {
     </div>
   );
 }
+
+const NumericalSetting = ({
+  title,
+  reloadAction,
+  children,
+}: {
+  title: string;
+  reloadAction: () => void;
+  children: ReactNode;
+}) => {
+  return (
+    <div>
+      <div className="flex items-center gap-2 pb-4">
+        <h4>{title}</h4>
+        <Button className=" px-1" variant={"ghost"} onClick={reloadAction}>
+          <ReloadIcon className="w-3 h-3" />
+        </Button>
+      </div>
+      {children}
+    </div>
+  );
+};

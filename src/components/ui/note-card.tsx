@@ -20,12 +20,10 @@ import { useMemo } from "react";
 import { Button } from "./button";
 
 export default function NoteCard({
-  seeTitles,
   note,
   settings,
   handleDelete,
 }: {
-  seeTitles: boolean;
   note: Note;
   settings: NoteSettings;
   handleDelete: (id: string) => void;
@@ -41,63 +39,75 @@ export default function NoteCard({
   };
 
   // basis-full, 1/4
+
   return (
     <Card
       // className="basis-full"
       className="w-full"
     >
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle
-          className={cn("text-muted-foreground select-none", {
-            "sr-only": !seeTitles,
-          })}
-        >
-          <div className="w-[16rem] overflow-x-clip">{note.fileName}</div>
-        </CardTitle>
-        {settings.actions.visible && (
-          <div className="w-fit ml-auto space-x-8">
-            {settings.actions.options.copy && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button className="px-2 py-0" variant={"ghost"}>
-                      <CopyIcon />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Copy contents</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+      {settings.header.visible && (
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle
+            className={cn("text-muted-foreground select-none", {
+              "sr-only": !settings.header.options.title,
+            })}
+          >
+            <div className="w-[16rem] overflow-x-clip">{note.fileName}</div>
+          </CardTitle>
+          {settings.header.options.actions.visible && (
+            <div className="w-fit ml-auto space-x-8">
+              {settings.header.options.actions.options.copy && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button className="px-2 py-0" variant={"ghost"}>
+                        <CopyIcon />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Copy contents</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
 
-            {settings.actions.options.remove && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      className="px-2 py-0"
-                      variant={"ghost"}
-                      onClick={onDelete}
-                    >
-                      <Cross1Icon />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Remove note</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-        )}
-      </CardHeader>
+              {settings.header.options.actions.options.remove && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="px-2 py-0"
+                        variant={"ghost"}
+                        onClick={onDelete}
+                      >
+                        <Cross1Icon />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Remove note</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+          )}
+        </CardHeader>
+      )}
       <CardContent
-        className={`leading-${settings.content.lineHeight} leading-tight  tracking-${settings.content.letterSpacing}`}
+        style={{
+          paddingLeft: `${settings.styling.note.paddingX}rem`,
+          paddingRight: `${settings.styling.note.paddingX}rem`,
+        }}
       >
         <ScrollArea>
           <pre
-            className={`pb-6 leading-${settings.content.lineHeight} tracking-${settings.content.letterSpacing}`}
+            style={{
+              letterSpacing: `${settings.content.letterSpacing}rem`,
+              lineHeight: `${settings.content.lineHeight}rem`,
+              paddingBottom: `${settings.styling.note.paddingBottom}rem`,
+              paddingTop: `${settings.styling.note.paddingTop}rem`,
+              fontSize: `${settings.styling.content.fontSize}rem`,
+            }}
           >
             {note.content}
           </pre>
