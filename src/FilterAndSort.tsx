@@ -12,23 +12,31 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useNoteStore } from "./lib/note-store";
-import { Button, buttonVariants } from "./components/ui/button";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
+import { buttonVariants } from "./components/ui/button";
+import { Label } from "./components/ui/label";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+import { sortNotes } from "./lib/note-sorting";
+import { useNoteStore } from "./lib/note-store";
+import { usePreferenceStore } from "./lib/preference-store";
+import { Order, SortBy } from "./lib/types";
+import { cn } from "./lib/utils";
 
 export default function FilterAndSort() {
+  const settings = usePreferenceStore((state) => state.settings);
+  const setSettings = usePreferenceStore((state) => state.setSettings);
+
   const notes = useNoteStore((state) => state.notes);
   const setNotes = useNoteStore((state) => state.setNotes);
 
-  const onSortAscending = () => {
-    // setNotes(notes.sort((a, b) => a.lastModified - b.lastModified));
-    setNotes([...notes].sort((a, b) => b.lastModified - a.lastModified));
+  const onOrderChange = (newOrder: Order) => {
+    setSettings({ ...settings, sort: { ...settings.sort, order: newOrder } });
+    setNotes(sortNotes(notes, settings));
   };
 
-  const onSortDescending = () => {
-    setNotes([...notes].sort((a, b) => a.lastModified - b.lastModified));
-    // setNotes(notes.sort((a, b) => b.lastModified - a.lastModified));
+  const onSortByChange = (newSortBy: SortBy) => {
+    setSettings({ ...settings, sort: { ...settings.sort, sortBy: newSortBy } });
+    setNotes(sortNotes(notes, settings));
   };
 
   return (
@@ -36,8 +44,13 @@ export default function FilterAndSort() {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <SheetTrigger className={buttonVariants({ variant: "ghost" })}>
+            <SheetTrigger
+              className={cn(buttonVariants({ variant: "ghost" }), "relative")}
+            >
               <MixerVerticalIcon />
+              {settings.sort.sortBy != "none" && (
+                <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
+              )}
             </SheetTrigger>
           </TooltipTrigger>
           <TooltipContent>
@@ -54,28 +67,37 @@ export default function FilterAndSort() {
           <div className="border p-2">
             <div>Sort by</div>
             <RadioGroup
-              defaultValue="option-one"
-              value={settings.lineHeight}
-              onValueChange={(
-                val: "tight" | "snug" | "normal" | "relaxed" | "loose"
-              ) => setSettings((prev) => ({ ...prev, lineHeight: val }))}
+              value={settings.sort.sortBy}
+              onValueChange={(val: SortBy) => onSortByChange(val)}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="normal" id="option-normal" />
-                <Label htmlFor="option-normal">Normal</Label>
+                <RadioGroupItem value="none" id="option-none" />
+                <Label htmlFor="option-none">None</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="tight" id="option-tight" />
-                <Label htmlFor="option-tight">Tight</Label>
+                <RadioGroupItem value="time" id="option-time" />
+                <Label htmlFor="option-time">Time</Label>
               </div>
             </RadioGroup>
           </div>
-          <div>
-            Order
-            <Button onClick={onSortAscending}>SortAsc</Button>
-            <Button onClick={onSortDescending}>SortDes</Button>
+          <div className="border p-2">
+            <div>Order</div>
+            <RadioGroup
+              value={settings.sort.order}
+              onValueChange={(val: Order) => onOrderChange(val)}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="asc" id="option-asc" />
+                <Label htmlFor="option-asc">Asc</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="desc" id="option-desc" />
+                <Label htmlFor="option-desc">Desc</Label>
+              </div>
+            </RadioGroup>
           </div>
         </div>
+        {/* <Button onClick={sortNotes}>Sort</Button> */}
       </SheetContent>
     </Sheet>
   );

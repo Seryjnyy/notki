@@ -4,38 +4,44 @@ import { toast } from "./components/ui/use-toast";
 import { useNoteStore } from "./lib/note-store";
 import { Note } from "./lib/types";
 import { guidGenerator } from "./lib/utils";
+import { usePreferenceStore } from "./lib/preference-store";
+import { sortNotes } from "./lib/note-sorting";
 
 export default function DropZone() {
   const setNotes = useNoteStore((state) => state.setNotes);
+  const settings = usePreferenceStore((state) => state.settings);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const readInNotes: Note[] = [];
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const readInNotes: Note[] = [];
 
-    for (const file of acceptedFiles) {
-      console.log(file.type);
-      if (file.type != "text/plain") {
-        console.log("wrong type");
-        toast({
-          variant: "destructive",
-          title: "Wrong type of file provided",
-          description: `Only text/plain files allowed, you added a ${file.type}.`,
+      for (const file of acceptedFiles) {
+        console.log(file.type);
+        if (file.type != "text/plain") {
+          console.log("wrong type");
+          toast({
+            variant: "destructive",
+            title: "Wrong type of file provided",
+            description: `Only text/plain files allowed, you added a ${file.type}.`,
+          });
+          continue;
+        }
+
+        const txt = await file.text();
+        readInNotes.push({
+          id: guidGenerator(),
+          fileName: file.name,
+          content: txt,
+          size: file.size,
+          lastModified: file.lastModified,
+          characterCount: txt.length,
         });
-        continue;
       }
 
-      const txt = await file.text();
-      readInNotes.push({
-        id: guidGenerator(),
-        fileName: file.name,
-        content: txt,
-        size: file.size,
-        lastModified: file.lastModified,
-        characterCount: txt.length,
-      });
-    }
-
-    setNotes(readInNotes.slice());
-  }, []);
+      setNotes(sortNotes(readInNotes.slice(), settings));
+    },
+    [settings]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

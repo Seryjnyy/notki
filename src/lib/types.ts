@@ -1,3 +1,10 @@
+export type Order = "asc" | "desc";
+export type SortBy = "none" | "time";
+export type LetterSpacing = "tighter" | "tight" | "normal" | "wide" | "wider";
+export type LineHeight = "tight" | "snug" | "normal" | "relaxed" | "loose";
+
+export type SearchTarget = "content" | "title" | "all";
+
 export type Note = {
   id: string;
   fileName: string;
@@ -14,5 +21,6 @@ export type NoteSettings = {
     options: { size: boolean; lastModified: boolean; characterCount: boolean };
   };
   actions: { visible: boolean; options: { remove: boolean; copy: boolean } };
-  lineHeight: "tight" | "snug" | "normal" | "relaxed" | "loose";
+  content: { letterSpacing: LetterSpacing; lineHeight: LineHeight };
+  sort: { sortBy: SortBy; order: Order };
 };

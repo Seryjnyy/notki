@@ -5,12 +5,13 @@ const PREFERENCE_STORE = "txt-viewer-preferences";
 export function getDefaultPreferences(): NoteSettings {
   const preferences: NoteSettings = {
     titles: true,
-    lineHeight: "normal",
     metadata: {
       visible: false,
       options: { size: true, lastModified: true, characterCount: true },
     },
     actions: { visible: true, options: { remove: true, copy: false } },
+    sort: { sortBy: "none", order: "asc" },
+    content: { letterSpacing: "normal", lineHeight: "normal" },
   };
   savePreferences(preferences);
 

@@ -1,56 +1,41 @@
-import { Label } from "./components/ui/label";
-import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Label } from "./components/ui/label";
+import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import {
-  GearIcon,
-  MixerVerticalIcon,
-  ReloadIcon,
-  ResetIcon,
-  UpdateIcon,
-} from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { GearIcon, UpdateIcon } from "@radix-ui/react-icons";
+import FilterAndSort from "./FilterAndSort";
 import { Button, buttonVariants } from "./components/ui/button";
 import { Checkbox } from "./components/ui/checkbox";
 import NoteCard from "./components/ui/note-card";
 import { useNoteStore } from "./lib/note-store";
-import { NoteSettings } from "./lib/types";
-import {
-  getDefaultPreferences,
-  getPreferences,
-  savePreferences,
-} from "./services/preferences";
-import FilterAndSort from "./FilterAndSort";
-
-// const NoteMetadataSettings = () => {
-//   return()
-// }
+import { usePreferenceStore } from "./lib/preference-store";
+import { getDefaultPreferences } from "./services/preferences";
+import { LetterSpacing, LineHeight } from "./lib/types";
+import Search from "./Search";
+import { useSearch } from "./lib/search-store";
 
 export default function Notes() {
   const notes = useNoteStore((state) => state.notes);
   const setNotes = useNoteStore((state) => state.setNotes);
-  const [settings, setSettings] = useState<NoteSettings>(getPreferences());
+  const searchTerm = useSearch((state) => state.searchTerm);
+  const setSearchResultCount = useSearch((state) => state.setResultCount);
 
-  useEffect(() => {
-    savePreferences(settings);
-  }, [settings]);
-
-  useEffect(() => {
-    console.log("notes change");
-  }, [notes]);
+  const settings = usePreferenceStore((state) => state.settings);
+  const setSettings = usePreferenceStore((state) => state.setSettings);
 
   const handleDelete = (id: string) => {
     setNotes(notes.filter((note) => note.id != id));
@@ -58,6 +43,13 @@ export default function Notes() {
 
   const onResetPreferences = () => {
     setSettings(getDefaultPreferences());
+  };
+
+  const filterSearch = () => {
+    const filtered = notes.filter((note) => note.content.includes(searchTerm));
+
+    setSearchResultCount(filtered.length);
+    return filtered;
   };
 
   return (
@@ -103,7 +95,7 @@ export default function Notes() {
                     onCheckedChange={(checked) => {
                       if (checked == "indeterminate") return;
 
-                      setSettings((prev) => ({ ...prev, titles: checked }));
+                      setSettings({ ...settings, titles: checked });
                     }}
                   />
                 </div>
@@ -116,15 +108,15 @@ export default function Notes() {
                     onCheckedChange={(checked) => {
                       if (checked == "indeterminate") return;
 
-                      setSettings((prev) => ({
-                        ...prev,
+                      setSettings({
+                        ...settings,
                         metadata: {
                           visible: checked,
                           options: {
-                            ...prev.metadata.options,
+                            ...settings.metadata.options,
                           },
                         },
-                      }));
+                      });
                     }}
                   />
                 </div>
@@ -137,18 +129,16 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings((prev) => ({
-                          ...prev,
+                        setSettings({
+                          ...settings,
                           metadata: {
-                            visible: prev.metadata.visible,
+                            visible: settings.metadata.visible,
                             options: {
+                              ...settings.metadata.options,
                               size: checked,
-                              lastModified: prev.metadata.options.lastModified,
-                              characterCount:
-                                prev.metadata.options.characterCount,
                             },
                           },
-                        }));
+                        });
                       }}
                     />
                   </div>
@@ -160,18 +150,16 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings((prev) => ({
-                          ...prev,
+                        setSettings({
+                          ...settings,
                           metadata: {
-                            visible: prev.metadata.visible,
+                            visible: settings.metadata.visible,
                             options: {
-                              size: prev.metadata.options.size,
+                              ...settings.metadata.options,
                               lastModified: checked,
-                              characterCount:
-                                prev.metadata.options.characterCount,
                             },
                           },
-                        }));
+                        });
                       }}
                     />
                   </div>
@@ -183,17 +171,16 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings((prev) => ({
-                          ...prev,
+                        setSettings({
+                          ...settings,
                           metadata: {
-                            visible: prev.metadata.visible,
+                            visible: settings.metadata.visible,
                             options: {
-                              size: prev.metadata.options.size,
-                              lastModified: prev.metadata.options.lastModified,
+                              ...settings.metadata.options,
                               characterCount: checked,
                             },
                           },
-                        }));
+                        });
                       }}
                     />
                   </div>
@@ -203,19 +190,67 @@ export default function Notes() {
               <div className="border p-2">
                 <div>Line height</div>
                 <RadioGroup
-                  defaultValue="option-one"
-                  value={settings.lineHeight}
-                  onValueChange={(
-                    val: "tight" | "snug" | "normal" | "relaxed" | "loose"
-                  ) => setSettings((prev) => ({ ...prev, lineHeight: val }))}
+                  value={settings.content.lineHeight}
+                  onValueChange={(val: LineHeight) =>
+                    setSettings({
+                      ...settings,
+                      content: { ...settings.content, lineHeight: val },
+                    })
+                  }
                 >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="tight" id="option-tight" />
+                    <Label htmlFor="option-tight">Tight</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="snug" id="option-snug" />
+                    <Label htmlFor="option-snug">Snug</Label>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="normal" id="option-normal" />
                     <Label htmlFor="option-normal">Normal</Label>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="relaxed" id="option-relaxed" />
+                    <Label htmlFor="option-relaxed">Relaxed</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="loose" id="option-loose" />
+                    <Label htmlFor="option-loose">Loose</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="border p-2">
+                <div>Letter spacing</div>
+                <RadioGroup
+                  value={settings.content.letterSpacing}
+                  onValueChange={(val: LetterSpacing) =>
+                    setSettings({
+                      ...settings,
+                      content: { ...settings.content, letterSpacing: val },
+                    })
+                  }
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="tighter" id="option-tighter" />
+                    <Label htmlFor="option-tighter">Tighter</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
                     <RadioGroupItem value="tight" id="option-tight" />
                     <Label htmlFor="option-tight">Tight</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="normal" id="option-normal" />
+                    <Label htmlFor="option-normal">Normal</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="wide" id="option-wide" />
+                    <Label htmlFor="option-wide">Wide</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="widest" id="option-widest" />
+                    <Label htmlFor="option-widest">Widest</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -228,13 +263,13 @@ export default function Notes() {
                     onCheckedChange={(checked) => {
                       if (checked == "indeterminate") return;
 
-                      setSettings((prev) => ({
-                        ...prev,
+                      setSettings({
+                        ...settings,
                         actions: {
                           visible: checked,
-                          options: { ...prev.actions.options },
+                          options: { ...settings.actions.options },
                         },
-                      }));
+                      });
                     }}
                   />
                 </div>
@@ -246,16 +281,16 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings((prev) => ({
-                          ...prev,
+                        setSettings({
+                          ...settings,
                           actions: {
-                            visible: prev.actions.visible,
+                            visible: settings.actions.visible,
                             options: {
                               remove: checked,
-                              copy: prev.actions.options.copy,
+                              copy: settings.actions.options.copy,
                             },
                           },
-                        }));
+                        });
                       }}
                     />
                   </div>
@@ -267,16 +302,16 @@ export default function Notes() {
                       onCheckedChange={(checked) => {
                         if (checked == "indeterminate") return;
 
-                        setSettings((prev) => ({
-                          ...prev,
+                        setSettings({
+                          ...settings,
                           actions: {
-                            visible: prev.actions.visible,
+                            visible: settings.actions.visible,
                             options: {
-                              remove: prev.actions.options.remove,
+                              remove: settings.actions.options.remove,
                               copy: checked,
                             },
                           },
-                        }));
+                        });
                       }}
                     />
                   </div>
@@ -293,18 +328,30 @@ export default function Notes() {
         </Sheet>
 
         <FilterAndSort />
+        <Search />
       </div>
 
       <div className="flex gap-4 flex-wrap">
-        {notes.map((note) => (
-          <NoteCard
-            note={note}
-            key={note.id}
-            seeTitles={settings.titles}
-            settings={settings}
-            handleDelete={handleDelete}
-          />
-        ))}
+        {searchTerm != "" &&
+          filterSearch().map((note) => (
+            <NoteCard
+              note={note}
+              key={note.id}
+              seeTitles={settings.titles}
+              settings={settings}
+              handleDelete={handleDelete}
+            />
+          ))}
+        {searchTerm == "" &&
+          notes.map((note) => (
+            <NoteCard
+              note={note}
+              key={note.id}
+              seeTitles={settings.titles}
+              settings={settings}
+              handleDelete={handleDelete}
+            />
+          ))}
       </div>
     </div>
   );
