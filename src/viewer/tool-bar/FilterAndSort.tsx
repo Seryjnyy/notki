@@ -13,30 +13,32 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
-import { buttonVariants } from "./components/ui/button";
-import { Label } from "./components/ui/label";
-import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
-import { sortNotes } from "./lib/note-sorting";
-import { useNoteStore } from "./lib/note-store";
-import { usePreferenceStore } from "./lib/preference-store";
-import { Order, SortBy } from "./lib/types";
-import { cn } from "./lib/utils";
+import { produce } from "immer";
+import { buttonVariants } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
+import { usePreferenceStore } from "../../lib/preference-store";
+import { Order, SortBy } from "../../lib/types";
+import { cn } from "../../lib/utils";
 
 export default function FilterAndSort() {
   const settings = usePreferenceStore((state) => state.settings);
   const setSettings = usePreferenceStore((state) => state.setSettings);
 
-  const notes = useNoteStore((state) => state.notes);
-  const setNotes = useNoteStore((state) => state.setNotes);
-
   const onOrderChange = (newOrder: Order) => {
-    setSettings({ ...settings, sort: { ...settings.sort, order: newOrder } });
-    setNotes(sortNotes(notes, settings));
+    setSettings(
+      produce(settings, (draft) => {
+        draft.sort.order = newOrder;
+      })
+    );
   };
 
   const onSortByChange = (newSortBy: SortBy) => {
-    setSettings({ ...settings, sort: { ...settings.sort, sortBy: newSortBy } });
-    setNotes(sortNotes(notes, settings));
+    setSettings(
+      produce(settings, (draft) => {
+        draft.sort.sortBy = newSortBy;
+      })
+    );
   };
 
   return (

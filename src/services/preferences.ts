@@ -1,4 +1,4 @@
-import { NoteSettings } from "@/lib/types";
+import { NoteSettings, NoteView } from "@/lib/types";
 
 const PREFERENCE_STORE = "txt-viewer-preferences";
 
@@ -33,6 +33,7 @@ export function getDefaultPreferences(): NoteSettings {
         fontSize: getDefaultFontSize(),
       },
     },
+    view: getDefaultNoteView(),
   };
   savePreferences(preferences);
 
@@ -47,6 +48,7 @@ export const getDefaultPaddingTop = () => 0;
 export const getDefaultPaddingBottom = () => 1.5;
 export const getDefaultColumns = () => 1;
 export const getDefaultFontSize = () => 1;
+export const getDefaultNoteView = (): NoteView => "all";
 
 export function removePreferences() {
   localStorage.removeItem(PREFERENCE_STORE);

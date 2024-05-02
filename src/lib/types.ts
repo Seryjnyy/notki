@@ -1,6 +1,6 @@
 export type Order = "asc" | "desc";
-export type SortBy = "none" | "time";
-
+export type SortBy = "none" | "time" | "size";
+export type NoteView = "all" | "single";
 export type SearchTarget = "content" | "title" | "all";
 
 export type Note = {
@@ -34,4 +34,5 @@ export type NoteSettings = {
     list: { columns: number };
     content: { fontSize: number };
   };
+  view: NoteView;
 };

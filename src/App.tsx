@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from "./components/ui/alert";
 
-import DropZone from "./DropZone";
-import Notes from "./Notes";
+import DropZone from "./viewer/DropZone";
+import Notes from "./viewer/Notes";
 import { ThemeProvider } from "./components/theme-provider";
 
 import { ExclamationTriangleIcon, UpdateIcon } from "@radix-ui/react-icons";
