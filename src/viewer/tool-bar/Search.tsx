@@ -12,15 +12,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
 
 import { MagnifyingGlassIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { Button, buttonVariants } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
-import { useSearch } from "./lib/search-store";
-import { SearchTarget } from "./lib/types";
-import { cn } from "./lib/utils";
+import { Button, buttonVariants } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { useSearch } from "../../lib/search-store";
+import { SearchTarget } from "../../lib/types";
+import { cn } from "../../lib/utils";
 
 export default function Search() {
   const searchTerm = useSearch((state) => state.searchTerm);

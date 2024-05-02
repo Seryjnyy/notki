@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { toast } from "./components/ui/use-toast";
-import { useNoteStore } from "./lib/note-store";
-import { Note } from "./lib/types";
-import { guidGenerator } from "./lib/utils";
-import { usePreferenceStore } from "./lib/preference-store";
-import { sortNotes } from "./lib/note-sorting";
+import { toast } from "../components/ui/use-toast";
+import { useNoteStore } from "../lib/note-store";
+import { Note } from "../lib/types";
+import { guidGenerator } from "../lib/utils";
+import { usePreferenceStore } from "../lib/preference-store";
+import { sortNotes } from "../lib/note-sorting";
 
 export default function DropZone() {
   const setNotes = useNoteStore((state) => state.setNotes);
