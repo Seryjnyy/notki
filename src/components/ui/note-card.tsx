@@ -18,6 +18,7 @@ import { cn, formatBytes, unixToTimestamp } from "@/lib/utils";
 import { CopyIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { useMemo } from "react";
 import { Button } from "./button";
+import useClipboard from "@/lib/use-clipboard";
 
 export default function NoteCard({
   note,
@@ -28,6 +29,7 @@ export default function NoteCard({
   settings: NoteSettings;
   handleDelete: (id: string) => void;
 }) {
+  const clipboard = useClipboard();
   const formattedDate = useMemo(() => {
     return unixToTimestamp(note.lastModified);
   }, [note]);
@@ -38,7 +40,16 @@ export default function NoteCard({
     handleDelete(note.id);
   };
 
-  // basis-full, 1/4
+  const onCopy = () => {
+    clipboard
+      .copyToClipboard(note.content)
+      .then(() => {
+        // TODO : implement
+      })
+      .catch(() => {
+        // TODO : implement
+      });
+  };
 
   return (
     <Card
@@ -60,7 +71,11 @@ export default function NoteCard({
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button className="px-2 py-0" variant={"ghost"}>
+                      <Button
+                        className="px-2 py-0"
+                        variant={"ghost"}
+                        onClick={onCopy}
+                      >
                         <CopyIcon />
                       </Button>
                     </TooltipTrigger>
@@ -108,6 +123,9 @@ export default function NoteCard({
               paddingTop: `${settings.styling.note.paddingTop}rem`,
               fontSize: `${settings.styling.content.fontSize}rem`,
             }}
+            className={
+              settings.styling.note.textSelectable ? "" : "select-none"
+            }
           >
             {note.content}
           </pre>

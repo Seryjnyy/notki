@@ -36,15 +36,17 @@ import {
   getDefaultPreferences,
 } from "../../services/preferences";
 
+interface NumericalSettingProps {
+  title: string;
+  reloadAction: () => void;
+  children: ReactNode;
+}
+
 const NumericalSetting = ({
   title,
   reloadAction,
   children,
-}: {
-  title: string;
-  reloadAction: () => void;
-  children: ReactNode;
-}) => {
+}: NumericalSettingProps) => {
   return (
     <div>
       <div className="flex items-center gap-2 pb-4">
@@ -54,6 +56,32 @@ const NumericalSetting = ({
         </Button>
       </div>
       {children}
+    </div>
+  );
+};
+
+interface CheckboxSettingProps {
+  title: string;
+  value: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}
+
+const CheckboxSetting = ({
+  title,
+  value,
+  onCheckedChange,
+}: CheckboxSettingProps) => {
+  return (
+    <div className="flex items-center gap-2">
+      {title}
+      <Checkbox
+        checked={value}
+        onCheckedChange={(checked) => {
+          if (checked == "indeterminate") return;
+
+          onCheckedChange(checked);
+        }}
+      />
     </div>
   );
 };
@@ -86,87 +114,70 @@ export default function Settings() {
           <SheetTitle>Settings</SheetTitle>
         </SheetHeader>
 
-        <ScrollArea className="pt-12 h-screen pb-12">
+        <ScrollArea className="pt-12 h-screen pb-[8rem]">
           <ScrollBar />
           <div className="border p-2">
-            <div className="flex items-center gap-2">
-              See header
-              <Checkbox
-                checked={settings.header.visible}
-                onCheckedChange={(checked) => {
-                  if (checked == "indeterminate") return;
+            <CheckboxSetting
+              title="See header"
+              value={settings.header.visible}
+              onCheckedChange={(checked) => {
+                setSettings(
+                  produce(settings, (draft) => {
+                    draft.header.visible = checked;
+                  })
+                );
+              }}
+            />
 
+            <div className="pl-4">
+              <CheckboxSetting
+                title="See titles"
+                value={settings.header.options.title}
+                onCheckedChange={(checked) => {
                   setSettings(
                     produce(settings, (draft) => {
-                      draft.header.visible = checked;
+                      draft.header.options.title = checked;
                     })
                   );
                 }}
               />
-            </div>
-            <div className="pl-4">
-              <div className="flex items-center gap-2">
-                See titles
-                <Checkbox
-                  checked={settings.header.options.title}
-                  onCheckedChange={(checked) => {
-                    if (checked == "indeterminate") return;
 
-                    setSettings(
-                      produce(settings, (draft) => {
-                        draft.header.options.title = checked;
-                      })
-                    );
-                  }}
-                />
-              </div>
+              <CheckboxSetting
+                title="See actions"
+                value={settings.header.options.actions.visible}
+                onCheckedChange={(checked) => {
+                  setSettings(
+                    produce(settings, (draft) => {
+                      draft.header.options.actions.visible = checked;
+                    })
+                  );
+                }}
+              />
 
-              <div className="flex items-center gap-2">
-                See actions
-                <Checkbox
-                  checked={settings.header.options.actions.visible}
-                  onCheckedChange={(checked) => {
-                    if (checked == "indeterminate") return;
-
-                    setSettings(
-                      produce(settings, (draft) => {
-                        draft.header.options.actions.visible = checked;
-                      })
-                    );
-                  }}
-                />
-              </div>
               <div className="pl-4">
-                <div className="flex items-center gap-2">
-                  See remove action
-                  <Checkbox
-                    checked={settings.header.options.actions.options.remove}
-                    onCheckedChange={(checked) => {
-                      if (checked == "indeterminate") return;
-                      setSettings(
-                        produce(settings, (draft) => {
-                          draft.header.options.actions.options.remove = checked;
-                        })
-                      );
-                    }}
-                  />
-                </div>
+                <CheckboxSetting
+                  title="See remove action"
+                  value={settings.header.options.actions.options.remove}
+                  onCheckedChange={(checked) => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.header.options.actions.options.remove = checked;
+                      })
+                    );
+                  }}
+                />
 
-                <div className="flex items-center gap-2">
-                  See copy action
-                  <Checkbox
-                    checked={settings.header.options.actions.options.copy}
-                    onCheckedChange={(checked) => {
-                      if (checked == "indeterminate") return;
-
-                      setSettings(
-                        produce(settings, (draft) => {
-                          draft.header.options.actions.options.copy = checked;
-                        })
-                      );
-                    }}
-                  />
-                </div>
+                <CheckboxSetting
+                  title="See copy action"
+                  value={settings.header.options.actions.options.copy}
+                  onCheckedChange={(checked) => {
+                    setSettings(
+                      produce(settings, (draft) => {
+                        draft.header.options.actions.options.copy = checked;
+                      })
+                    );
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -197,70 +208,54 @@ export default function Settings() {
           </div>
 
           <div className="border p-2">
-            <div className="flex items-center gap-2">
-              See metadata
-              <Checkbox
-                checked={settings.metadata.visible}
-                onCheckedChange={(checked) => {
-                  if (checked == "indeterminate") return;
+            <CheckboxSetting
+              title="See metadata"
+              value={settings.metadata.visible}
+              onCheckedChange={(checked) => {
+                setSettings(
+                  produce(settings, (draft) => {
+                    draft.metadata.visible = checked;
+                  })
+                );
+              }}
+            />
 
+            <div className="pl-4">
+              <CheckboxSetting
+                title="See size"
+                value={settings.metadata.options.size}
+                onCheckedChange={(checked) => {
                   setSettings(
                     produce(settings, (draft) => {
-                      draft.metadata.visible = checked;
+                      draft.metadata.options.size = checked;
                     })
                   );
                 }}
               />
-            </div>
 
-            <div className="pl-4">
-              <div className="flex items-center gap-2">
-                See size
-                <Checkbox
-                  checked={settings.metadata.options.size}
-                  onCheckedChange={(checked) => {
-                    if (checked == "indeterminate") return;
+              <CheckboxSetting
+                title="See last modified"
+                value={settings.metadata.options.lastModified}
+                onCheckedChange={(checked) => {
+                  setSettings(
+                    produce(settings, (draft) => {
+                      draft.metadata.options.lastModified = checked;
+                    })
+                  );
+                }}
+              />
 
-                    setSettings(
-                      produce(settings, (draft) => {
-                        draft.metadata.options.size = checked;
-                      })
-                    );
-                  }}
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                See last modified
-                <Checkbox
-                  checked={settings.metadata.options.lastModified}
-                  onCheckedChange={(checked) => {
-                    if (checked == "indeterminate") return;
-
-                    setSettings(
-                      produce(settings, (draft) => {
-                        draft.metadata.options.lastModified = checked;
-                      })
-                    );
-                  }}
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                See character count
-                <Checkbox
-                  checked={settings.metadata.options.characterCount}
-                  onCheckedChange={(checked) => {
-                    if (checked == "indeterminate") return;
-
-                    setSettings(
-                      produce(settings, (draft) => {
-                        draft.metadata.options.characterCount = checked;
-                      })
-                    );
-                  }}
-                />
-              </div>
+              <CheckboxSetting
+                title="See character count"
+                value={settings.metadata.options.characterCount}
+                onCheckedChange={(checked) => {
+                  setSettings(
+                    produce(settings, (draft) => {
+                      draft.metadata.options.characterCount = checked;
+                    })
+                  );
+                }}
+              />
             </div>
           </div>
 
@@ -441,6 +436,46 @@ export default function Settings() {
                 }}
               />
             </NumericalSetting>
+          </div>
+
+          <div className="border p-2">
+            <NumericalSetting
+              title="List padding x"
+              reloadAction={() => {
+                setSettings(
+                  produce(settings, (draft) => {
+                    draft.styling.list.paddingX = getDefaultPaddingX();
+                  })
+                );
+              }}
+            >
+              <Input
+                type="number"
+                step="0.1"
+                value={settings.styling.list.paddingX}
+                onChange={(e) => {
+                  setSettings(
+                    produce(settings, (draft) => {
+                      draft.styling.list.paddingX = Number(e.target.value);
+                    })
+                  );
+                }}
+              />
+            </NumericalSetting>
+          </div>
+
+          <div className="border p-2">
+            <CheckboxSetting
+              title="Note content selectable"
+              value={settings.styling.note.textSelectable}
+              onCheckedChange={(checked) => {
+                setSettings(
+                  produce(settings, (draft) => {
+                    draft.styling.note.textSelectable = checked;
+                  })
+                );
+              }}
+            />
           </div>
 
           <div className="border p-2">

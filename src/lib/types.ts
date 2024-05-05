@@ -30,8 +30,13 @@ export type NoteSettings = {
   content: { letterSpacing: number; lineHeight: number };
   sort: { sortBy: SortBy; order: Order };
   styling: {
-    note: { paddingX: number; paddingBottom: number; paddingTop: number };
-    list: { columns: number };
+    note: {
+      paddingX: number;
+      paddingBottom: number;
+      paddingTop: number;
+      textSelectable: boolean;
+    };
+    list: { columns: number; paddingX: number };
     content: { fontSize: number };
   };
   view: NoteView;

@@ -1,7 +1,6 @@
 import { sortNotes } from "@/lib/note-sorting";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useMemo, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "../components/ui/button";
 import NoteCard from "../components/ui/note-card";
 import { useNoteStore } from "../lib/note-store";
@@ -16,7 +15,7 @@ import Settings from "./tool-bar/Settings";
 export default function Notes() {
   return (
     <div className="flex gap-4 flex-col">
-      <div>
+      <div className="px-2 md:px-8">
         <ResetNotes />
         <Settings />
         <FilterAndSort />
@@ -35,6 +34,8 @@ const NotesView = () => {
   const setSearchResultCount = useSearch((state) => state.setResultCount);
   const searchTarget = useSearch((state) => state.searchTarget);
   const settings = usePreferenceStore((state) => state.settings);
+
+  let content = <></>;
 
   const handleDelete = (id: string) => {
     setNotes(notes.filter((note) => note.id != id));
@@ -76,7 +77,7 @@ const NotesView = () => {
   }, [notes, settings, searchTerm, searchTarget]);
 
   if (settings.view == "single") {
-    return (
+    content = (
       <SingleNote
         notes={filteredNotes}
         settings={settings}
@@ -85,7 +86,7 @@ const NotesView = () => {
     );
   } else {
     const listColumns = `md:grid-cols-${settings.styling.list.columns}`;
-    return (
+    content = (
       <div className={"grid grid-cols-1 gap-4 " + listColumns}>
         {sortNotes(filteredNotes, settings).map((note) => (
           <NoteCard
@@ -95,10 +96,21 @@ const NotesView = () => {
             handleDelete={handleDelete}
           />
         ))}
-        <ErrorBoundary fallback={<div>wait</div>}></ErrorBoundary>
       </div>
     );
   }
+
+  return (
+    <div
+      className="px-2"
+      style={{
+        paddingLeft: `${settings.styling.list.paddingX}rem`,
+        paddingRight: `${settings.styling.list.paddingX}rem`,
+      }}
+    >
+      {content}
+    </div>
+  );
 };
 
 interface SingleNoteProps {

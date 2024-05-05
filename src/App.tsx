@@ -32,7 +32,7 @@ function App() {
             <DropZone />
           </section>
 
-          <section className="w-full px-2 md:px-8 h-fit">
+          <section className="w-full h-fit">
             <h2 className="text-muted-foreground text-center text-sm">
               YOUR NOTES
             </h2>
