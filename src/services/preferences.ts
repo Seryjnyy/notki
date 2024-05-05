@@ -25,9 +25,11 @@ export function getDefaultPreferences(): NoteSettings {
         paddingX: getDefaultPaddingX(),
         paddingTop: getDefaultPaddingTop(),
         paddingBottom: getDefaultPaddingBottom(),
+        textSelectable: true,
       },
       list: {
         columns: getDefaultColumns(),
+        paddingX: getDefaultListPaddingX(),
       },
       content: {
         fontSize: getDefaultFontSize(),
@@ -49,6 +51,7 @@ export const getDefaultPaddingBottom = () => 1.5;
 export const getDefaultColumns = () => 1;
 export const getDefaultFontSize = () => 1;
 export const getDefaultNoteView = (): NoteView => "all";
+export const getDefaultListPaddingX = () => 2;
 
 export function removePreferences() {
   localStorage.removeItem(PREFERENCE_STORE);
