@@ -32,6 +32,7 @@
   },
   "scripts": {
     "build": "tailwindcss -i ./src/main.css -o ./dist/index.css",
+    "build-site": "tailwindcss -i ./src/main.css -o ./dist/index.css",
     "lint": "eslint . --max-warnings 0",
     "dev": "tailwindcss -i ./src/main.css -o ./dist/index.css --watch",
     "generate:component": "turbo gen react-component",

@@ -3,6 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build-site": {
+      "dependsOn": ["^build-site"],
       "outputs": [".dist/**"]
     },
     "build": {
