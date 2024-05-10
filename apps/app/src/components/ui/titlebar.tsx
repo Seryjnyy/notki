@@ -1,9 +1,4 @@
-import {
-  BoxIcon,
-  CropIcon,
-  Cross1Icon,
-  MinusIcon,
-} from "@radix-ui/react-icons";
+import { BoxIcon, Cross1Icon, MinusIcon } from "@radix-ui/react-icons";
 import { appWindow } from "@tauri-apps/api/window";
 import { ReactNode } from "react";
 
