@@ -4,7 +4,7 @@
     "beforeBuildCommand": "npm run build-frontend",
     "beforeDevCommand": "npm run dev-frontend",
     "devPath": "http://localhost:5174",
-    "distDir": "../build"
+    "distDir": "../dist"
   },
   "package": {
     "productName": "txt-viewer",
@@ -27,7 +27,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -40,8 +40,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "app.txt-viewer",
+      "longDescription": "A better way to view Windows notes.",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -50,7 +50,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "Note viewer.",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
