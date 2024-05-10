@@ -1,0 +1,34 @@
+{
+  "name": "@repo/lib",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "./metadata-utils": "./src/metadata-utils.ts",
+    "./note-sorting": "./src/note-sorting.ts",
+    "./note-store": "./src/note-store.tsx",
+    "./preference-store": "./src/preference-store.tsx",
+    "./preference-service": "./src/preferences-service.ts",
+    "./search-store": "./src/search-store.tsx",
+    "./types": "./src/types.ts",
+    "./use-clipboard": "./src/use-clipboard.tsx"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/eslint": "^8.56.5",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "eslint": "^8.57.0",
+    "react": "^18.2.0",
+    "typescript": "^5.3.3"
+  }
+}
