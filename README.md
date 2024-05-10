@@ -1,94 +1,81 @@
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
+# Turborepo starter
 
-![Logo](./Images/logo.png)
+This is an official starter Turborepo.
 
-  <h1>txt-viewer</h1>
+## Using this example
 
-  <p align="center">
-    A better way to view a bunch of txt files.
-    </br>
-    <a href="https://txt-viewer.netlify.app/"><strong>Visit the site</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
-    ·
-    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
-  </p>
-</div>
+Run the following command:
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about">About</a>
-      <ul>
-        <li ><a href="#why">Why</a></li>
-      </ul>
-    </li>
-    <li><a href="#built-with">Built with</a></li>
-    <!-- <li><a href="#usage">Usage</a></li> -->
-    <li><a href="#status">Status</a></li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#locally">Locally</a>
-          <ul>
-            <li><a href="#for-development">For development</a></li>
-            <li><a href="#build-and-deploy">Build and deploy</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ol>
-</details>
+```sh
+npx create-turbo@latest
+```
 
-## About
+## What's inside?
 
-A better way to deal with text files.
-Simply select or drag in your text files to view them.
+This Turborepo includes the following packages/apps:
 
-The site runs locally, so all your files stay with you.
+### Apps and Packages
 
-### Why?
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-I often use Windows Notepad for quick note-taking, resulting in numerous text files. Managing them in the standard way can get annoying. Windows 10 Notepad's interface is dated with no dark mode, and handling multiple open windows isn't ideal. To address this, I created this minimalistic UI for viewing my notes.
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-## Built with
+### Utilities
 
-- React
-- Vite
-- shadcn/ui
-- Zustand
+This Turborepo has some additional tools already setup for you:
 
-## Status
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-The project is still in development.
+### Build
 
-## Getting started
+To build all apps and packages, run the following command:
 
-### Locally
+```
+cd my-turborepo
+pnpm build
+```
 
-- You will need Node installed.
+### Develop
 
-#### For development
+To develop all apps and packages, run the following command:
 
-- Run it locally.
-  ```
-  npm run dev
-  ```
-- Then visit [localhost:5173](localhost:5173) to see the site.
-  - Note: Check the console to get the link, as it might use another port.
+```
+cd my-turborepo
+pnpm dev
+```
 
-#### Build and deploy
+### Remote Caching
 
-- Build the site.
-  ```
-  npm run build
-  ```
-  - You should lint before building.
-    ```
-    npm run lint
-    ```
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+
+```
+cd my-turborepo
+npx turbo login
+```
+
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+
+```
+npx turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
