@@ -1,7 +1,9 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#2E2F09",
-        "titleBar.activeBackground": "#40420D",
-        "titleBar.activeForeground": "#FBFBEA"
-    }
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#2E2F09",
+    "titleBar.activeBackground": "#40420D",
+    "titleBar.activeForeground": "#FBFBEA"
+  },
+  "editor.cursorStyle": "block",
+  "rust-analyzer.linkedProjects": ["apps\\app\\src-tauri\\Cargo.toml"]
 }

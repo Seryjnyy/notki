@@ -50,31 +50,11 @@ const SidebarButton = () => {
   );
 };
 
-export default function Titlebar() {
-  const uiState = useUiState((state) => state.uiState);
-
-  if (!uiState.titlebar) return <></>;
-
+export default function MinimalTitlebar() {
   return (
     <div
       data-tauri-drag-region
-      className="select-none h-[30px] flex justify-between fixed top-0 left-0 right-0 bg-secondary z-10"
-    >
-      <SidebarButton />
-
-      <div>
-        <WindowActionButton action={() => appWindow.minimize()}>
-          <MinusIcon className="" />
-        </WindowActionButton>
-
-        <WindowActionButton action={() => appWindow.toggleMaximize()}>
-          <BoxIcon />
-        </WindowActionButton>
-
-        <WindowActionButton action={() => appWindow.close()}>
-          <Cross1Icon />
-        </WindowActionButton>
-      </div>
-    </div>
+      className="select-none h-[30px] w-[30px] ml-auto flex justify-between fixed top-0 left-0 right-0 bg-secondary z-10 rounded-bl-md"
+    ></div>
   );
 }

@@ -15,9 +15,11 @@ rust-version = "1.60"
 tauri-build = { version = "1.5.2", features = [] }
 
 [dependencies]
+tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.6.3", features = [ "window-close", "window-minimize", "window-unmaximize", "window-unminimize", "window-show", "window-maximize", "window-hide", "window-start-dragging"] }
+tauri = { version = "1.6.3", features = [ "fs-exists", "fs-read-file", "fs-read-dir", "fs-create-dir", "dialog-all", "fs-write-file", "window-close", "window-minimize", "window-unmaximize", "window-unminimize", "window-show", "window-maximize", "window-hide", "window-start-dragging", "devtools"] }
+tauri-plugin-fs-extra = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
