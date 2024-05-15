@@ -4,7 +4,8 @@
     "beforeBuildCommand": "npm run build-frontend",
     "beforeDevCommand": "npm run dev-frontend",
     "devPath": "http://localhost:5174",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "txt-viewer",
@@ -23,6 +24,18 @@
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
+      },
+      "fs": {
+        "writeFile": true,
+        "readDir": true,
+        "readFile": true,
+        "exists": true,
+        "createDir": true,
+        "scope": []
+      },
+      "dialog": {
+        "all": true,
+        "open": true
       }
     },
     "bundle": {
@@ -67,7 +80,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 1080,
+        "height": 800,
         "resizable": true,
         "title": "txt-viewer",
         "width": 800,
