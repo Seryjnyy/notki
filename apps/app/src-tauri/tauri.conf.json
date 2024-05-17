@@ -31,7 +31,7 @@
         "readFile": true,
         "exists": true,
         "createDir": true,
-        "scope": []
+        "scope": ["$APPCONFIG/*"]
       },
       "dialog": {
         "all": true,

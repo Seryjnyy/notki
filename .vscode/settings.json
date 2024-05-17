@@ -5,5 +5,12 @@
     "titleBar.activeForeground": "#FBFBEA"
   },
   "editor.cursorStyle": "block",
-  "rust-analyzer.linkedProjects": ["apps\\app\\src-tauri\\Cargo.toml"]
+  "rust-analyzer.linkedProjects": ["apps\\app\\src-tauri\\Cargo.toml"],
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "typescript.surveys.enabled": false
 }

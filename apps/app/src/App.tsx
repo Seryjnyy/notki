@@ -10,11 +10,12 @@ import AutoSave from "./components/ui/auto-save";
 import NewVault from "./components/ui/new-vault";
 import CommandBox from "./components/ui/command-box";
 import MinimalTitlebar from "./components/ui/minimal-titlebar";
+import { listen } from "@tauri-apps/api/event";
 
 function App() {
   // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
   const uiState = useUiState((state) => state.uiState);
-
+  listen("event", () => console.log("hello"));
   return (
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
