@@ -1,3 +1,4 @@
+import { readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { ArchiveIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/button";
@@ -192,6 +193,18 @@ const VaultOptions = () => {
 };
 
 export default function NewVault() {
+  useEffect(() => {
+    const s = async () => {
+      const contents = await readTextFile("symbol-sets.conf", {
+        dir: BaseDirectory.AppConfig,
+      });
+      const symbolSets = JSON.parse(contents);
+      console.log(symbolSets);
+    };
+
+    s();
+  }, []);
+
   return (
     <div className="flex">
       <ExistingVaults />
