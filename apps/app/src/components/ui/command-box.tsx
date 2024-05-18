@@ -18,6 +18,7 @@ import {
   useState,
 } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import { UiState } from "~/lib/types";
 import { useUiState } from "~/lib/ui-store";
 
@@ -52,6 +53,7 @@ const CommandList = ({
   const setUiState = useUiState((state) => state.setUiState);
   const searchInput = useRef<HTMLInputElement>(null);
   const currentFocus = useRef(-1);
+  const openedTabs = useOpenedTabs((state) => state.openedTabs);
 
   const commands = useMemo(() => {
     const noteCommands = [
@@ -137,8 +139,8 @@ const CommandList = ({
   const onSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
-    if (filtered.length == 1) {
-      filtered[0]?.action(uiState);
+    if (filteredCommands.length == 1) {
+      filteredCommands[0]?.action(uiState);
       onCommandExecution();
       return;
     }
@@ -156,7 +158,20 @@ const CommandList = ({
     console.log("rerendering uistate ", uiState);
   }, [uiState.titlebar]);
 
-  const [filtered, filteredRefs] = useMemo(() => {
+  const [filteredTabs, filteredTabsRefs] = useMemo(() => {
+    if (searchTerm == "")
+      return [openedTabs, openedTabs.map(() => createRef<HTMLDivElement>())];
+
+    // TODO : doing this in all search function :/
+    const formattedSearchTerm = searchTerm.toLocaleLowerCase();
+
+    const filtered = openedTabs.filter((tab) =>
+      tab.title.toLowerCase().includes(formattedSearchTerm)
+    );
+    return [filtered, filtered.map(() => createRef<HTMLDivElement>())];
+  }, [searchTerm, openedTabs]);
+
+  const [filteredCommands, filteredCommandsRefs] = useMemo(() => {
     if (searchTerm == "")
       return [commands, commands.map(() => createRef<HTMLDivElement>())];
 
@@ -177,7 +192,7 @@ const CommandList = ({
   const updateCurrentFocus = (i: number) => {
     if (
       currentFocus.current + i < -1 ||
-      currentFocus.current + i >= filteredRefs.length
+      currentFocus.current + i >= filteredCommandsRefs.length
     ) {
       return;
     }
@@ -188,7 +203,7 @@ const CommandList = ({
     if (currentFocus.current == -1) {
       searchInput.current?.focus();
     } else {
-      filteredRefs[currentFocus.current].current?.focus();
+      filteredCommandsRefs[currentFocus.current].current?.focus();
     }
   };
 
@@ -225,11 +240,11 @@ const CommandList = ({
         />
       </form>
       <div
-        className={`p-2 ${filtered.length == 1 ? "ring-1" : ""} rounded-md ring-primary mt-4`}
+        className={`p-2 ${filteredCommands.length == 1 ? "ring-1" : ""} rounded-md ring-primary mt-4`}
       >
-        {filtered.map((command, index) => (
+        {filteredCommands.map((command, index) => (
           <Command
-            ref={filteredRefs[index]}
+            ref={filteredCommandsRefs[index]}
             key={command.title}
             title={command.title}
             shortcut={command.shortcut}
@@ -244,8 +259,9 @@ export default function CommandBox() {
   const [opened, setOpened] = useState(false);
   useState;
 
-  useHotkeys("ctrl+k", () => setOpened((prev) => !prev), {
+  useHotkeys("ctrl+shift+p", () => setOpened((prev) => !prev), {
     enableOnFormTags: true,
+    preventDefault: true,
   });
   useHotkeys("esc", () => setOpened(false), {
     enableOnFormTags: true,

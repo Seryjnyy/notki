@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use serde_json::Value;
 use std::sync::{Arc, Mutex};
 use tauri::{App, Manager, Window};
 
@@ -22,6 +23,7 @@ struct AppState {
 
 lazy_static! {
     static ref CONFIG_PATH: Mutex<PathBuf> = Mutex::new(PathBuf::new());
+    static ref OPENED_TABS_PATH: Mutex<PathBuf> = Mutex::new(PathBuf::new());
 }
 
 // use tauri::Manager;
@@ -83,6 +85,19 @@ struct ConfigData {
     current_workspace: String,
 }
 
+#[derive(Serialize)]
+struct OpenedTab {
+    id: String,
+    title: String,
+    filepath: String,
+}
+
+#[derive(Serialize)]
+struct OpenedTabsData {
+    current_tab: String,
+    opened_tabs: Vec<OpenedTab>,
+}
+
 // fn create_file() {
 //     let id = nanoid!(16);
 
@@ -96,10 +111,85 @@ struct ConfigData {
 // Scan files for current workspace
 // send to frontend
 
+fn find_opened_tabs_path() {
+    if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.txt-viewer") {
+        let config_dir = proj_dirs.config_dir();
+        let file_name = "opened-tabs.json";
+        // deal with error
+        let file_exists = config_dir
+            .join(file_name)
+            .try_exists()
+            .expect(&format!("Checking if {} exists failed.", file_name));
+
+        let opened_tabs_path = Path::new(&config_dir).join(file_name);
+        if !file_exists {
+            // create config dir
+            if let Err(err) = fs::create_dir_all(&config_dir) {
+                panic!("Failed to create the config folder.")
+            }
+
+            // TODO : Change this
+            let data = OpenedTabsData {
+                current_tab: "first".to_owned(),
+                opened_tabs: vec![
+                    OpenedTab {
+                        id: String::from("first_id"),
+                        title: String::from("first time"),
+                        filepath: String::from("first file path"),
+                    },
+                    OpenedTab {
+                        id: String::from("second_id"),
+                        title: String::from("second time"),
+                        filepath: String::from("second file path"),
+                    },
+                ],
+            };
+
+            // create config file
+            let file = File::create(&opened_tabs_path).expect("Failed to create the config file.");
+            let mut writer = BufWriter::new(file);
+            serde_json::to_writer(&mut writer, &data)
+                .expect("Failed to create a writer for config data.");
+            writer.flush().expect("Failed to flush config writer.");
+        }
+
+        let mut temp_opened_tabs_path = OPENED_TABS_PATH.lock().unwrap();
+        *temp_opened_tabs_path = opened_tabs_path.clone();
+
+        // read from file
+        // println!("{}", &temp_config_path);
+
+        // update file
+    }
+}
+
+#[tauri::command]
+fn get_opened_tabs_config() -> String {
+    let temp_opened_tabs_path = OPENED_TABS_PATH.lock().unwrap();
+
+    let contents = fs::read_to_string(&*temp_opened_tabs_path).expect("Couldn't read config.");
+    return contents;
+}
+
+fn set_current_tab(new_current_tab: String) {
+    let contents = get_opened_tabs_config();
+    let mut contents_parsed: Value =
+        serde_json::from_str(&contents).expect("Couldn't parse json file.");
+
+    contents_parsed["current_tab"] = Value::from(new_current_tab);
+
+    let contents_updated_json =
+        serde_json::to_string_pretty(&contents_parsed).expect("Failed to serialise content.");
+
+    let path = OPENED_TABS_PATH.lock().unwrap();
+    fs::write(&*path, contents_updated_json).expect("Failed to write updated opened_tabs config.");
+}
+
 fn main() {
     // let filePaths = fs::read_to_string("config.t")
     // let data = fs::read_to_string("")
-
+    find_opened_tabs_path();
+    set_current_tab("a new current tab please".to_owned());
     // For now errors crash the app completely
     if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.txt-viewer") {
         let config_dir = proj_dirs.config_dir();
@@ -142,59 +232,59 @@ fn main() {
     // let contents = fs::read_to_string(&*temp_config_path.clone()).expect("Couldn't read config.");
     // println!("{}", contents)
 
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_existing_vaults, see_allowed])
-        .plugin(tauri_plugin_fs_extra::init())
-        .plugin(tauri_plugin_persisted_scope::init())
-        .setup(|app| {
-            // File watching
-            let temp_config_path = CONFIG_PATH.lock().unwrap();
-            println!("{}", &temp_config_path.to_str().unwrap());
-            // TODO : Could specifically emit to one workspace, if title of window had the workspace name
-            // Does it emit to other windows that are new instances of the app? or just the one apps multiple windows?
-            let app_handle = app.app_handle();
-            let mut watcher = notify::recommended_watcher(|res| match res {
-                Ok(event) => {
-                    println!("event: {:?}", event);
-
-                    // app_handle.emit_all("event", "payload").expect("s");
-                }
-                Err(e) => println!("watch error: {:?}", e),
-            })
-            .expect("Couldn't create a file watcher.");
-
-            watcher
-                .watch(
-                    PathBuf::from("C:\\Users\\jakub\\Documents\\test".to_owned()).as_path(),
-                    RecursiveMode::Recursive,
-                )
-                .unwrap();
-
-            // File watching
-
-            //     let file_paths = fs::read_to_string("./config.txt");
-            //     match file_paths {
-            //         Ok(paths) => {
-            //             let results = paths.lines();
-            //             for part in results.clone() {
-            //                 println!("{}", part);
-            //                 let res = app
-            //                     .fs_scope()
-            //                     .allow_directory(part, true)
-            //                     .map_err(|err| err.to_string());
-            //                 match res {
-            //                     Ok(a) => println!("Path added"),
-            //                     Err(error) => println!("couldn't allow directory"),
-            //                 }
-            //             }
-            //             println!("{}", results.count())
-            //         }
-            //         Err(error) => {
-            //             println!("oh no")
-            //         }
-            //     }
-            Ok(())
-        })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    // tauri::Builder::default()
+    //     .invoke_handler(tauri::generate_handler![
+    //         get_existing_vaults,
+    //         get_opened_tabs_config,
+    //         see_allowed
+    //     ])
+    //     .plugin(tauri_plugin_fs_extra::init())
+    //     .plugin(tauri_plugin_persisted_scope::init())
+    // .setup(|app| {
+    //     // File watching
+    //     let temp_config_path = CONFIG_PATH.lock().unwrap();
+    //     println!("{}", &temp_config_path.to_str().unwrap());
+    //     // TODO : Could specifically emit to one workspace, if title of window had the workspace name
+    //     // Does it emit to other windows that are new instances of the app? or just the one apps multiple windows?
+    //     let app_handle = app.app_handle();
+    //     let mut watcher = notify::recommended_watcher(|res| match res {
+    //         Ok(event) => {
+    //             println!("event: {:?}", event);
+    //             // app_handle.emit_all("event", "payload").expect("s");
+    //         }
+    //         Err(e) => println!("watch error: {:?}", e),
+    //     })
+    //     .expect("Couldn't create a file watcher.");
+    //     watcher
+    //         .watch(
+    //             PathBuf::from("C:\\Users\\jakub\\Documents\\test".to_owned()).as_path(),
+    //             RecursiveMode::Recursive,
+    //         )
+    //         .unwrap();
+    //     // File watching
+    //     //     let file_paths = fs::read_to_string("./config.txt");
+    //     //     match file_paths {
+    //     //         Ok(paths) => {
+    //     //             let results = paths.lines();
+    //     //             for part in results.clone() {
+    //     //                 println!("{}", part);
+    //     //                 let res = app
+    //     //                     .fs_scope()
+    //     //                     .allow_directory(part, true)
+    //     //                     .map_err(|err| err.to_string());
+    //     //                 match res {
+    //     //                     Ok(a) => println!("Path added"),
+    //     //                     Err(error) => println!("couldn't allow directory"),
+    //     //                 }
+    //     //             }
+    //     //             println!("{}", results.count())
+    //     //         }
+    //     //         Err(error) => {
+    //     //             println!("oh no")
+    //     //         }
+    //     //     }
+    //     Ok(())
+    // })
+    // .run(tauri::generate_context!())
+    // .expect("error while running tauri application");
 }
