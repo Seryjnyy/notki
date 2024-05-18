@@ -21,8 +21,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1"
-  }
+  ]
 }

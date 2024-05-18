@@ -1,26 +1,20 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/button";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
-import React, { useEffect, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { useOpenedTabs } from "~/lib/opene-tabs-store";
-import { invoke } from "@tauri-apps/api";
+import React, { useEffect, useState } from "react";
+import { getFileContent } from "~/lib/file-services/file-service";
 import {
   changeStoredCurrentTab,
   changeStoredOpenedTabs,
   getStoredTabConfig,
 } from "~/lib/file-services/tab-service";
-import {
-  FileEntryWithMetadata,
-  showAllFiles,
-} from "~/lib/file-services/directory-service";
-import { Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import { getFileContent } from "~/lib/file-services/file-service";
-import { produce } from "immer";
+import { useOpenedTabs } from "~/lib/opene-tabs-store";
 
 interface TabProps {
   title: string;
