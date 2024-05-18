@@ -18,6 +18,7 @@ import {
   useState,
 } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { newFile } from "~/lib/file-services/file-service";
 import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import { UiState } from "~/lib/types";
 import { useUiState } from "~/lib/ui-store";
@@ -71,6 +72,22 @@ const CommandList = ({
       },
     ];
 
+    const fileCommands = [
+      {
+        title: "New note",
+        desc: "Creates new note",
+        action: () => {
+          console.log("Creating note");
+          newFile();
+        },
+        shortcut: (
+          <>
+            <Badge className="px-1">Ctrl + N</Badge>
+          </>
+        ),
+      },
+    ];
+
     const commandDialogCommands = [
       {
         title: "Open command palette",
@@ -95,6 +112,7 @@ const CommandList = ({
     ];
 
     return [
+      ...fileCommands,
       ...noteCommands,
       ...commandDialogCommands,
       {

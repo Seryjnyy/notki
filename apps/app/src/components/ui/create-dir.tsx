@@ -14,7 +14,11 @@ export default function CreateDir() {
   const [notes, setNotes] = useState<Note[]>([]);
 
   const onClick = async () => {
-    const selected = await open({ directory: true, multiple: false });
+    const selected = await open({
+      directory: true,
+      multiple: false,
+      recursive: true,
+    });
 
     if (typeof selected != "string") {
       return;
