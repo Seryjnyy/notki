@@ -11,6 +11,8 @@ import NewVault from "./components/ui/new-vault";
 import CommandBox from "./components/ui/command-box";
 import MinimalTitlebar from "./components/ui/minimal-titlebar";
 import { listen } from "@tauri-apps/api/event";
+import TabbedView from "./components/ui/tabbed-view";
+import FileSearchBox from "./components/ui/file-search-box";
 
 function App() {
   // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -28,13 +30,15 @@ function App() {
             <Footer /> */}
             {/* <CreateDir /> */}
             {/* <AutoSave /> */}
-            <NewVault />
+            <TabbedView />
+            {/* <NewVault /> */}
             {/* <NoteTakingPage /> */}
           </ScrollArea>
         </div>
 
         <Toaster />
         <CommandBox />
+        <FileSearchBox />
       </ThemeProvider>
     </>
   );
