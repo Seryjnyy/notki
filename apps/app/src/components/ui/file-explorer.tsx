@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import {
-  FileEntryWithMetadata,
-  getAllFilesInFolderWithMetadata,
-} from "~/lib/file-services/directory-service";
+import { getAllFilesInFolderWithMetadata } from "~/lib/file-services/directory-service";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { CaretDownIcon, ReloadIcon, ResetIcon } from "@radix-ui/react-icons";
 import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import { produce } from "immer";
 import {
   changeStoredCurrentTab,
   changeStoredOpenedTabs,
 } from "~/lib/file-services/tab-service";
+import { Button } from "@repo/ui/button";
+import { ScrollArea } from "@repo/ui/scroll-area";
+import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
 
 const File = ({ data }: { data: FileEntryWithMetadata }) => {
   const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
@@ -74,6 +74,14 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
   );
 };
 
+const FileExplorerActions = () => {
+  return (
+    <div>
+      <Button>new</Button>
+    </div>
+  );
+};
+
 export default function FileExplorer() {
   const [files, setFiles] = useState<FileEntryWithMetadata[]>([]);
 
@@ -88,17 +96,32 @@ export default function FileExplorer() {
     setUp();
   }, []);
 
+  const onReload = async () => {
+    const res = await getAllFilesInFolderWithMetadata(
+      "C:\\Users\\jakub\\Documents\\test"
+    );
+
+    setFiles(res);
+  };
+
   return (
     <div className="bg-gray-800 h-full flex flex-col">
       <div>{"directory"}</div>
-      <div className="bg-gray-700 flex flex-col px-2 gap-2">
-        {files.map((file, index) => {
-          if (file.children) {
-            return <Folder data={file} key={index} />;
-          }
+      <Button className="w-fit h-fit" variant={"outline"} onClick={onReload}>
+        <ReloadIcon />
+      </Button>
+      <div>
+        <ScrollArea className="h-[90vh]">
+          <div className="bg-gray-700 flex flex-col px-4 gap-2 pb-12 pt-12">
+            {files.map((file, index) => {
+              if (file.children) {
+                return <Folder data={file} key={index} />;
+              }
 
-          return <File data={file} key={index} />;
-        })}
+              return <File data={file} key={index} />;
+            })}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

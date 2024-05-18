@@ -3,11 +3,11 @@
 
 use serde_json::Value;
 use std::sync::{Arc, Mutex};
-use tauri::{App, Manager, Window};
+use tauri::{App, AppHandle, Manager, Window};
 
 use nanoid::nanoid;
 
-use notify::{RecommendedWatcher, RecursiveMode, Result, Watcher};
+use notify::{ReadDirectoryChangesWatcher, RecommendedWatcher, RecursiveMode, Result, Watcher};
 
 use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
@@ -185,6 +185,10 @@ fn set_current_tab(new_current_tab: String) {
     fs::write(&*path, contents_updated_json).expect("Failed to write updated opened_tabs config.");
 }
 
+// fn new_file_created(app_handle: tauri::AppHandle) {
+//     app_handle.emit_all("new_file_created", "")
+// }
+
 fn main() {
     // let filePaths = fs::read_to_string("config.t")
     // let data = fs::read_to_string("")
@@ -231,60 +235,40 @@ fn main() {
     // let temp_config_path = CONFIG_PATH.lock().unwrap();
     // let contents = fs::read_to_string(&*temp_config_path.clone()).expect("Couldn't read config.");
     // println!("{}", contents)
-
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_existing_vaults,
             get_opened_tabs_config,
-            see_allowed
+            see_allowed,
         ])
         .plugin(tauri_plugin_fs_extra::init())
         .plugin(tauri_plugin_persisted_scope::init())
-        // .setup(|app| {
-        //     // File watching
-        //     let temp_config_path = CONFIG_PATH.lock().unwrap();
-        //     println!("{}", &temp_config_path.to_str().unwrap());
-        //     // TODO : Could specifically emit to one workspace, if title of window had the workspace name
-        //     // Does it emit to other windows that are new instances of the app? or just the one apps multiple windows?
-        //     let app_handle = app.app_handle();
-        //     let mut watcher = notify::recommended_watcher(|res| match res {
-        //         Ok(event) => {
-        //             println!("event: {:?}", event);
-        //             // app_handle.emit_all("event", "payload").expect("s");
-        //         }
-        //         Err(e) => println!("watch error: {:?}", e),
-        //     })
-        //     .expect("Couldn't create a file watcher.");
-        //     watcher
-        //         .watch(
-        //             PathBuf::from("C:\\Users\\jakub\\Documents\\test".to_owned()).as_path(),
-        //             RecursiveMode::Recursive,
-        //         )
-        //         .unwrap();
-        //     // File watching
-        //     //     let file_paths = fs::read_to_string("./config.txt");
-        //     //     match file_paths {
-        //     //         Ok(paths) => {
-        //     //             let results = paths.lines();
-        //     //             for part in results.clone() {
-        //     //                 println!("{}", part);
-        //     //                 let res = app
-        //     //                     .fs_scope()
-        //     //                     .allow_directory(part, true)
-        //     //                     .map_err(|err| err.to_string());
-        //     //                 match res {
-        //     //                     Ok(a) => println!("Path added"),
-        //     //                     Err(error) => println!("couldn't allow directory"),
-        //     //                 }
-        //     //             }
-        //     //             println!("{}", results.count())
-        //     //         }
-        //     //         Err(error) => {
-        //     //             println!("oh no")
-        //     //         }
-        //     //     }
-        //     Ok(())
-        // })
+        .setup(|app| {
+            //     //     let file_paths = fs::read_to_string("./config.txt");
+            //     //     match file_paths {
+            //     //         Ok(paths) => {
+            //     //             let results = paths.lines();
+            //     //             for part in results.clone() {
+            //     //                 println!("{}", part);
+            //     //                 let res = app
+            //     //                     .fs_scope()
+            //     //                     .allow_directory(part, true)
+            //     //                     .map_err(|err| err.to_string());
+            //     //                 match res {
+            //     //                     Ok(a) => println!("Path added"),
+            //     //                     Err(error) => println!("couldn't allow directory"),
+            //     //                 }
+            //     //             }
+            //     //             println!("{}", results.count())
+            //     //         }
+            //     //         Err(error) => {
+            //     //             println!("oh no")
+            //     //         }
+            //     //     }
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+
+    println!("Reaches end")
 }

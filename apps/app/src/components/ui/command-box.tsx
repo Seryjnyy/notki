@@ -54,7 +54,10 @@ const CommandList = ({
   const setUiState = useUiState((state) => state.setUiState);
   const searchInput = useRef<HTMLInputElement>(null);
   const currentFocus = useRef(-1);
+
   const openedTabs = useOpenedTabs((state) => state.openedTabs);
+  const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
+  const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
 
   const commands = useMemo(() => {
     const noteCommands = [
@@ -76,9 +79,19 @@ const CommandList = ({
       {
         title: "New note",
         desc: "Creates new note",
-        action: () => {
+        action: async () => {
           console.log("Creating note");
-          newFile();
+          const [filename, filepath] = await newFile(
+            "C:\\Users\\jakub\\Documents\\test"
+          );
+          // update tab
+          // TODO : using filename which is bad
+          setOpenedTabs(
+            produce(openedTabs, (draft) => {
+              draft.push({ id: "no id", title: filename, filepath: filepath });
+            })
+          );
+          setCurrentTab(filename);
         },
         shortcut: (
           <>
