@@ -6,5 +6,6 @@ export const getDefaultUiState = (): UiState => {
   return {
     sidebar: true,
     titlebar: true,
+    section: "note-viewer",
   };
 };

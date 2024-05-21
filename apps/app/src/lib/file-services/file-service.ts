@@ -125,3 +125,7 @@ export const newFile = async (
 
   return [`${filename}${foundValid}.txt`, filepath];
 };
+
+export const saveFile = (filepath: string, content: string) => {
+  writeTextFile(filepath, content);
+};

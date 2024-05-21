@@ -8,13 +8,14 @@ import {
   TooltipTrigger,
 } from "@repo/ui/tooltip";
 import React, { useEffect, useState } from "react";
-import { getFileContent } from "~/lib/file-services/file-service";
+import { getFileContent, saveFile } from "~/lib/file-services/file-service";
 import {
   changeStoredCurrentTab,
   changeStoredOpenedTabs,
   getStoredTabConfig,
 } from "~/lib/file-services/tab-service";
 import { useOpenedTabs } from "~/lib/opene-tabs-store";
+import NoteTakingPage from "../note-taking-page";
 
 interface TabProps {
   title: string;
@@ -49,7 +50,7 @@ const Tab = ({
         <TooltipTrigger>
           <div
             {...props}
-            className={`${active ? "bg-gray-800" : "bg-muted-foreground"} max-w-[120px] w-[120px] flex items-center gap-2`}
+            className={`${active ? "bg-secondary" : ""} max-w-[120px] w-[120px] flex items-center gap-2`}
           >
             <span className="w-[80%] overflow-hidden text-ellipsis">
               {title}
@@ -118,19 +119,10 @@ export default function TabbedView() {
     changeStoredCurrentTab(tabID);
   };
 
-  const content = () => {
-    const found = openedTabs.find((tab) => tab.title == currentTab);
-    console.log(found);
-
-    if (!found) return <div>No content</div>;
-
-    return <FileContent filepath={found.filepath} />;
-  };
-
   return (
     <div>
       <ScrollArea className="w-full whitespace-nowrap ">
-        <div className="flex">
+        <div className="flex border-b">
           {openedTabs.map((tab) => (
             <Tab
               key={tab.title}
@@ -145,7 +137,15 @@ export default function TabbedView() {
       </ScrollArea>
       {currentTab == "" && <div>No tabs open</div>}
       {/* {currentTabIndex >= 0 && currentTabIndex < openedTabs.length && ( */}
-      {currentTab != "" && <div>{content()}</div>}
+      {currentTab != "" && (
+        <div>
+          <NoteTakingPage
+            filepath={
+              openedTabs.find((tab) => tab.title == currentTab)?.filepath
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }
