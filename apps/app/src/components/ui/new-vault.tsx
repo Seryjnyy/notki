@@ -1,28 +1,21 @@
-import { readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
-import { ArchiveIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArchiveIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
-import { open } from "@tauri-apps/api/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/ui/tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { open } from "@tauri-apps/api/dialog";
+import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
-import { useEffect, useState } from "react";
-import { Vault } from "~/lib/types";
-import { getVaults } from "~/lib/vaults";
 import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   createVaultSchema,
   createVaultSchemaType,
 } from "~/lib/form-schemas/create-vault";
+import { Vault } from "~/lib/types";
+import { getVaults } from "~/lib/vaults";
 import {
   Form,
   FormControl,

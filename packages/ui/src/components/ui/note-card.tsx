@@ -64,22 +64,20 @@ export default function NoteCard({
           {settings.header.options.actions.visible && (
             <div className="w-fit ml-auto space-x-8">
               {settings.header.options.actions.options.copy && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="px-2 py-0"
-                        variant={"ghost"}
-                        onClick={onCopy}
-                      >
-                        <CopyIcon />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Copy contents</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className="px-2 py-0"
+                      variant={"ghost"}
+                      onClick={onCopy}
+                    >
+                      <CopyIcon />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy contents</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
 
               {settings.header.options.actions.options.remove && (

@@ -124,9 +124,45 @@ const CommandList = ({
       },
     ];
 
+    const uiCommands = [
+      {
+        title: "Change to note manager",
+        desc: "Changes view to note manager.",
+        action: async (currUiState: UiState) => {
+          setUiState(
+            produce(uiState, (draft) => {
+              draft.section = "note-manager";
+            })
+          );
+        },
+        shortcut: (
+          <>
+            <Badge className="px-1">Ctrl + idk</Badge>
+          </>
+        ),
+      },
+      {
+        title: "Change to note viewer",
+        desc: "Changes view to note viewer.",
+        action: async (currUiState: UiState) => {
+          setUiState(
+            produce(uiState, (draft) => {
+              draft.section = "note-viewer";
+            })
+          );
+        },
+        shortcut: (
+          <>
+            <Badge className="px-1">Ctrl + idk</Badge>
+          </>
+        ),
+      },
+    ];
+
     return [
       ...fileCommands,
       ...noteCommands,
+      ...uiCommands,
       ...commandDialogCommands,
       {
         title: "Minimise window",

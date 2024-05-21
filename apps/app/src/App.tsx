@@ -19,6 +19,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
+import MainPage from "@repo/ui/main-page";
+import { TooltipProvider } from "@repo/ui/tooltip";
 
 function App() {
   // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -27,31 +29,40 @@ function App() {
   return (
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Titlebar />
-        {/* <MinimalTitlebar /> */}
-        <div className="h-screen overflow-hidden flex mt-7">
-          {uiState.sidebar && <Sidebar />}
-          <ResizablePanelGroup direction="horizontal" className="w-full ">
-            <ResizablePanel minSize={15}>
-              <FileExplorer />
-            </ResizablePanel>
-            <ResizableHandle />
-            <ResizablePanel>
-              <TabbedView />
-              {/* <CreateDir /> */}
-            </ResizablePanel>
-          </ResizablePanelGroup>
+        <TooltipProvider>
+          <Titlebar />
+          {/* <MinimalTitlebar /> */}
+          <div className="h-screen overflow-hidden flex mt-7 ">
+            {uiState.sidebar && <Sidebar />}
 
-          {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
-          {/* <MainPage />
+            {uiState.section == "note-manager" && (
+              <ResizablePanelGroup direction="horizontal" className="w-full ">
+                <ResizablePanel minSize={28}>
+                  <FileExplorer />
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel>
+                  <TabbedView />
+                  {/* <CreateDir /> */}
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            )}
+            {uiState.section == "note-viewer" && (
+              <div className="mt-7 w-full">
+                <MainPage />
+              </div>
+            )}
+            {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
+            {/* <MainPage />
             <Footer /> */}
-          {/* <CreateDir /> */}
-          {/* <AutoSave /> */}
+            {/* <CreateDir /> */}
+            {/* <AutoSave /> */}
 
-          {/* <NewVault /> */}
-          {/* <NoteTakingPage /> */}
-          {/* </ScrollArea> */}
-        </div>
+            {/* <NewVault /> */}
+            {/* <NoteTakingPage /> */}
+            {/* </ScrollArea> */}
+          </div>
+        </TooltipProvider>
 
         <Toaster />
         <CommandBox />

@@ -12,7 +12,7 @@ const useUiState = create<UiStateStore>()((set) => ({
   setUiState: (newUiState) =>
     set(() => {
       // savePreferences(newSettings);
-      // console.log(newUiState);
+      console.log(newUiState);
       return { uiState: newUiState };
     }),
 }));
