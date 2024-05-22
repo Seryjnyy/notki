@@ -32,14 +32,39 @@ import {
 import { Button } from "@repo/ui/button";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
+import { useUiState } from "~/lib/ui-store";
 
 const File = ({ data }: { data: FileEntryWithMetadata }) => {
   const currentTab = useOpenedTabs((state) => state.currentTab);
   const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
   const openedTabs = useOpenedTabs((state) => state.openedTabs);
   const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
+  const uiState = useUiState((state) => state.uiState);
 
   const bgColour = currentTab == data.name ? "bg-secondary" : "";
+
+  const onClick = () => {
+    console.log(data.metadata);
+    if (uiState.section != "note-manager") return;
+
+    setCurrentTab(data.name ?? "unknown");
+    changeStoredCurrentTab(data.name ?? "");
+
+    // Only add once
+    if (openedTabs.find((tab) => tab.title == data.name) == undefined) {
+      setOpenedTabs(
+        produce(openedTabs, (draft) => {
+          draft.push({
+            id: "idk",
+            filepath: data.path,
+            title: data.name ?? "unknown",
+          });
+        })
+      );
+      console.log("opened tabs", openedTabs);
+      changeStoredOpenedTabs(openedTabs);
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -47,29 +72,7 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
         <TooltipTrigger>
           <div
             className={`px-2 hover:bg-secondary ${bgColour} rounded-md text-start`}
-            onClick={() => {
-              console.log(data.metadata);
-
-              setCurrentTab(data.name ?? "unknown");
-              changeStoredCurrentTab(data.name ?? "");
-
-              // Only add once
-              if (
-                openedTabs.find((tab) => tab.title == data.name) == undefined
-              ) {
-                setOpenedTabs(
-                  produce(openedTabs, (draft) => {
-                    draft.push({
-                      id: "idk",
-                      filepath: data.path,
-                      title: data.name ?? "unknown",
-                    });
-                  })
-                );
-                console.log("opened tabs", openedTabs);
-                changeStoredOpenedTabs(openedTabs);
-              }
-            }}
+            onClick={onClick}
           >
             <span className="text-ellipsis text-nowrap"> {data.name}</span>
           </div>
@@ -131,7 +134,7 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
 
 export default function FileExplorer() {
   const [files, setFiles] = useState<FileEntryWithMetadata[]>([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const setUp = async () => {

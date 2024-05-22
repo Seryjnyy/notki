@@ -1,6 +1,8 @@
 import {
   BoxIcon,
   Cross1Icon,
+  LaptopIcon,
+  MagnifyingGlassIcon,
   MinusIcon,
   ViewVerticalIcon,
 } from "@radix-ui/react-icons";
@@ -50,6 +52,52 @@ const SidebarButton = () => {
   );
 };
 
+const AppSectionButtons = () => {
+  const uiState = useUiState((state) => state.uiState);
+  const setUiState = useUiState((state) => state.setUiState);
+
+  const onToggle = () => {
+    setUiState(
+      produce(uiState, (draft) => {
+        draft.sidebar = !draft.sidebar;
+      })
+    );
+  };
+
+  return (
+    <div>
+      <div className="inline-flex justify-center items-center h-[30px] w-12 p-1">
+        <div
+          className="hover:bg-primary p-1 rounded-md group"
+          onClick={() => {
+            setUiState(
+              produce(uiState, (draft) => {
+                draft.section = "note-viewer";
+              })
+            );
+          }}
+        >
+          <MagnifyingGlassIcon className=" group-hover:text-secondary" />
+        </div>
+      </div>
+      <div className="inline-flex justify-center items-center h-[30px] w-12 p-1">
+        <div
+          className="hover:bg-primary p-1 rounded-md group"
+          onClick={() => {
+            setUiState(
+              produce(uiState, (draft) => {
+                draft.section = "note-manager";
+              })
+            );
+          }}
+        >
+          <LaptopIcon className="text-primary group-hover:text-secondary" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Titlebar() {
   const uiState = useUiState((state) => state.uiState);
 
@@ -60,7 +108,10 @@ export default function Titlebar() {
       data-tauri-drag-region
       className="select-none h-[30px] flex justify-between fixed top-0 left-0 right-0 bg-secondary z-10"
     >
-      <SidebarButton />
+      <div className="flex">
+        <SidebarButton />
+        <AppSectionButtons />
+      </div>
 
       <div>
         <WindowActionButton action={() => appWindow.minimize()}>

@@ -35,23 +35,24 @@ function App() {
           <div className="h-screen overflow-hidden flex mt-7 ">
             {uiState.sidebar && <Sidebar />}
 
-            {uiState.section == "note-manager" && (
-              <ResizablePanelGroup direction="horizontal" className="w-full ">
+            <ResizablePanelGroup direction="horizontal" className="w-full ">
+              {uiState.sideSection != "none" && (
                 <ResizablePanel minSize={28}>
-                  <FileExplorer />
+                  {uiState.sideSection == "file-explorer" && <FileExplorer />}
                 </ResizablePanel>
-                <ResizableHandle />
-                <ResizablePanel>
-                  <TabbedView />
-                  {/* <CreateDir /> */}
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            )}
-            {uiState.section == "note-viewer" && (
-              <div className="mt-7 w-full">
-                <MainPage />
-              </div>
-            )}
+              )}
+              <ResizableHandle />
+
+              <ResizablePanel>
+                {/* <CreateDir /> */}
+                {uiState.section == "note-manager" && <TabbedView />}
+                {uiState.section == "note-viewer" && (
+                  <div className="mt-7 w-full">
+                    <MainPage />
+                  </div>
+                )}
+              </ResizablePanel>
+            </ResizablePanelGroup>
             {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
             {/* <MainPage />
             <Footer /> */}

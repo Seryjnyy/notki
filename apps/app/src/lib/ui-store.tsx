@@ -1,6 +1,15 @@
 import { create } from "zustand";
 import { UiState } from "./types";
-import { getDefaultUiState } from "./ui-state";
+
+// TODO : save ui state, and get saved ui state
+const getDefaultUiState = (): UiState => {
+  return {
+    sidebar: true,
+    sideSection: "none",
+    titlebar: true,
+    section: "note-manager",
+  };
+};
 
 interface UiStateStore {
   uiState: UiState;
