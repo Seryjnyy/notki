@@ -7,8 +7,10 @@ import {
 import { getAllFilesInFolder } from "./directory-service";
 import { guidGenerator } from "@repo/lib/metadata-utils";
 import { Metadata, metadata } from "tauri-plugin-fs-extra-api";
+import { generateFileID } from "../file";
 
 export interface FileEntryWithMetadata {
+  id: string;
   metadata: Metadata;
   path: string;
   name?: string | undefined;
@@ -34,7 +36,12 @@ export const getMetadataForFileEntry = async (
   }
 
   const fileChildren = file.children ? childrenWithMeta : file.children;
-  return { ...file, children: fileChildren, metadata: meta };
+  return {
+    ...file,
+    children: fileChildren,
+    metadata: meta,
+    id: await generateFileID(file.path),
+  };
 };
 
 // TODO : can metadata() fail?

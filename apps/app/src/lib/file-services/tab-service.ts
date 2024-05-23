@@ -13,7 +13,7 @@ const zTab = z.object({
   filepath: z.string(),
 });
 
-type Tab = z.infer<typeof zTab>;
+export type Tab = z.infer<typeof zTab>;
 
 const zOpenedTabs = z.object({
   currentTab: z.string(),
@@ -52,7 +52,7 @@ export const changeStoredOpenedTabs = async (newOpenedTabs: Tab[]) => {
   const config = await getStoredTabConfig();
 
   config.openedTabs = newOpenedTabs;
-  console.log(config);
+  console.log("saving new config", config);
   writeTextFile("config\\opened-tabs.json", JSON.stringify(config), {
     dir: BaseDirectory.AppConfig,
   });

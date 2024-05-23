@@ -47,15 +47,15 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
     console.log(data.metadata);
     if (uiState.section != "note-manager") return;
 
-    setCurrentTab(data.name ?? "unknown");
-    changeStoredCurrentTab(data.name ?? "");
+    setCurrentTab(data.id);
+    changeStoredCurrentTab(data.id);
 
     // Only add once
     if (openedTabs.find((tab) => tab.title == data.name) == undefined) {
       setOpenedTabs(
         produce(openedTabs, (draft) => {
           draft.push({
-            id: "idk",
+            id: data.id,
             filepath: data.path,
             title: data.name ?? "unknown",
           });
@@ -141,7 +141,7 @@ export default function FileExplorer() {
       const res = await getAllFilesInFolderWithMetadata(
         "C:\\Users\\jakub\\Documents\\test"
       );
-
+      console.log(res);
       setFiles(res);
     };
     setUp();
@@ -161,7 +161,7 @@ export default function FileExplorer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Button className="w-fit h-fit" variant={"ghost"}>
+              <Button className="w-fit h-fit" variant={"ghost"} asChild>
                 <FilePlusIcon />
               </Button>
             </TooltipTrigger>
@@ -174,7 +174,7 @@ export default function FileExplorer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Button className="w-fit h-fit" variant={"ghost"}>
+              <Button className="w-fit h-fit" variant={"ghost"} asChild>
                 <CardStackPlusIcon />
               </Button>
             </TooltipTrigger>
@@ -191,6 +191,7 @@ export default function FileExplorer() {
                 className="w-fit h-fit"
                 variant={"ghost"}
                 onClick={onReload}
+                asChild
               >
                 <ReloadIcon />
               </Button>
@@ -204,7 +205,7 @@ export default function FileExplorer() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Button className="w-fit h-fit" variant={"ghost"}>
+              <Button className="w-fit h-fit" variant={"ghost"} asChild>
                 <FilePlusIcon />
               </Button>
             </TooltipTrigger>

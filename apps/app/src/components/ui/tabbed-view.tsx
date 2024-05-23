@@ -16,58 +16,67 @@ import {
 } from "~/lib/file-services/tab-service";
 import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import NoteTakingPage from "../note-taking-page";
+import { generateFileID } from "~/lib/file";
+import { Tab as TabType } from "~/lib/file-services/tab-service";
 
 interface TabProps {
-  title: string;
-  tooltip: string;
   active: boolean;
+  data: TabType;
 }
-const Tab = ({
-  title,
-  tooltip,
-  active,
-  ...props
-}: TabProps & React.HTMLAttributes<HTMLDivElement>) => {
+const Tab = ({ active, data }: TabProps) => {
   const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
   const openedTabs = useOpenedTabs((state) => state.openedTabs);
   const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
 
-  const onCloseTab = () => {
+  const onCloseTab = async () => {
     // unsaved changes
 
     // remove from opened tabs
-    const removed = openedTabs.filter((tab) => tab.title != title);
+    const removed = openedTabs.filter((tab) => {
+      return tab.id != data.id;
+    });
+
     setOpenedTabs(removed);
     changeStoredOpenedTabs(removed);
 
     // change current tab
-    setCurrentTab(removed.length > 0 ? removed[0].title : "");
+    setCurrentTab(removed.length > 0 ? removed[0].id : "");
+  };
+
+  const onChangeCurrentTab = () => {
+    console.log("ho shti");
+    setCurrentTab(data.id);
+    changeStoredCurrentTab(data.id);
   };
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <div
-            {...props}
-            className={`${active ? "bg-secondary" : ""} max-w-[120px] w-[120px] flex items-center gap-2`}
-          >
-            <span className="w-[80%] overflow-hidden text-ellipsis">
-              {title}
-            </span>
-            <Button
-              className="py-0 px-0 w-[20%] hover:bg-slate-500"
-              variant={"ghost"}
-              asChild
-              onClick={() => onCloseTab()}
+    <div
+      className={`${active ? "bg-secondary" : ""} max-w-[120px] w-[120px] flex items-center gap-2 `}
+    >
+      <TooltipProvider>
+        <Tooltip delayDuration={1000}>
+          <TooltipTrigger>
+            <div
+              className={`${active ? "bg-secondary" : ""}  flex items-center gap-2 `}
+              onClick={onChangeCurrentTab}
             >
-              <Cross2Icon />
-            </Button>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>{tooltip}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+              <span className="w-[80%] overflow-hidden text-ellipsis">
+                {data.title}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>{data.filepath}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <Button
+        className="py-0 px-0 w-[20%] hover:bg-slate-500"
+        variant={"ghost"}
+        asChild
+        onClick={() => onCloseTab()}
+      >
+        <Cross2Icon />
+      </Button>
+    </div>
   );
 };
 
@@ -114,23 +123,12 @@ export default function TabbedView() {
     console.log(openedTabs);
   }, []);
 
-  const onChangeCurrentTab = (tabID: string) => {
-    setCurrentTab(tabID);
-    changeStoredCurrentTab(tabID);
-  };
-
   return (
     <div>
       <ScrollArea className="w-full whitespace-nowrap ">
         <div className="flex border-b">
           {openedTabs.map((tab) => (
-            <Tab
-              key={tab.title}
-              title={tab.title}
-              tooltip={"tab.tooltip"}
-              active={currentTab == tab.title}
-              onClick={() => onChangeCurrentTab(tab.title)}
-            />
+            <Tab key={tab.id} data={tab} active={currentTab == tab.id} />
           ))}
         </div>
         <ScrollBar orientation="horizontal" className="mt-2 h-2 " />
@@ -140,9 +138,7 @@ export default function TabbedView() {
       {currentTab != "" && (
         <div>
           <NoteTakingPage
-            filepath={
-              openedTabs.find((tab) => tab.title == currentTab)?.filepath
-            }
+            filepath={openedTabs.find((tab) => tab.id == currentTab)?.filepath}
           />
         </div>
       )}
