@@ -56,17 +56,11 @@ const AppSectionButtons = () => {
   const uiState = useUiState((state) => state.uiState);
   const setUiState = useUiState((state) => state.setUiState);
 
-  const onToggle = () => {
-    setUiState(
-      produce(uiState, (draft) => {
-        draft.sidebar = !draft.sidebar;
-      })
-    );
-  };
-
   return (
     <div>
-      <div className="inline-flex justify-center items-center h-[30px] w-12 p-1">
+      <div
+        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-viewer" ? " bg-gray-600" : ""}`}
+      >
         <div
           className="hover:bg-primary p-1 rounded-md group"
           onClick={() => {
@@ -80,7 +74,9 @@ const AppSectionButtons = () => {
           <MagnifyingGlassIcon className=" group-hover:text-secondary" />
         </div>
       </div>
-      <div className="inline-flex justify-center items-center h-[30px] w-12 p-1">
+      <div
+        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-manager" ? " bg-gray-600" : ""}`}
+      >
         <div
           className="hover:bg-primary p-1 rounded-md group"
           onClick={() => {

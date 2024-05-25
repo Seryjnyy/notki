@@ -25,9 +25,15 @@ import {
   FormLabel,
   FormMessage,
 } from "./form";
+import { WorkspaceConfig, useWorkspaceConfig } from "~/lib/workspace-store";
+import { invoke } from "@tauri-apps/api";
+import { setCurrentWorkspace, getCurrentWorkspace } from "~/lib/config-service";
 
 const ExistingVaults = () => {
   const [vaults, setVaults] = useState<Vault[]>([]);
+  const setWorkspacePath = useWorkspaceConfig(
+    (state) => state.setCurrentWorkspace
+  );
 
   useEffect(() => {
     const setUp = async () => {
@@ -41,7 +47,11 @@ const ExistingVaults = () => {
       {vaults.map((vault) => (
         <div
           key={vault.id}
-          className="hover:bg-secondary p-2 rounded-md flex items-center"
+          className="hover:bg-secondary p-2 rounded-md flex items-center cursor-pointer"
+          onClick={async () => {
+            setCurrentWorkspace(vault.path);
+            setWorkspacePath(await getCurrentWorkspace());
+          }}
         >
           <div className="flex flex-col items-start">
             <span>{vault.name}</span>

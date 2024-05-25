@@ -82,7 +82,7 @@ fn see_allowed(app_handle: tauri::AppHandle) {
 
 #[derive(Serialize)]
 struct ConfigData {
-    current_workspace: String,
+    currentWorkspace: String,
 }
 
 #[derive(Serialize)]
@@ -185,16 +185,7 @@ fn set_current_tab(new_current_tab: String) {
     fs::write(&*path, contents_updated_json).expect("Failed to write updated opened_tabs config.");
 }
 
-// fn new_file_created(app_handle: tauri::AppHandle) {
-//     app_handle.emit_all("new_file_created", "")
-// }
-
-fn main() {
-    // let filePaths = fs::read_to_string("config.t")
-    // let data = fs::read_to_string("")
-    find_opened_tabs_path();
-    // set_current_tab("a new current tab please".to_owned());
-    // For now errors crash the app completely
+fn find_config_path() {
     if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.txt-viewer") {
         let config_dir = proj_dirs.config_dir();
         // deal with error
@@ -212,7 +203,7 @@ fn main() {
 
             // TODO : Change this
             let data = ConfigData {
-                current_workspace: "C:\\Users\\jakub\\Documents\\test".to_string(),
+                currentWorkspace: "C:\\Users\\jakub\\Documents\\test".to_string(),
             };
 
             // create config file
@@ -231,6 +222,45 @@ fn main() {
 
         // update file
     }
+}
+
+// fn new_file_created(app_handle: tauri::AppHandle) {
+//     app_handle.emit_all("new_file_created", "")
+// }
+
+#[tauri::command]
+// TODO : get_config
+fn get_current_workspace() -> String {
+    let temp_path = CONFIG_PATH.lock().unwrap();
+
+    let contents = fs::read_to_string(&*temp_path).expect("Couldn't read config.");
+    return contents;
+}
+
+#[tauri::command]
+fn set_current_workspace(new_current_workspace: String) -> String {
+    let contents = get_current_workspace();
+
+    let mut contents_parsed: Value =
+        serde_json::from_str(&contents).expect("Couldn't parse json file.");
+
+    contents_parsed["currentWorkspace"] = Value::from(new_current_workspace.clone());
+
+    let contents_updated_json =
+        serde_json::to_string_pretty(&contents_parsed).expect("Failed to serialise content.");
+
+    let path = CONFIG_PATH.lock().unwrap();
+    fs::write(&*path, contents_updated_json).expect("Failed to write updated opened_tabs config.");
+    return new_current_workspace.to_owned();
+}
+
+fn main() {
+    // let filePaths = fs::read_to_string("config.t")
+    // let data = fs::read_to_string("")
+    find_opened_tabs_path();
+    find_config_path();
+    // set_current_tab("a new current tab please".to_owned());
+    // For now errors crash the app completely
 
     // let temp_config_path = CONFIG_PATH.lock().unwrap();
     // let contents = fs::read_to_string(&*temp_config_path.clone()).expect("Couldn't read config.");
@@ -240,6 +270,8 @@ fn main() {
             get_existing_vaults,
             get_opened_tabs_config,
             see_allowed,
+            get_current_workspace,
+            set_current_workspace
         ])
         .plugin(tauri_plugin_fs_extra::init())
         .plugin(tauri_plugin_persisted_scope::init())
