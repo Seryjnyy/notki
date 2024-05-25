@@ -33,6 +33,7 @@ import { Button } from "@repo/ui/button";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
 import { useUiState } from "~/lib/ui-store";
+import { useWorkspaceConfig } from "~/lib/workspace-store";
 
 const File = ({ data }: { data: FileEntryWithMetadata }) => {
   const currentTab = useOpenedTabs((state) => state.currentTab);
@@ -135,12 +136,13 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
 export default function FileExplorer() {
   const [files, setFiles] = useState<FileEntryWithMetadata[]>([]);
   const [open, setOpen] = useState(true);
+  const workspacePath = useWorkspaceConfig((state) => state.currentWorkspace);
 
   useEffect(() => {
     const setUp = async () => {
-      const res = await getAllFilesInFolderWithMetadata(
-        "C:\\Users\\jakub\\Documents\\test"
-      );
+      if (workspacePath == "") return;
+
+      const res = await getAllFilesInFolderWithMetadata(workspacePath);
       console.log(res);
       setFiles(res);
     };
@@ -148,9 +150,8 @@ export default function FileExplorer() {
   }, []);
 
   const onReload = async () => {
-    const res = await getAllFilesInFolderWithMetadata(
-      "C:\\Users\\jakub\\Documents\\test"
-    );
+    if (workspacePath == "") return;
+    const res = await getAllFilesInFolderWithMetadata(workspacePath);
 
     setFiles(res);
   };
@@ -231,7 +232,7 @@ export default function FileExplorer() {
             >
               {open && <CaretDownIcon />}
               {!open && <CaretRightIcon />}
-              <span>{"some directory"}</span>
+              <span>{workspacePath}</span>
             </CollapsibleTrigger>
             <CollapsibleContent>
               <div className="flex flex-col px-0 gap-2 pb-12 pt-4 pl-2">

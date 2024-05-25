@@ -16,6 +16,7 @@ export default function Sidebar() {
           )}
           <Button
             variant="ghost"
+            className="rounded-none"
             onClick={() =>
               setUiState(
                 produce(uiState, (draft) => {
@@ -50,7 +51,7 @@ export default function Sidebar() {
           </Button>
         </div> */}
 
-        <Button variant="ghost" className="p-0">
+        <Button variant="ghost" className="p-0 rounded-none">
           <GearIcon className="w-4 h-4" />
         </Button>
       </div>

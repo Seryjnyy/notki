@@ -1,17 +1,18 @@
-import { Badge } from "@repo/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
 } from "@repo/ui/dialog-controlled";
+import React from "react";
+
+import { Badge } from "@repo/ui/badge";
 import { Input } from "@repo/ui/input";
 
 import { appWindow } from "@tauri-apps/api/window";
-import { current, produce } from "immer";
+import { produce } from "immer";
 import {
   createRef,
   forwardRef,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -342,31 +343,22 @@ const CommandList = ({
   );
 };
 
-export default function CommandBox() {
-  const [opened, setOpened] = useState(false);
-  useState;
-
-  useHotkeys("ctrl+shift+p", () => setOpened((prev) => !prev), {
-    enableOnFormTags: true,
-    preventDefault: true,
-  });
-  useHotkeys("esc", () => setOpened(false), {
-    enableOnFormTags: true,
-  });
+export default function CommandPalette() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <Dialog open={opened}>
+    <Dialog open={open}>
       <DialogContent>
         <DialogHeader>
           {/* <div className="flex items-center justify-between">
-            <DialogTitle className="w-fit">Command</DialogTitle>
-            <DialogClose onClick={() => setOpened(false)}>
-              <Cross2Icon className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </DialogClose>
-          </div> */}
+                <DialogTitle className="w-fit">Command</DialogTitle>
+                <DialogClose onClick={() => setOpened(false)}>
+                  <Cross2Icon className="h-4 w-4" />
+                  <span className="sr-only">Close</span>
+                </DialogClose>
+              </div> */}
           {/* <DialogDescription>Enter command</DialogDescription> */}
-          <CommandList onCommandExecution={() => setOpened(false)} />
+          <CommandList onCommandExecution={() => setOpen(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
