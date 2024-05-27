@@ -42,7 +42,7 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
   const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
   const uiState = useUiState((state) => state.uiState);
 
-  const bgColour = currentTab == data.name ? "bg-secondary" : "";
+  const bgColour = currentTab == data.id ? "bg-secondary" : "";
 
   const onClick = () => {
     console.log(data.metadata);
@@ -52,7 +52,7 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
     changeStoredCurrentTab(data.id);
 
     // Only add once
-    if (openedTabs.find((tab) => tab.title == data.name) == undefined) {
+    if (openedTabs.find((tab) => tab.id == data.id) == undefined) {
       setOpenedTabs(
         produce(openedTabs, (draft) => {
           draft.push({
@@ -104,7 +104,7 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
   return (
     <Collapsible open={open}>
       <CollapsibleTrigger
-        className="px-2 w-full hover:bg-gray-300 rounded-md text-start flex items-center "
+        className="px-2 w-full hover:bg-secondary rounded-md text-start flex items-center "
         onClick={() => {
           setOpen((prev) => !prev);
         }}
@@ -157,7 +157,7 @@ export default function FileExplorer() {
   };
 
   return (
-    <div className=" h-full flex flex-col">
+    <div className="h-full flex flex-col border-r bg-popover">
       <div className="pt-2 w-full flex justify-start pb-2 pl-1">
         <TooltipProvider>
           <Tooltip>
@@ -225,7 +225,7 @@ export default function FileExplorer() {
         <ScrollArea className="h-[90vh]">
           <Collapsible open={open} className="pr-2">
             <CollapsibleTrigger
-              className="px-2 w-full hover:bg-gray-300 rounded-md text-start flex items-center "
+              className="px-2 w-full hover:bg-secondary rounded-md text-start flex items-center "
               onClick={() => {
                 setOpen((prev) => !prev);
               }}

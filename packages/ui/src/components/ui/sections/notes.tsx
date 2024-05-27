@@ -11,6 +11,7 @@ import FilterAndSort from "./tool-bar/FilterAndSort";
 import ResetNotes from "./tool-bar/ResetNotes";
 import Search from "./tool-bar/Search";
 import Settings from "./tool-bar/Settings";
+import { ScrollArea } from "../scroll-area";
 
 export default function Notes() {
   return (

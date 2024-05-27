@@ -344,7 +344,7 @@ const CommandList = ({
 
 export default function CommandBox() {
   const [opened, setOpened] = useState(false);
-  useState;
+  
 
   useHotkeys("ctrl+shift+p", () => setOpened((prev) => !prev), {
     enableOnFormTags: true,

@@ -1,4 +1,3 @@
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
 import {
@@ -18,6 +17,7 @@ import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import NoteTakingPage from "../note-taking-page";
 import { generateFileID } from "~/lib/file";
 import { Tab as TabType } from "~/lib/file-services/tab-service";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 interface TabProps {
   active: boolean;
@@ -51,16 +51,16 @@ const Tab = ({ active, data }: TabProps) => {
 
   return (
     <div
-      className={`${active ? "bg-secondary" : ""} max-w-[120px] w-[120px] flex items-center gap-2 `}
+      className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1`}
     >
       <TooltipProvider>
         <Tooltip delayDuration={1000}>
           <TooltipTrigger>
             <div
-              className={`${active ? "bg-secondary" : ""}  flex items-center gap-2 `}
+              className={`${active && "bg-card"} `}
               onClick={onChangeCurrentTab}
             >
-              <span className="w-[80%] overflow-hidden text-ellipsis">
+              <span className="flex-1/4 overflow-hidden text-ellipsis">
                 {data.title}
               </span>
             </div>
@@ -68,32 +68,19 @@ const Tab = ({ active, data }: TabProps) => {
           <TooltipContent>{data.filepath}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <Button
-        className="py-0 px-0 w-[20%] hover:bg-slate-500"
-        variant={"ghost"}
-        asChild
-        onClick={() => onCloseTab()}
-      >
-        <Cross2Icon />
-      </Button>
+      <div className="flex-3/4">
+        <Button
+          className="hover:bg-primary w-4 h-4 rounded-md hover:text-primary-foreground p-1"
+          variant={"ghost"}
+          asChild
+          size={"icon"}
+          onClick={() => onCloseTab()}
+        >
+          <Cross1Icon className="w-2 h-2" scale={1} />
+        </Button>
+      </div>
     </div>
   );
-};
-
-const FileContent = ({ filepath }: { filepath: string }) => {
-  const [content, setContent] = useState("");
-
-  useEffect(() => {
-    const setUp = async () => {
-      const res = await getFileContent(filepath);
-
-      setContent(res);
-    };
-
-    setUp();
-  }, [filepath]);
-
-  return <div>{content}</div>;
 };
 
 export default function TabbedView() {
@@ -126,12 +113,12 @@ export default function TabbedView() {
   return (
     <div>
       <ScrollArea className="w-full whitespace-nowrap ">
-        <div className="flex border-b">
+        <div className="flex bg-secondary">
           {openedTabs.map((tab) => (
             <Tab key={tab.id} data={tab} active={currentTab == tab.id} />
           ))}
         </div>
-        <ScrollBar orientation="horizontal" className="mt-2 h-2 " />
+        <ScrollBar orientation="horizontal" className="mt-4 h-2" />
       </ScrollArea>
       {currentTab == "" && <div>No tabs open</div>}
       {/* {currentTabIndex >= 0 && currentTabIndex < openedTabs.length && ( */}

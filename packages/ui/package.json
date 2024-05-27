@@ -27,6 +27,7 @@
     "./toast": "./src/components/ui/toast.tsx",
     "./toaster": "./src/components/ui/toaster.tsx",
     "./tooltip": "./src/components/ui/tooltip.tsx",
+    "./skeleton": "./src/components/ui/skeleton.tsx",
     "./use-toast": "./src/components/ui/use-toast.ts",
     "./mode-toggle": "./src/components/mode-toggle.tsx",
     "./theme-provider": "./src/components/theme-provider.tsx",
