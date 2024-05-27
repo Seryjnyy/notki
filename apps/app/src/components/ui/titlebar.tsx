@@ -71,7 +71,7 @@ const AppSectionButtons = () => {
             );
           }}
         >
-          <MagnifyingGlassIcon className=" group-hover:text-secondary" />
+          <MagnifyingGlassIcon className="text-primary group-hover:text-secondary" />
         </div>
       </div>
       <div

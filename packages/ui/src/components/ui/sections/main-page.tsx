@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "../button";
 import { removePreferences } from "@repo/lib/preference-service";
 import Notes from "./notes";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export default function MainPage() {
   const onResetPreferences = () => {
@@ -13,7 +14,7 @@ export default function MainPage() {
   };
 
   return (
-    <div>
+    <div className="bg-background">
       <header>
         <h1 className="sr-only">Txt viewer</h1>
       </header>

@@ -4,6 +4,8 @@ import { Textarea } from "./ui/textarea";
 import { getFileContent, saveFile } from "~/lib/file-services/file-service";
 import { Button } from "@repo/ui/button";
 import { open } from "@tauri-apps/api/dialog";
+import { ScrollArea } from "@repo/ui/scroll-area";
+import { useConfig } from "./use-config";
 
 export default function NoteTakingPage({
   filepath,
@@ -12,6 +14,7 @@ export default function NoteTakingPage({
 }) {
   const [value, setValue] = useState("");
   const autoSaveTimer = useRef<NodeJS.Timeout | null>();
+  const themeConfig = useConfig();
 
   useEffect(() => {
     console.log(filepath);
@@ -28,7 +31,6 @@ export default function NoteTakingPage({
   useEffect(() => {
     if (!filepath) return;
     return () => {
-      console.log("filepath wtf", filepath);
       saveFile(filepath, value);
     };
   }, []);
@@ -42,12 +44,18 @@ export default function NoteTakingPage({
   //     document.addEventListener("keydown", (ev) => setValue(ev.key));
   //   }, []);
 
-  if (!filepath) return <>no.</>;
+  if (!filepath)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Nothing to show, open a file.
+      </div>
+    );
 
   const autoResize = () => {
     if (textArea.current) {
       textArea.current.style.height = "auto";
-      textArea.current.style.height = textArea.current.scrollHeight + "px";
+      textArea.current.style.height =
+        100 + textArea.current.scrollHeight + "px";
     }
   };
 
@@ -65,14 +73,21 @@ export default function NoteTakingPage({
     }, 2000);
   };
 
+  const textColour =
+    themeConfig.noteFontColour == "primary"
+      ? "text-primary"
+      : "text-black dark:text-white";
+  console.log("what", textColour);
   return (
-    <div className="">
-      <Textarea
-        ref={textArea}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-background h-screen w-full resize-none overflow-hidden rounded-none"
-      />
+    <div>
+      <ScrollArea className=" h-screen ">
+        <Textarea
+          ref={textArea}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`bg-background h-screen w-full resize-none overflow-hidden rounded-none ${textColour}`}
+        />
+      </ScrollArea>
     </div>
   );
 }
