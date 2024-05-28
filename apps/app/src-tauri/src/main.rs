@@ -81,6 +81,13 @@ fn see_allowed(app_handle: tauri::AppHandle) {
 // fn manage_config
 
 #[derive(Serialize)]
+struct Workspace {
+    id: String,
+    path: String,
+    name: String,
+}
+
+#[derive(Serialize)]
 struct ConfigData {
     currentWorkspace: String,
 }

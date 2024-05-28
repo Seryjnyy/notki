@@ -51,7 +51,7 @@ const Tab = ({ active, data }: TabProps) => {
 
   return (
     <div
-      className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1`}
+      className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1 pr-1`}
     >
       <TooltipProvider>
         <Tooltip delayDuration={1000}>
@@ -60,7 +60,7 @@ const Tab = ({ active, data }: TabProps) => {
               className={`${active && "bg-card"} `}
               onClick={onChangeCurrentTab}
             >
-              <span className="flex-1/4 overflow-hidden text-ellipsis">
+              <span className="flex-3/4 overflow-hidden text-ellipsis pl-2 text-sm">
                 {data.title}
               </span>
             </div>
@@ -68,7 +68,7 @@ const Tab = ({ active, data }: TabProps) => {
           <TooltipContent>{data.filepath}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <div className="flex-3/4">
+      <div className="flex-1/4">
         <Button
           className="hover:bg-primary w-4 h-4 rounded-md hover:text-primary-foreground p-1"
           variant={"ghost"}
