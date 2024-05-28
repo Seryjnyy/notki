@@ -14,10 +14,13 @@ import {
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
 import {
+  ArchiveIcon,
   CardStackPlusIcon,
   CaretDownIcon,
   CaretRightIcon,
   CaretSortIcon,
+  CubeIcon,
+  FileIcon,
   FilePlusIcon,
   PlusIcon,
   ReloadIcon,
@@ -75,7 +78,9 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
             className={`px-2 hover:bg-secondary ${bgColour} rounded-md text-start`}
             onClick={onClick}
           >
-            <span className="text-ellipsis text-nowrap"> {data.name}</span>
+            <span className="text-ellipsis text-nowrap flex items-center gap-1">
+              <FileIcon className="text-muted-foreground" /> {data.name}
+            </span>
           </div>
         </TooltipTrigger>
         <TooltipContent className="flex flex-col">
@@ -111,9 +116,12 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
       >
         {open && <CaretDownIcon />}
         {!open && <CaretRightIcon />}
-        <span>{data.name}</span>
+        <span className="flex gap-1 items-center">
+          <ArchiveIcon className="text-muted-foreground" />
+          {data.name}
+        </span>
       </CollapsibleTrigger>
-      <CollapsibleContent className="flex flex-col gap-2 ml-4 ">
+      <CollapsibleContent className="flex flex-col gap-2 ml-4  border-l ">
         {data.children &&
           data.children.map((file, index) => {
             if (file.children) {
@@ -223,6 +231,9 @@ export default function FileExplorer() {
 
       <div>
         <ScrollArea className="h-[90vh]">
+          <div className="text-center text-sm text-muted-foreground">
+            {"vault name"}
+          </div>
           <Collapsible open={open} className="pr-2">
             <CollapsibleTrigger
               className="px-2 w-full hover:bg-secondary rounded-md text-start flex items-center "
@@ -232,10 +243,13 @@ export default function FileExplorer() {
             >
               {open && <CaretDownIcon />}
               {!open && <CaretRightIcon />}
-              <span>{workspacePath}</span>
+              <span className="flex items-center gap-1">
+                <CubeIcon className="text-muted-foreground" />
+                {workspacePath}
+              </span>
             </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="flex flex-col px-0 gap-2 pb-12 pt-4 pl-2">
+            <CollapsibleContent className="flex  ">
+              <div className="flex flex-col px-0 gap-2 pb-12  ml-4 border-l">
                 {files
                   .sort((file) => (file.children ? -1 : 1))
                   .map((file, index) => {
