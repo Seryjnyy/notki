@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Textarea } from "./ui/textarea";
 import { getFileContent, saveFile } from "~/lib/file-services/file-service";
@@ -6,6 +6,39 @@ import { Button } from "@repo/ui/button";
 import { open } from "@tauri-apps/api/dialog";
 import { ScrollArea } from "@repo/ui/scroll-area";
 import { useConfig } from "./use-config";
+
+const DataWithLabel = ({
+  amount,
+  label,
+}: {
+  amount: string | number;
+  label: string;
+}) => {
+  return (
+    <span>
+      {amount} <span className="text-muted-foreground">{label}</span>
+    </span>
+  );
+};
+
+const countWords = (str: string) => {
+  // empty string was 1 without this
+  if (str.length == 0) return 0;
+  return str.trim().split(/\s+/).length;
+};
+
+const Metadata = ({ content }: { content: string }) => {
+  const wordCount = useMemo(() => countWords(content), [content]);
+
+  return (
+    <div className="absolute bottom-16 right-2 border rounded-xl px-2 text-sm space-x-4">
+      <DataWithLabel amount={content.length} label="ch" />
+      <DataWithLabel amount={wordCount} label="words" />
+      {/* <DataWithLabel amount={4} label="kb" /> */}
+      <span>20/04/2001</span>
+    </div>
+  );
+};
 
 export default function NoteTakingPage({
   filepath,
@@ -79,7 +112,7 @@ export default function NoteTakingPage({
       : "text-black dark:text-white";
   console.log("what", textColour);
   return (
-    <div>
+    <div className="relative">
       <ScrollArea className=" h-screen ">
         <Textarea
           ref={textArea}
@@ -88,6 +121,7 @@ export default function NoteTakingPage({
           className={`bg-background h-screen w-full resize-none overflow-hidden rounded-none ${textColour}`}
         />
       </ScrollArea>
+      <Metadata content={value} />
     </div>
   );
 }

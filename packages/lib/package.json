@@ -11,7 +11,7 @@
     "./preference-service": "./src/preferences-service.ts",
     "./search-store": "./src/search-store.tsx",
     "./types": "./src/types.ts",
-    "./use-clipboard": "./src/use-clipboard.tsx"
+    "./use-clipboard": "./src/hooks/use-clipboard.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
