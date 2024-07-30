@@ -6,6 +6,7 @@ import { Button } from "../button";
 import { removePreferences } from "@repo/lib/preference-service";
 import Notes from "./notes";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import ThemeEditor from "../../theme-editor";
 
 export default function MainPage() {
   const onResetPreferences = () => {
@@ -48,6 +49,7 @@ export default function MainPage() {
                 </div>
               }
             >
+              <ThemeEditor />
               <Notes />
             </ErrorBoundary>
           </section>

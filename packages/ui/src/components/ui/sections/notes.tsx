@@ -12,15 +12,17 @@ import ResetNotes from "./tool-bar/ResetNotes";
 import Search from "./tool-bar/Search";
 import Settings from "./tool-bar/Settings";
 import { ScrollArea } from "../scroll-area";
+import CopyAllContent from "./tool-bar/CopyAllContent";
 
 export default function Notes() {
   return (
     <div className="flex gap-4 flex-col">
-      <div className="px-2 md:px-8">
+      <div className="px-2 md:px-8 ">
         <ResetNotes />
         <Settings />
         <FilterAndSort />
         <Search />
+        <CopyAllContent />
       </div>
 
       <NotesView />

@@ -59,10 +59,10 @@ const AppSectionButtons = () => {
   return (
     <div>
       <div
-        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-viewer" ? " bg-gray-600" : ""}`}
+        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-viewer" ? " bg-card" : ""}`}
       >
         <div
-          className="hover:bg-primary p-1 rounded-md group"
+          className="hover:bg-primary p-1 rounded-xl group"
           onClick={() => {
             setUiState(
               produce(uiState, (draft) => {
@@ -75,10 +75,10 @@ const AppSectionButtons = () => {
         </div>
       </div>
       <div
-        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-manager" ? " bg-gray-600" : ""}`}
+        className={`inline-flex justify-center items-center h-[30px] w-12 p-1 ${uiState.section == "note-manager" ? " bg-card" : ""}`}
       >
         <div
-          className="hover:bg-primary p-1 rounded-md group"
+          className="hover:bg-primary p-1 rounded-xl group"
           onClick={() => {
             setUiState(
               produce(uiState, (draft) => {

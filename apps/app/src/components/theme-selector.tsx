@@ -1,7 +1,17 @@
+import { Label } from "@repo/ui/label";
 import React from "react";
+import { themes } from "./themes";
+import { Button } from "@repo/ui/button";
 
 // Based on stuff from Shadcn/ui
 export default function ThemeSelector() {
+  const [mounted, setMounted] = React.useState(false);
+  const { setTheme: setMode, resolvedTheme: mode } = useTheme();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div>
       <div className="space-y-1.5">
