@@ -2,28 +2,26 @@ import { create } from "zustand";
 import { UiState } from "./types";
 
 // TODO : save ui state, and get saved ui state
-const getDefaultUiState = (): UiState => {
-  return {
+const defaults: UiState = {
     sidebar: true,
     sideSection: "none",
     titlebar: true,
     section: "note-manager",
-  };
+    settings: false,
 };
 
 interface UiStateStore {
-  uiState: UiState;
-  setUiState: (uiState: UiState) => void;
+    uiState: UiState;
+    setUiState: (uiState: UiState) => void;
 }
 
 const useUiState = create<UiStateStore>()((set) => ({
-  uiState: getDefaultUiState(),
-  setUiState: (newUiState) =>
-    set(() => {
-      // savePreferences(newSettings);
-      console.log(newUiState);
-      return { uiState: newUiState };
-    }),
+    uiState: defaults,
+    setUiState: (newUiState) =>
+        set(() => {
+            console.log(newUiState);
+            return { uiState: newUiState };
+        }),
 }));
 
 export { useUiState };

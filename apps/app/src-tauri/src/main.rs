@@ -68,6 +68,7 @@ fn get_existing_vaults() -> serde_json::Value {
     return json;
 }
 
+// TODO : Not sure why this is here anymore
 #[tauri::command]
 fn see_allowed(app_handle: tauri::AppHandle) {
     let hash_set = tauri::scope::FsScope::allowed_patterns(&app_handle.fs_scope());
@@ -129,13 +130,16 @@ fn find_opened_tabs_path() {
             .expect(&format!("Checking if {} exists failed.", file_name));
 
         let opened_tabs_path = Path::new(&config_dir).join(file_name);
+
+        // If config file does not exist then create one first
         if !file_exists {
-            // create config dir
-            if let Err(err) = fs::create_dir_all(&config_dir) {
+            // Create config folder
+            if let Err(_err) = fs::create_dir_all(&config_dir) {
                 panic!("Failed to create the config folder.")
             }
 
             // TODO : Change this
+            // Default data for opened tabs file
             let data = OpenedTabsData {
                 currentTab: "".to_owned(),
                 openedTabs: vec![
@@ -152,7 +156,7 @@ fn find_opened_tabs_path() {
                 ],
             };
 
-            // create config file
+            // Write default data to file
             let file = File::create(&opened_tabs_path).expect("Failed to create the config file.");
             let mut writer = BufWriter::new(file);
             serde_json::to_writer(&mut writer, &data)
@@ -160,13 +164,9 @@ fn find_opened_tabs_path() {
             writer.flush().expect("Failed to flush config writer.");
         }
 
+        // Save opened_tabs path to global variable
         let mut temp_opened_tabs_path = OPENED_TABS_PATH.lock().unwrap();
         *temp_opened_tabs_path = opened_tabs_path.clone();
-
-        // read from file
-        // println!("{}", &temp_config_path);
-
-        // update file
     }
 }
 
@@ -194,26 +194,30 @@ fn set_current_tab(new_current_tab: String) {
 
 fn find_config_path() {
     if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.txt-viewer") {
+        // Check if file exists
         let config_dir = proj_dirs.config_dir();
-        // deal with error
         let config_file_exists = config_dir
             .join("config.json")
             .try_exists()
             .expect("Checking if config.json exists failed.");
 
         let config_file_path = Path::new(&config_dir).join("config.json");
+
+        // If file does not exist then create one first
         if !config_file_exists {
-            // create config dir
+            // Create config folder
             if let Err(err) = fs::create_dir_all(&config_dir) {
+                // TODO : Probably not good to just throw this
                 panic!("Failed to create the config folder.")
             }
 
             // TODO : Change this
+            // Default data for config file
             let data = ConfigData {
-                currentWorkspace: "C:\\Users\\jakub\\Documents\\test".to_string(),
+                currentWorkspace: "".to_string(),
             };
 
-            // create config file
+            // Write default data to new config file
             let file = File::create(&config_file_path).expect("Failed to create the config file.");
             let mut writer = BufWriter::new(file);
             serde_json::to_writer(&mut writer, &data)
@@ -221,13 +225,9 @@ fn find_config_path() {
             writer.flush().expect("Failed to flush config writer.");
         }
 
+        // Save config path to variable
         let mut temp_config_path = CONFIG_PATH.lock().unwrap();
         *temp_config_path = config_file_path.clone();
-
-        // read from file
-        // println!("{}", &temp_config_path);
-
-        // update file
     }
 }
 

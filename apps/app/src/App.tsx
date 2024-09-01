@@ -5,9 +5,9 @@ import { TooltipProvider } from "@repo/ui/tooltip";
 import { invoke } from "@tauri-apps/api";
 import { useEffect } from "react";
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import MainDialog from "./components/main-dialog";
 import CommandPalette from "./components/ui/command-palette";
@@ -16,74 +16,71 @@ import NewVault from "./components/ui/new-vault";
 import Sidebar from "./components/ui/sidebar";
 import TabbedView from "./components/ui/tabbed-view";
 import Titlebar from "./components/ui/titlebar";
-import { useConfig } from "./components/use-config";
-import { useUiState } from "./lib/ui-store";
-import { WorkspaceConfig, useWorkspaceConfig } from "./lib/workspace-store";
+
 import CommandBox from "./components/ui/command-box";
 import FileSearchBox from "./components/ui/file-search-box";
+import { useUiState } from "./lib/ui-store";
+import { WorkspaceConfig, useWorkspaceConfig } from "./lib/workspace-store";
 
 function App() {
-  // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
-  const uiState = useUiState((state) => state.uiState);
-  const workspacePath = useWorkspaceConfig((state) => state.currentWorkspace);
-  const setWorkspacePath = useWorkspaceConfig(
-    (state) => state.setCurrentWorkspace
-  );
-  const config = useConfig();
+    // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
+    const uiState = useUiState((state) => state.uiState);
+    const workspacePath = useWorkspaceConfig((state) => state.currentWorkspace);
+    const setWorkspacePath = useWorkspaceConfig(
+        (state) => state.setCurrentWorkspace
+    );
 
-  useEffect(() => {
-    console.log("current workspace", workspacePath);
-    const setUp = async () => {
-      const res = await invoke("get_current_workspace");
-      if (typeof res == "string") {
-        // TODO : Check if actual directory
-        // TODO : Check if have access to it
-        const config = JSON.parse(res) as WorkspaceConfig;
+    useEffect(() => {
+        console.log("current workspace", workspacePath);
+        const setUp = async () => {
+            const res = await invoke("get_current_workspace");
+            if (typeof res == "string") {
+                // TODO : Check if actual directory
+                // TODO : Check if have access to it
+                const config = JSON.parse(res) as WorkspaceConfig;
 
-        console.log("getting workspace", config.currentWorkspace);
-        if (config.currentWorkspace == "") {
-          return;
-        }
+                console.log("getting workspace", config.currentWorkspace);
+                if (config.currentWorkspace == "") {
+                    return;
+                }
 
-        setWorkspacePath(config.currentWorkspace);
-      }
-    };
+                setWorkspacePath(config.currentWorkspace);
+            }
+        };
 
-    setUp();
-  }, []);
+        setUp();
+    }, []);
 
-  return (
-    <>
-      <div className={`${"theme-" + config.theme} bg-background`}>
+    return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <TooltipProvider>
-            <Titlebar />
-            {/* <MinimalTitlebar /> */}
-            {workspacePath == "" && (
-              <div className="h-screen overflow-hidden flex pt-7 ">
-                <NewVault />
-              </div>
-            )}
-            {workspacePath != "" && (
-              <div className="h-screen overflow-hidden flex pt-7 ">
-                {uiState.sidebar && <Sidebar />}
+            <TooltipProvider>
+                <div className={` w-full h-screen flex flex-col  pt-7`}>
+                    <Titlebar />
+                    {/* <MinimalTitlebar /> */}
+                    {workspacePath == "" && (
+                        <div className="h-screen overflow-hidden flex ">
+                            <NewVault />
+                        </div>
+                    )}
+                    {workspacePath != "" && (
+                        <div className="h-screen overflow-hidden flex  ">
+                            {uiState.sidebar && <Sidebar />}
 
-                <ResizablePanelGroup
-                  direction="horizontal"
-                  className="w-full  border-l border-t border-primary z-20"
-                >
-                  {uiState.sideSection != "none" && (
-                    <ResizablePanel minSize={28}>
-                      {uiState.sideSection == "file-explorer" && (
-                        <FileExplorer />
-                      )}
-                    </ResizablePanel>
-                  )}
-                  <ResizableHandle />
+                            <ResizablePanelGroup
+                                direction="horizontal"
+                                className="w-full     "
+                            >
+                                {uiState.sideSection != "none" && (
+                                    <ResizablePanel minSize={28}>
+                                        {uiState.sideSection ==
+                                            "file-explorer" && <FileExplorer />}
+                                    </ResizablePanel>
+                                )}
+                                <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
 
-                  <ResizablePanel>
-                    {/* <CreateDir /> */}
-                    {/* <Button
+                                <ResizablePanel className="bg-background">
+                                    {/* <CreateDir /> */}
+                                    {/* <Button
                       onClick={async () => {
                         const res = await invoke("set_current_workspace", {
                           newCurrentWorkspace: "",
@@ -101,41 +98,40 @@ function App() {
                       Reset
                     </Button> */}
 
-                    {uiState.section == "note-manager" && (
-                      <div>
-                        <TabbedView />
-                      </div>
-                    )}
-                    {uiState.section == "note-viewer" && (
-                      <div className="mt-7 w-full ">
-                        <MainPage />
-                      </div>
-                    )}
-                    {/* <ThemeSelector /> */}
-                  </ResizablePanel>
-                </ResizablePanelGroup>
-                {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
-                {/* <MainPage />
+                                    {uiState.section == "note-manager" && (
+                                        <div>
+                                            <TabbedView />
+                                        </div>
+                                    )}
+                                    {uiState.section == "note-viewer" && (
+                                        <div className="mt-7 w-full ">
+                                            <MainPage />
+                                        </div>
+                                    )}
+                                    {/* <ThemeSelector /> */}
+                                </ResizablePanel>
+                            </ResizablePanelGroup>
+                            {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
+                            {/* <MainPage />
             <Footer /> */}
-                {/* <CreateDir /> */}
-                {/* <AutoSave /> */}
+                            {/* <CreateDir /> */}
+                            {/* <AutoSave /> */}
 
-                {/* <NewVault /> */}
-                {/* <NoteTakingPage /> */}
-                {/* </ScrollArea> */}
-                <MainDialog />
-              </div>
-            )}
-          </TooltipProvider>
-
-          <Toaster />
-          <CommandPalette />
-          <CommandBox />
-          <FileSearchBox />
+                            {/* <NewVault /> */}
+                            {/* <NoteTakingPage /> */}
+                            {/* </ScrollArea> */}
+                            {/* <MainDialog /> */}
+                            <MainDialog />
+                        </div>
+                    )}
+                    <Toaster />
+                    <CommandPalette />
+                    <CommandBox />
+                    <FileSearchBox />
+                </div>
+            </TooltipProvider>
         </ThemeProvider>
-      </div>
-    </>
-  );
+    );
 }
 
 export default App;
