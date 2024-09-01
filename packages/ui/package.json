@@ -6,7 +6,8 @@
   ],
   "private": true,
   "exports": {
-    "./styles.css": "./dist/index.css",
+    
+    "./styles.css": "./src/main.css",
     "./alert": "./src/components/ui/alert.tsx",
     "./button": "./src/components/ui/button.tsx",
     "./card": "./src/components/ui/card.tsx",
