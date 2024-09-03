@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "exports": {
+    "./create-zustand-selectors": "./src/create-zustand-selectors.ts",
     "./metadata-utils": "./src/metadata-utils.ts",
     "./note-sorting": "./src/note-sorting.ts",
     "./note-store": "./src/note-store.tsx",

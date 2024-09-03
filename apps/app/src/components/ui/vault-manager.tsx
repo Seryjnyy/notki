@@ -14,8 +14,8 @@ import {
     createVaultSchema,
     createVaultSchemaType,
 } from "~/lib/form-schemas/create-vault";
-import { Vault } from "~/lib/types";
-import { getVaults } from "~/lib/vaults";
+
+import { addVault, getVaults } from "~/lib/vaults";
 import {
     Form,
     FormControl,
@@ -25,9 +25,10 @@ import {
     FormLabel,
     FormMessage,
 } from "./form";
-import { WorkspaceConfig, useWorkspaceConfig } from "~/lib/workspace-store";
+import { useWorkspaceConfig } from "~/lib/workspace-store";
 import { invoke } from "@tauri-apps/api";
-import { setCurrentWorkspace, getCurrentWorkspace } from "~/lib/config-service";
+// import { setCurrentWorkspace } from "~/lib/config-service";
+import { Vault } from "~/lib/backend-types";
 
 const ExistingVaults = () => {
     const [vaults, setVaults] = useState<Vault[]>([]);
@@ -42,26 +43,35 @@ const ExistingVaults = () => {
         setUp();
     }, []);
 
+    useEffect(() => {
+        console.log("vaults", vaults);
+    }, [vaults]);
+
     return (
-        <div className="border-r w-fit h-screen px-4 py-4 bg-card">
+        <div className="border-r min-w-[16rem]  h-screen px-4 py-4 bg-card">
+            <h2 className="font-semibold">Vaults</h2>
             {vaults.map((vault) => (
                 <div
                     key={vault.id}
-                    className="hover:bg-secondary p-2 rounded-md flex items-center cursor-pointer"
+                    className="hover:bg-secondary px-4 py-3 rounded-md flex items-center cursor-pointer"
                     onClick={async () => {
-                        setCurrentWorkspace(vault.path);
-                        setWorkspacePath(await getCurrentWorkspace());
+                        // setCurrentWorkspace(vault.filepath);
+                        setWorkspacePath(vault);
+                        // setWorkspacePath(await getCurrentWorkspace());
                     }}
                 >
                     <div className="flex flex-col items-start">
-                        <span>{vault.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                            {vault.path}
+                        <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-[10rem]">
+                            {vault.name}
+                        </span>
+                        <span className="text-sm text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap max-w-[10rem]">
+                            {vault.filepath}
+                            oub
                         </span>
                     </div>
                     <Popover>
-                        <PopoverTrigger className="p-2 w-fit h-fit rounded-lg ml-4 hover:bg-slate-600">
-                            <DotsVerticalIcon className="" />
+                        <PopoverTrigger className="p-2 w-fit h-fit rounded-lg ml-4 hover:brightness-150 bg-inherit">
+                            <DotsVerticalIcon />
                         </PopoverTrigger>
                         <PopoverContent className="flex flex-col p-2">
                             <div className="w-full hover:bg-gray-800 p-2 rounded-md flex items-center gap-2">
@@ -81,14 +91,20 @@ const CreateVaultForm = () => {
         resolver: zodResolver(createVaultSchema),
         defaultValues: {
             name: "",
+            location: "",
         },
     });
 
     function onSubmit(values: createVaultSchemaType) {
         console.log(values);
+        addVault(values.name, values.location);
     }
     const onBrowse = async () => {
-        const selected = await open({ directory: true, multiple: false });
+        const selected = await open({
+            directory: true,
+            multiple: false,
+            recursive: true,
+        });
         if (typeof selected != "string") {
             return;
         }
@@ -172,9 +188,9 @@ const CreateVaultForm = () => {
 
 const VaultOptions = () => {
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full ">
             <div className="flex justify-center items-center h-[200px] w-full ">
-                txt-viewer
+                <h1 className="text-sm font-extrabold">txt-viewer</h1>
             </div>
             <div className="h-fit flex items-center justify-between w-full px-12">
                 {/* <div>
@@ -184,7 +200,7 @@ const VaultOptions = () => {
           </p>
         </div>
         <Button>Create</Button> */}
-                <Tabs defaultValue="create-vault" className="w-full">
+                <Tabs defaultValue="create-vault" className="w-full space-y-12">
                     <TabsList>
                         <TabsTrigger value="create-vault">
                             Create vault
@@ -194,9 +210,7 @@ const VaultOptions = () => {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="create-vault">
-                        <div className="pt-4">
-                            <CreateVaultForm />
-                        </div>
+                        <CreateVaultForm />
                     </TabsContent>
                     <TabsContent value="open-existing-vault">
                         Not yet.
@@ -207,19 +221,7 @@ const VaultOptions = () => {
     );
 };
 
-export default function NewVault() {
-    // useEffect(() => {
-    //   const setUp = async () => {
-    //     const contents = await readTextFile("symbol-sets.conf", {
-    //       dir: BaseDirectory.AppConfig,
-    //     });
-    //     const symbolSets = JSON.parse(contents);
-    //     console.log(symbolSets);
-    //   };
-
-    //   setUp();
-    // }, []);
-
+export default function VaultManager() {
     return (
         <div className="flex">
             <ExistingVaults />

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { UiState } from "./types";
+import { createSelectors } from "@repo/lib/create-zustand-selectors";
 
 // TODO : save ui state, and get saved ui state
 const defaults: UiState = {
@@ -15,7 +16,7 @@ interface UiStateStore {
     setUiState: (uiState: UiState) => void;
 }
 
-const useUiState = create<UiStateStore>()((set) => ({
+const useUiStateBase = create<UiStateStore>()((set) => ({
     uiState: defaults,
     setUiState: (newUiState) =>
         set(() => {
@@ -23,5 +24,7 @@ const useUiState = create<UiStateStore>()((set) => ({
             return { uiState: newUiState };
         }),
 }));
+
+const useUiState = createSelectors(useUiStateBase);
 
 export { useUiState };

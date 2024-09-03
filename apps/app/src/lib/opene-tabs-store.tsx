@@ -1,35 +1,86 @@
+import { createSelectors } from "@repo/lib/create-zustand-selectors";
 import { invoke } from "@tauri-apps/api";
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
-type Tab = {
-  id: string;
-  title: string;
-  filepath: string;
+export type Tab = {
+    id: string;
+    workspaceId: string;
+    title: string;
+    filepath: string;
 };
 
 interface OpenedTabsStore {
-  openedTabs: Tab[];
-  setOpenedTabs: (newOpenedTabs: Tab[]) => void;
-  currentTab: string;
-  setCurrentTab: (newCurrentTab: string) => void;
+    openedTabs: Tab[];
+    setOpenedTabs: (newOpenedTabs: Tab[]) => void;
+    addOpenTab: (tab: Tab) => void;
+    removeOpenTab: (tab: Tab) => void;
+    currentTabId: string;
+    setCurrentTabId: (newCurrentTab: string) => void;
 }
 
-// TODO : Get stored list from backend
-const getDefaultOpenedTabs = () => {
-  return [];
+const defaults = {
+    openedTabs: [],
+    currentTabId: "",
 };
 
-// TODO : Get from saved state.
-const getDefaultCurrentTab = () => {
-  return "";
-};
+// It will store opened tabs for all workspaces
+// TODO : What happens if workspace id gets removed/changed, the data will be inaccessible
+// Big issue, might need to periodically provide all valid workspace ids and remove the others
+// TODO : Not 100% confident with how immer and persist are used here
+const useOpenedTabsBase = create<OpenedTabsStore>()(
+    immer(
+        persist(
+            (set, get) => ({
+                ...defaults,
+                setOpenedTabs: (newOpenedTabs) =>
+                    set((state) => {
+                        // Check if current tab is in opened tabs
+                        // If not then set to ""
+                        // TODO : Should current tab have null?
 
-const useOpenedTabs = create<OpenedTabsStore>()((set) => ({
-  openedTabs: getDefaultOpenedTabs(),
-  setOpenedTabs: (newOpenedTabs) => set(() => ({ openedTabs: newOpenedTabs })),
-  currentTab: getDefaultCurrentTab(),
-  setCurrentTab: (newCurrentTab: string) =>
-    set(() => ({ currentTab: newCurrentTab })),
-}));
+                        if (
+                            !newOpenedTabs.find(
+                                (x) => x.id == state.currentTabId
+                            )
+                        ) {
+                            state.currentTabId = "";
+                        }
+
+                        state.openedTabs = newOpenedTabs;
+                    }),
+                setCurrentTabId: (newCurrentTab: string) =>
+                    set((state) => {
+                        state.currentTabId = newCurrentTab;
+                    }),
+                addOpenTab: (tab: Tab) =>
+                    set((state) => {
+                        if (state.openedTabs.find((x) => x.id == tab.id)) {
+                            return;
+                        }
+
+                        state.openedTabs.push(tab);
+                    }),
+                removeOpenTab: (tab: Tab) =>
+                    set((state) => {
+                        if (state.currentTabId == tab.id) {
+                            state.currentTabId = "";
+                        }
+
+                        state.openedTabs = state.openedTabs.filter(
+                            (x) => x.id != tab.id
+                        );
+                    }),
+            }),
+            {
+                name: "txt-viewer-tabs-storage",
+                storage: createJSONStorage(() => localStorage),
+            }
+        )
+    )
+);
+
+const useOpenedTabs = createSelectors(useOpenedTabsBase);
 
 export { useOpenedTabs };

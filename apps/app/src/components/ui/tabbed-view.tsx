@@ -1,134 +1,118 @@
+import { Cross1Icon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from "@repo/ui/tooltip";
-import React, { useEffect, useState } from "react";
-import { getFileContent, saveFile } from "~/lib/file-services/file-service";
-import {
-  changeStoredCurrentTab,
-  changeStoredOpenedTabs,
-  getStoredTabConfig,
-} from "~/lib/file-services/tab-service";
-import { useOpenedTabs } from "~/lib/opene-tabs-store";
+import { useEffect } from "react";
+
+import { Tab, useOpenedTabs } from "~/lib/opene-tabs-store";
 import NoteTakingPage from "../note-taking-page";
-import { generateFileID } from "~/lib/file";
-import { Tab as TabType } from "~/lib/file-services/tab-service";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { invoke } from "@tauri-apps/api";
+import { saveFile } from "~/lib/file-services/file-service";
 
 interface TabProps {
-  active: boolean;
-  data: TabType;
+    active: boolean;
+    tab: Tab;
 }
-const Tab = ({ active, data }: TabProps) => {
-  const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
-  const openedTabs = useOpenedTabs((state) => state.openedTabs);
-  const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
+const TabItem = ({ active, tab }: TabProps) => {
+    const setCurrentTabId = useOpenedTabs.use.setCurrentTabId();
+    const removeOpenTab = useOpenedTabs.use.removeOpenTab();
 
-  const onCloseTab = async () => {
-    // unsaved changes
+    const onCloseTab = async () => {
+        // TODO:  unsaved changes?
 
-    // remove from opened tabs
-    const removed = openedTabs.filter((tab) => {
-      return tab.id != data.id;
-    });
+        removeOpenTab(tab);
+    };
 
-    setOpenedTabs(removed);
-    changeStoredOpenedTabs(removed);
+    const onChangeCurrentTab = () => {
+        setCurrentTabId(tab.id);
+    };
 
-    // change current tab
-    setCurrentTab(removed.length > 0 ? removed[0].id : "");
-  };
-
-  const onChangeCurrentTab = () => {
-    console.log("ho shti");
-    setCurrentTab(data.id);
-    changeStoredCurrentTab(data.id);
-  };
-
-  return (
-    <div
-      className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1 pr-1`}
-    >
-      <TooltipProvider>
-        <Tooltip delayDuration={1000}>
-          <TooltipTrigger>
-            <div
-              className={`${active && "bg-card"} `}
-              onClick={onChangeCurrentTab}
-            >
-              <span className="flex-3/4 overflow-hidden text-ellipsis pl-2 text-sm">
-                {data.title}
-              </span>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>{data.filepath}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <div className="flex-1/4">
-        <Button
-          className="hover:bg-primary w-4 h-4 rounded-md hover:text-primary-foreground p-1"
-          variant={"ghost"}
-          asChild
-          size={"icon"}
-          onClick={() => onCloseTab()}
+    return (
+        <div
+            className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1 pr-1`}
         >
-          <Cross1Icon className="w-2 h-2" scale={1} />
-        </Button>
-      </div>
-    </div>
-  );
+            <TooltipProvider>
+                <Tooltip delayDuration={1000}>
+                    <TooltipTrigger>
+                        <div
+                            className={`${active && "bg-card"} `}
+                            onClick={onChangeCurrentTab}
+                        >
+                            <span className="flex-3/4 overflow-hidden text-ellipsis pl-2 text-sm">
+                                {tab.title}
+                            </span>
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent>{tab.filepath}</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            <div className="flex-1/4">
+                <Button
+                    className="hover:bg-primary w-4 h-4 rounded-md hover:text-primary-foreground p-1"
+                    variant={"ghost"}
+                    asChild
+                    size={"icon"}
+                    onClick={() => onCloseTab()}
+                >
+                    <Cross1Icon className="w-2 h-2" scale={1} />
+                </Button>
+            </div>
+        </div>
+    );
 };
 
 export default function TabbedView() {
-  const openedTabs = useOpenedTabs((state) => state.openedTabs);
-  const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
-  const currentTab = useOpenedTabs((state) => state.currentTab);
-  const setCurrentTab = useOpenedTabs((state) => state.setCurrentTab);
+    const openedTabs = useOpenedTabs.use.openedTabs();
+    const currentTabId = useOpenedTabs.use.currentTabId();
 
-  useEffect(() => {
-    const setUp = async () => {
-      //   const res: string = await invoke("get_opened_tabs_config");
-
-      const openedTabsConfig = await getStoredTabConfig();
-      setOpenedTabs(openedTabsConfig.openedTabs);
-      setCurrentTab(openedTabsConfig.currentTab);
-      //   const parsed = JSON.parse(res) as {
-      //     current_tab: string;
-      //     opened_tabs: { id: string; title: string; filepath: string }[];
-      //   };
-      //   console.log("🚀 ~ parsed ~ parsed:", parsed);
-
-      //   setOpenedTabs(parsed.opened_tabs);
-      //   setCurrentTab(parsed.current_tab);
-    };
-
-    setUp();
-    console.log(openedTabs);
-  }, []);
-
-  return (
-    <div>
-      <ScrollArea className="w-full whitespace-nowrap ">
-        <div className="flex bg-secondary">
-          {openedTabs.map((tab) => (
-            <Tab key={tab.id} data={tab} active={currentTab == tab.id} />
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" className="mt-4 h-2" />
-      </ScrollArea>
-      {currentTab == "" && <div>No tabs open</div>}
-      {/* {currentTabIndex >= 0 && currentTabIndex < openedTabs.length && ( */}
-      {currentTab != "" && (
+    return (
         <div>
-          <NoteTakingPage
-            filepath={openedTabs.find((tab) => tab.id == currentTab)?.filepath}
-          />
+            <Button
+                onClick={() => {
+                    // invoke("test_write_file", {
+                    //     filepath: "C:\\tempForStupid\\fsdfewakh.txt",
+                    //     content: "mukahfiodsn noifonisd ",
+                    // });
+                    // invoke("see_allowed");
+                    saveFile(
+                        "C:\\Users\\User\\Pictures\\apt\\kurde\\apton.txt",
+                        "some stuff"
+                    );
+                }}
+            >
+                save to file
+            </Button>
+            <ScrollArea className="w-full whitespace-nowrap ">
+                <div className="flex bg-secondary">
+                    {openedTabs.map((tab) => (
+                        <TabItem
+                            key={tab.id}
+                            tab={tab}
+                            active={currentTabId == tab.id}
+                        />
+                    ))}
+                </div>
+                <ScrollBar orientation="horizontal" className="mt-4 h-2" />
+            </ScrollArea>
+            {currentTabId == "" && (
+                <div className="w-full bg-red-600">No tabs open</div>
+            )}
+            {/* {currentTabIndex >= 0 && currentTabIndex < openedTabs.length && ( */}
+            {currentTabId != "" && (
+                <div>
+                    <NoteTakingPage
+                        filepath={
+                            openedTabs.find((tab) => tab.id == currentTabId)
+                                ?.filepath
+                        }
+                    />
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
