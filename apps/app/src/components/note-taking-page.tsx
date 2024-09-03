@@ -108,12 +108,12 @@ export default function NoteTakingPage({
 
     return (
         <div className="relative">
-            <ScrollArea className=" h-screen ">
+            <ScrollArea className=" h-screen bg-stone-900">
                 <Textarea
                     ref={textArea}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className={`bg-background h-screen w-full resize-none overflow-hidden rounded-none `}
+                    className={`bg-inherit h-screen w-full resize-none overflow-hidden rounded-none focus:outline-none focus:border-none focus:none`}
                 />
             </ScrollArea>
             <Metadata content={value} />

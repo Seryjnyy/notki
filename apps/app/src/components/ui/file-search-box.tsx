@@ -158,10 +158,12 @@ const FileSearchList = ({
 
 export default function FileSearchBox() {
     const [opened, setOpened] = useState(false);
+    const uiState = useUiState.use.uiState();
 
     useHotkeys(
         "ctrl+p",
         () => {
+            if (uiState.section == "vault-manager") return;
             setOpened((prev) => !prev);
         },
         {
@@ -177,14 +179,6 @@ export default function FileSearchBox() {
         <Dialog open={opened}>
             <DialogContent>
                 <DialogHeader>
-                    {/* <div className="flex items-center justify-between">
-              <DialogTitle className="w-fit">Command</DialogTitle>
-              <DialogClose onClick={() => setOpened(false)}>
-                <Cross2Icon className="h-4 w-4" />
-                <span className="sr-only">Close</span>
-              </DialogClose>
-            </div> */}
-                    {/* <DialogDescription>Enter command</DialogDescription> */}
                     <FileSearchList
                         onCommandExecution={() => setOpened(false)}
                     />

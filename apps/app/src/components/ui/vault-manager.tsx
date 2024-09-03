@@ -14,6 +14,7 @@ import {
     createVaultSchema,
     createVaultSchemaType,
 } from "~/lib/form-schemas/create-vault";
+import { open as shellOpen } from "@tauri-apps/api/shell";
 
 import { addVault, getVaults } from "~/lib/vaults";
 import {
@@ -43,9 +44,13 @@ const ExistingVaults = () => {
         setUp();
     }, []);
 
-    useEffect(() => {
-        console.log("vaults", vaults);
-    }, [vaults]);
+    const onOpenInFileExplorer = async (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        filepath: string
+    ) => {
+        e.stopPropagation();
+        console.log(filepath);
+    };
 
     return (
         <div className="border-r min-w-[16rem]  h-screen px-4 py-4 bg-card">
@@ -55,9 +60,7 @@ const ExistingVaults = () => {
                     key={vault.id}
                     className="hover:bg-secondary px-4 py-3 rounded-md flex items-center cursor-pointer"
                     onClick={async () => {
-                        // setCurrentWorkspace(vault.filepath);
                         setWorkspacePath(vault);
-                        // setWorkspacePath(await getCurrentWorkspace());
                     }}
                 >
                     <div className="flex flex-col items-start">
@@ -70,11 +73,19 @@ const ExistingVaults = () => {
                         </span>
                     </div>
                     <Popover>
-                        <PopoverTrigger className="p-2 w-fit h-fit rounded-lg ml-4 hover:brightness-150 bg-inherit">
+                        <PopoverTrigger
+                            className="p-2 w-fit h-fit rounded-lg ml-4 hover:brightness-150 bg-inherit z-30"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <DotsVerticalIcon />
                         </PopoverTrigger>
-                        <PopoverContent className="flex flex-col p-2">
-                            <div className="w-full hover:bg-gray-800 p-2 rounded-md flex items-center gap-2">
+                        <PopoverContent
+                            className="flex flex-col  bg-background cursor-pointer"
+                            onClick={(e) =>
+                                onOpenInFileExplorer(e, vault.filepath)
+                            }
+                        >
+                            <div className="w-full hover:bg-foreground hover:text-background p-2 rounded-sm flex items-center gap-2">
                                 <ArchiveIcon />
                                 <span>Reveal in file explorer</span>
                             </div>
