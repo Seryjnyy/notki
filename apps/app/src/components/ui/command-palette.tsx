@@ -93,6 +93,7 @@ const CommandList = ({
                                 id: "no id",
                                 title: filename,
                                 filepath: filepath,
+                                workspaceId: "no workspaceId",
                             });
                         })
                     );
@@ -335,7 +336,7 @@ const CommandList = ({
                 />
             </form>
             <div
-                className={`p-2 ${filteredCommands.length == 1 ? "ring-1" : ""} rounded-md ring-primary mt-4`}
+                className={`p-2 ${filteredCommands.length == 1 ? "ring-1" : ""} rounded-md ring-primary mt-4 `}
             >
                 {filteredCommands.map((command, index) => (
                     <Command

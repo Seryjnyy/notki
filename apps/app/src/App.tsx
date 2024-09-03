@@ -22,6 +22,8 @@ import FileSearchBox from "./components/ui/file-search-box";
 import { useUiState } from "./lib/ui-store";
 import { useWorkspaceConfig } from "./lib/workspace-store";
 import { produce } from "immer";
+import NoteTakingPage from "./components/note-taking-page";
+import MinimalTitlebar from "./components/ui/minimal-titlebar";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -107,25 +109,6 @@ function App() {
                                     <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
 
                                     <ResizablePanel className="bg-background">
-                                        {/* <CreateDir /> */}
-                                        {/* <Button
-                      onClick={async () => {
-                        const res = await invoke("set_current_workspace", {
-                          newCurrentWorkspace: "",
-                        });
-                        if (typeof res != "string") {
-                          console.error(
-                            "Error on setting current workspace, returned value is not a string."
-                          );
-                          return;
-                        }
-                        const parsed = JSON.parse(res) as WorkspaceConfig;
-                        setWorkspacePath(parsed.currentWorkspace);
-                      }}
-                    >
-                      Reset
-                    </Button> */}
-
                                         {uiState.section == "note-manager" && (
                                             <div>
                                                 <TabbedView />
@@ -136,19 +119,9 @@ function App() {
                                                 <MainPage />
                                             </div>
                                         )}
-                                        {/* <ThemeSelector /> */}
                                     </ResizablePanel>
                                 </ResizablePanelGroup>
-                                {/* <ScrollArea className="mt-[30px] h-screen w-full"> */}
-                                {/* <MainPage />
-            <Footer /> */}
-                                {/* <CreateDir /> */}
-                                {/* <AutoSave /> */}
 
-                                {/* <NewVault /> */}
-                                {/* <NoteTakingPage /> */}
-                                {/* </ScrollArea> */}
-                                {/* <MainDialog /> */}
                                 <MainDialog />
                             </div>
                         ))}

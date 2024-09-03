@@ -44,6 +44,9 @@
       "dialog": {
         "all": true,
         "open": true
+      },
+      "shell": {
+        "open": true
       }
     },
     "bundle": {

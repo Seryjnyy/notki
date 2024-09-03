@@ -34,13 +34,13 @@ const TabItem = ({ active, tab }: TabProps) => {
 
     return (
         <div
-            className={`${active && "bg-card "}  flex justify-between gap-2  border-l py-1 pr-1`}
+            className={`${active && "bg-primary text-primary-foreground"}  flex justify-between gap-2   py-1 pr-1 group items-center`}
         >
             <TooltipProvider>
                 <Tooltip delayDuration={1000}>
                     <TooltipTrigger>
                         <div
-                            className={`${active && "bg-card"} `}
+                            // className={`${active && "bg-card"} `}
                             onClick={onChangeCurrentTab}
                         >
                             <span className="flex-3/4 overflow-hidden text-ellipsis pl-2 text-sm">
@@ -51,9 +51,9 @@ const TabItem = ({ active, tab }: TabProps) => {
                     <TooltipContent>{tab.filepath}</TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-            <div className="flex-1/4">
+            <div className="flex-1/4 w-4 h-4 ">
                 <Button
-                    className="hover:bg-primary w-4 h-4 rounded-md hover:text-primary-foreground p-1"
+                    className="hover:bg-secondary w-4 h-4 rounded-md hover:text-secondary-foreground p-1 group-hover:block hidden cursor-pointer"
                     variant={"ghost"}
                     asChild
                     size={"icon"}
@@ -72,23 +72,8 @@ export default function TabbedView() {
 
     return (
         <div>
-            <Button
-                onClick={() => {
-                    // invoke("test_write_file", {
-                    //     filepath: "C:\\tempForStupid\\fsdfewakh.txt",
-                    //     content: "mukahfiodsn noifonisd ",
-                    // });
-                    // invoke("see_allowed");
-                    saveFile(
-                        "C:\\Users\\User\\Pictures\\apt\\kurde\\apton.txt",
-                        "some stuff"
-                    );
-                }}
-            >
-                save to file
-            </Button>
             <ScrollArea className="w-full whitespace-nowrap ">
-                <div className="flex bg-secondary">
+                <div className="flex bg-stone-950 ">
                     {openedTabs.map((tab) => (
                         <TabItem
                             key={tab.id}

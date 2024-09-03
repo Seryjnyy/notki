@@ -22,6 +22,7 @@ import {
     CubeIcon,
     FileIcon,
     FilePlusIcon,
+    MixerVerticalIcon,
     PlusIcon,
     ReloadIcon,
     ResetIcon,
@@ -37,6 +38,12 @@ import { ScrollArea } from "@repo/ui/scroll-area";
 import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
 import { useUiState } from "~/lib/ui-store";
 import { useWorkspaceConfig } from "~/lib/workspace-store";
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from "@repo/ui/context-menu";
 
 const File = ({ data }: { data: FileEntryWithMetadata }) => {
     const currentTab = useOpenedTabs((state) => state.currentTabId);
@@ -62,6 +69,7 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
                         id: data.id,
                         filepath: data.path,
                         title: data.name ?? "unknown",
+                        workspaceId: "no workspace id",
                     });
                 })
             );
@@ -71,35 +79,42 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
     };
 
     return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger>
-                    <div
-                        className={`px-2 hover:bg-secondary ${bgColour} rounded-none text-start`}
-                        onClick={onClick}
-                    >
-                        <span className="text-ellipsis text-nowrap flex items-center gap-1">
-                            <FileIcon className="text-muted-foreground" />{" "}
-                            {data.name}
-                        </span>
-                    </div>
-                </TooltipTrigger>
-                <TooltipContent className="flex flex-col">
-                    <p>
-                        modified at{" "}
-                        <span className="font-semibold">
-                            {data.metadata.modifiedAt.toDateString()}
-                        </span>
-                    </p>
-                    <p>
-                        created at{" "}
-                        <span className="font-semibold">
-                            {data.metadata.createdAt.toDateString()}
-                        </span>
-                    </p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        // <Tooltip delayDuration={2000}>
+        //     <TooltipTrigger>
+        <ContextMenu>
+            <ContextMenuTrigger>
+                <div
+                    className={`px-2 hover:bg-secondary ${bgColour} rounded-none text-start `}
+                    onClick={onClick}
+                >
+                    <span className="text-ellipsis text-nowrap flex items-center gap-1">
+                        <FileIcon className="text-muted-foreground" />{" "}
+                        {data.name}
+                    </span>
+                </div>
+            </ContextMenuTrigger>
+            <ContextMenuContent className="bg-background w-[19rem]">
+                <ContextMenuItem className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold">
+                    Some stuff
+                </ContextMenuItem>
+            </ContextMenuContent>
+        </ContextMenu>
+        // </TooltipTrigger>
+        //     <TooltipContent className="flex flex-col px-4" side="bottom">
+        //         <p>
+        //             modified at{" "}
+        //             <span className="font-semibold">
+        //                 {data.metadata.modifiedAt.toDateString()}
+        //             </span>
+        //         </p>
+        //         <p>
+        //             created at{" "}
+        //             <span className="font-semibold">
+        //                 {data.metadata.createdAt.toDateString()}
+        //             </span>
+        //         </p>
+        //     </TooltipContent>
+        // </Tooltip>
     );
 };
 
@@ -122,7 +137,7 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
                     {data.name}
                 </span>
             </CollapsibleTrigger>
-            <CollapsibleContent className="flex flex-col gap-2 ml-4  border-l ">
+            <CollapsibleContent className="flex flex-col ml-4  border-l border-muted">
                 {data.children &&
                     data.children.map((file, index) => {
                         if (file.children) {
@@ -136,12 +151,6 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
     );
 };
 
-// const FileExplorerActions = () => {
-//   return (
-
-//   );
-// };
-
 const FileExplorerTooltip = ({
     trigger,
     content,
@@ -151,7 +160,7 @@ const FileExplorerTooltip = ({
 }) => {
     return (
         <Tooltip delayDuration={100}>
-            <TooltipTrigger>{trigger}</TooltipTrigger>
+            <TooltipTrigger asChild>{trigger}</TooltipTrigger>
             <TooltipContent side="bottom">
                 <p>{content}</p>
             </TooltipContent>
@@ -185,11 +194,27 @@ export default function FileExplorer() {
     };
 
     return (
-        <div className="h-full flex flex-col  bg-gray-900">
+        <div className="h-full flex flex-col border-r">
             <div className="py-2 w-full flex items-center justify-center  bg-inherit brightness-125">
                 <FileExplorerTooltip
                     trigger={
-                        <Button size={"icon"} variant={"ghost"}>
+                        <Button
+                            size={"icon"}
+                            variant={"ghost"}
+                            onClick={onReload}
+                        >
+                            <ReloadIcon />
+                        </Button>
+                    }
+                    content="Reload folder"
+                />
+                <FileExplorerTooltip
+                    trigger={
+                        <Button
+                            size={"icon"}
+                            variant={"ghost"}
+                            onClick={() => {}}
+                        >
                             <FilePlusIcon />
                         </Button>
                     }
@@ -206,31 +231,19 @@ export default function FileExplorer() {
                 />
                 <FileExplorerTooltip
                     trigger={
-                        <Button
-                            size={"icon"}
-                            variant={"ghost"}
-                            onClick={onReload}
-                        >
-                            <ReloadIcon />
+                        <Button size={"icon"} variant={"ghost"}>
+                            <MixerVerticalIcon />
                         </Button>
                     }
-                    content="Reload folder"
+                    content="Sort"
                 />
                 <FileExplorerTooltip
                     trigger={
                         <Button variant={"ghost"} size={"icon"}>
-                            <FilePlusIcon />
-                        </Button>
-                    }
-                    content="Create file"
-                />
-                <FileExplorerTooltip
-                    trigger={
-                        <Button size={"icon"} variant={"ghost"}>
                             <CaretSortIcon />
                         </Button>
                     }
-                    content="Sort"
+                    content="Collapse all"
                 />
             </div>
 
@@ -253,7 +266,7 @@ export default function FileExplorer() {
                         </span>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="flex  ">
-                        <div className="flex flex-col px-0    ml-4 border-l w-full">
+                        <div className="flex flex-col px-0    ml-4 border-l border-muted w-full">
                             {files
                                 .sort((file) => (file.children ? -1 : 1))
                                 .map((file, index) => {
