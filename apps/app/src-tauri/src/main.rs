@@ -1,9 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use serde_json::Value;
+use serde_json::{json, Value};
 use std::sync::{Arc, Mutex};
 use tauri::{App, AppHandle, Manager, Window};
+use typeshare::typeshare;
 
 use nanoid::nanoid;
 
@@ -58,6 +59,75 @@ use directories::ProjectDirs;
 use serde::Serialize;
 use tauri::{GlobPattern, Pattern};
 
+#[derive(Serialize)]
+#[typeshare]
+struct Vault {
+    id: String,
+    name: String,
+    filepath: String,
+}
+
+#[derive(Serialize)]
+#[typeshare]
+#[serde(rename_all = "camelCase")]
+struct Config {
+    current_workspace: String,
+    vaults: Vec<Vault>,
+}
+
+// TODO : Problem is if workspaces are added to config, but config is removed the user will not know
+// what they gave access to.#
+#[tauri::command]
+fn add_vault(name: String, filepath: String) -> serde_json::Value {
+    // Get existing vaults from the config
+    let mut config = get_config();
+    let vaults = config
+        .get("vaults")
+        .expect("Could not find vaults inside config.");
+    let mut vaults_copy = vaults.clone();
+
+    // Add the new vault to the array
+    // TODO : Probably should have something to check against duplicate id
+    if let Some(vaults_arr) = vaults_copy.as_array_mut() {
+        vaults_arr.push(json!({
+            "id": nanoid!(),
+            "name":name,
+            "filepath":filepath
+        }));
+
+        // Save config with new values
+        let val = Value::Array(vaults_arr.clone());
+        config["vaults"] = val;
+
+        let contents_updated_json =
+            serde_json::to_string_pretty(&config).expect("Failed to serialise content.");
+
+        let path = CONFIG_PATH.lock().unwrap();
+        fs::write(&*path, contents_updated_json)
+            .expect("Failed to write updated opened_tabs config.");
+    }
+
+    println!("{:?}", vaults_copy);
+    return config;
+}
+
+#[tauri::command]
+fn test_write_file(filepath: String, content: String) {
+
+    // let _ = fs::write(filepath, content);
+}
+
+#[tauri::command]
+fn get_config() -> serde_json::Value {
+    let temp_config_path = CONFIG_PATH.lock().unwrap();
+    let file = fs::File::open(temp_config_path.as_path()).expect("file should open read only");
+
+    let json: serde_json::Value =
+        serde_json::from_reader(file).expect("file should be proper JSON");
+
+    return json;
+}
+
 #[tauri::command]
 fn get_existing_vaults() -> serde_json::Value {
     let file = fs::File::open("./config.json").expect("file should open read only");
@@ -82,18 +152,6 @@ fn see_allowed(app_handle: tauri::AppHandle) {
 // fn manage_config
 
 #[derive(Serialize)]
-struct Workspace {
-    id: String,
-    path: String,
-    name: String,
-}
-
-#[derive(Serialize)]
-struct ConfigData {
-    currentWorkspace: String,
-}
-
-#[derive(Serialize)]
 struct OpenedTab {
     id: String,
     title: String,
@@ -101,9 +159,10 @@ struct OpenedTab {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct OpenedTabsData {
-    currentTab: String,
-    openedTabs: Vec<OpenedTab>,
+    current_tab: String,
+    opened_tabs: Vec<OpenedTab>,
 }
 
 // fn create_file() {
@@ -141,8 +200,8 @@ fn find_opened_tabs_path() {
             // TODO : Change this
             // Default data for opened tabs file
             let data = OpenedTabsData {
-                currentTab: "".to_owned(),
-                openedTabs: vec![
+                current_tab: "".to_owned(),
+                opened_tabs: vec![
                     // OpenedTab {
                     //     id: String::from("first_id"),
                     //     title: String::from("first time"),
@@ -213,14 +272,15 @@ fn find_config_path() {
 
             // TODO : Change this
             // Default data for config file
-            let data = ConfigData {
-                currentWorkspace: "".to_string(),
+            let default_data = Config {
+                current_workspace: "".to_string(),
+                vaults: Vec::new(),
             };
 
             // Write default data to new config file
             let file = File::create(&config_file_path).expect("Failed to create the config file.");
             let mut writer = BufWriter::new(file);
-            serde_json::to_writer(&mut writer, &data)
+            serde_json::to_writer(&mut writer, &default_data)
                 .expect("Failed to create a writer for config data.");
             writer.flush().expect("Failed to flush config writer.");
         }
@@ -278,10 +338,13 @@ fn main() {
             get_opened_tabs_config,
             see_allowed,
             get_current_workspace,
-            set_current_workspace
+            set_current_workspace,
+            get_config,
+            add_vault,
+            test_write_file
         ])
-        .plugin(tauri_plugin_fs_extra::init())
         .plugin(tauri_plugin_persisted_scope::init())
+        .plugin(tauri_plugin_fs_extra::init())
         .setup(|app| {
             //     //     let file_paths = fs::read_to_string("./config.txt");
             //     //     match file_paths {

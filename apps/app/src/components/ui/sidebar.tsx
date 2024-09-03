@@ -1,4 +1,4 @@
-import { FileIcon, GearIcon } from "@radix-ui/react-icons";
+import { ArchiveIcon, FileIcon, GearIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import ModeToggle from "@repo/ui/mode-toggle";
 import { produce } from "immer";
@@ -66,7 +66,7 @@ export default function Sidebar() {
 
     return (
         <div className="w-12 h-screen pt-8 bg-secondary">
-            <div className="flex flex-col">
+            <div className="flex flex-col h-full ">
                 <SidebarButton
                     tooltip="File manager"
                     active={uiState.sideSection == "file-explorer"}
@@ -120,6 +120,20 @@ export default function Sidebar() {
                     <div>
                         <ModeToggle />
                     </div>
+                </SidebarTooltip>
+                <SidebarTooltip content="Vaults">
+                    <Button
+                        variant={"ghost"}
+                        onClick={() => {
+                            setUiState(
+                                produce(uiState, (draft) => {
+                                    draft.section = "vault-manager";
+                                })
+                            );
+                        }}
+                    >
+                        <ArchiveIcon />
+                    </Button>
                 </SidebarTooltip>
             </div>
         </div>

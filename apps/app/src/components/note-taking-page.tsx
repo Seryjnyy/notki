@@ -61,7 +61,9 @@ export default function NoteTakingPage({
 
     useEffect(() => {
         if (!filepath) return;
+        // This messes up stuff
         return () => {
+            if (value == "") return;
             saveFile(filepath, value);
         };
     }, []);
@@ -100,8 +102,8 @@ export default function NoteTakingPage({
 
         autoSaveTimer.current = setTimeout(() => {
             console.log("autosave");
-            saveFile(filepath, value);
-        }, 2000);
+            saveFile(filepath, newValue);
+        }, 100);
     };
 
     return (
