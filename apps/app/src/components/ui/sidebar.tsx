@@ -28,12 +28,14 @@ const SidebarTooltip = ({
     content: string;
 }) => {
     return (
-        <Tooltip delayDuration={1000}>
-            <TooltipTrigger asChild>{children}</TooltipTrigger>
-            <TooltipContent side="right">
-                <p>{content}</p>
-            </TooltipContent>
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip delayDuration={1000}>
+                <TooltipTrigger asChild>{children}</TooltipTrigger>
+                <TooltipContent side="right">
+                    <p>{content}</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };
 

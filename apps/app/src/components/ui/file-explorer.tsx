@@ -35,7 +35,11 @@ import {
 } from "~/lib/file-services/tab-service";
 import { Button } from "@repo/ui/button";
 import { ScrollArea } from "@repo/ui/scroll-area";
-import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
+import {
+    FileEntryWithMetadata,
+    newDir,
+    newFile,
+} from "~/lib/file-services/file-service";
 import { useUiState } from "~/lib/ui-store";
 import { useWorkspaceConfig } from "~/lib/workspace-store";
 import {
@@ -79,42 +83,44 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
     };
 
     return (
-        // <Tooltip delayDuration={2000}>
-        //     <TooltipTrigger>
-        <ContextMenu>
-            <ContextMenuTrigger>
-                <div
-                    className={`px-2 hover:bg-secondary ${bgColour} rounded-none text-start `}
-                    onClick={onClick}
-                >
-                    <span className="text-ellipsis text-nowrap flex items-center gap-1">
-                        <FileIcon className="text-muted-foreground" />{" "}
-                        {data.name}
-                    </span>
-                </div>
-            </ContextMenuTrigger>
-            <ContextMenuContent className="bg-background w-[19rem]">
-                <ContextMenuItem className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold">
-                    Some stuff
-                </ContextMenuItem>
-            </ContextMenuContent>
-        </ContextMenu>
-        // </TooltipTrigger>
-        //     <TooltipContent className="flex flex-col px-4" side="bottom">
-        //         <p>
-        //             modified at{" "}
-        //             <span className="font-semibold">
-        //                 {data.metadata.modifiedAt.toDateString()}
-        //             </span>
-        //         </p>
-        //         <p>
-        //             created at{" "}
-        //             <span className="font-semibold">
-        //                 {data.metadata.createdAt.toDateString()}
-        //             </span>
-        //         </p>
-        //     </TooltipContent>
-        // </Tooltip>
+        <TooltipProvider>
+            <Tooltip delayDuration={1000}>
+                <TooltipTrigger>
+                    <ContextMenu>
+                        <ContextMenuTrigger>
+                            <div
+                                className={`px-2 hover:bg-secondary ${bgColour} rounded-none text-start `}
+                                onClick={onClick}
+                            >
+                                <span className="text-ellipsis text-nowrap flex items-center gap-1">
+                                    <FileIcon className="text-muted-foreground" />{" "}
+                                    {data.name}
+                                </span>
+                            </div>
+                        </ContextMenuTrigger>
+                        <ContextMenuContent className="bg-background w-[19rem]">
+                            <ContextMenuItem className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold">
+                                Some stuff
+                            </ContextMenuItem>
+                        </ContextMenuContent>
+                    </ContextMenu>
+                </TooltipTrigger>
+                <TooltipContent className="flex flex-col px-4" side="bottom">
+                    <p>
+                        modified at{" "}
+                        <span className="font-semibold">
+                            {data.metadata.modifiedAt.toDateString()}
+                        </span>
+                    </p>
+                    <p>
+                        created at{" "}
+                        <span className="font-semibold">
+                            {data.metadata.createdAt.toDateString()}
+                        </span>
+                    </p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };
 
@@ -122,20 +128,46 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
     // TODO : ui state should store which one is open
     const [open, setOpen] = useState(false);
 
+    const onNewFile = () => {
+        newFile(data.path);
+    };
+
+    const onNewDir = () => {
+        newDir(data.path);
+    };
+
     return (
         <Collapsible open={open} className="w-full">
             <CollapsibleTrigger
-                className="px-2 w-full hover:bg-secondary rounded-none text-start flex items-center "
+                className="px-2 w-full hover:bg-secondary rounded-none "
                 onClick={() => {
                     setOpen((prev) => !prev);
                 }}
             >
-                {open && <CaretDownIcon />}
-                {!open && <CaretRightIcon />}
-                <span className="flex gap-1 items-center">
-                    <ArchiveIcon className="text-muted-foreground" />
-                    {data.name}
-                </span>
+                <ContextMenu>
+                    <ContextMenuTrigger className=" flex items-center text-start ">
+                        {open && <CaretDownIcon />}
+                        {!open && <CaretRightIcon />}
+                        <span className="flex gap-1 items-center">
+                            <ArchiveIcon className="text-muted-foreground" />
+                            {data.name}
+                        </span>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="bg-background w-[19rem]">
+                        <ContextMenuItem
+                            className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold space-x-2"
+                            onClick={onNewFile}
+                        >
+                            <FilePlusIcon /> <span>New file</span>
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold space-x-2"
+                            onClick={onNewDir}
+                        >
+                            <CardStackPlusIcon /> <span>New folder</span>
+                        </ContextMenuItem>
+                    </ContextMenuContent>
+                </ContextMenu>
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col ml-4  border-l border-muted">
                 {data.children &&
@@ -159,7 +191,7 @@ const FileExplorerTooltip = ({
     content: ReactNode;
 }) => {
     return (
-        <Tooltip delayDuration={100}>
+        <Tooltip delayDuration={300}>
             <TooltipTrigger asChild>{trigger}</TooltipTrigger>
             <TooltipContent side="bottom">
                 <p>{content}</p>
@@ -193,58 +225,72 @@ export default function FileExplorer() {
         setFiles(res);
     };
 
+    const onNewFile = () => {
+        if (!workspace) return;
+
+        newFile(workspace?.filepath);
+    };
+
     return (
         <div className="h-full flex flex-col border-r">
             <div className="py-2 w-full flex items-center justify-center  bg-inherit brightness-125">
-                <FileExplorerTooltip
-                    trigger={
-                        <Button
-                            size={"icon"}
-                            variant={"ghost"}
-                            onClick={onReload}
-                        >
-                            <ReloadIcon />
-                        </Button>
-                    }
-                    content="Reload folder"
-                />
-                <FileExplorerTooltip
-                    trigger={
-                        <Button
-                            size={"icon"}
-                            variant={"ghost"}
-                            onClick={() => {}}
-                        >
-                            <FilePlusIcon />
-                        </Button>
-                    }
-                    content="Create file"
-                />
+                <TooltipProvider>
+                    <FileExplorerTooltip
+                        trigger={
+                            <Button
+                                size={"icon"}
+                                variant={"ghost"}
+                                onClick={onReload}
+                            >
+                                <ReloadIcon />
+                            </Button>
+                        }
+                        content="Reload folder"
+                    />
+                    <FileExplorerTooltip
+                        trigger={
+                            <Button
+                                size={"icon"}
+                                variant={"ghost"}
+                                onClick={onNewFile}
+                            >
+                                <FilePlusIcon />
+                            </Button>
+                        }
+                        content="Create file"
+                    />
 
-                <FileExplorerTooltip
-                    trigger={
-                        <Button size={"icon"} variant={"ghost"}>
-                            <CardStackPlusIcon />
-                        </Button>
-                    }
-                    content="Create folder"
-                />
-                <FileExplorerTooltip
-                    trigger={
-                        <Button size={"icon"} variant={"ghost"}>
-                            <MixerVerticalIcon />
-                        </Button>
-                    }
-                    content="Sort"
-                />
-                <FileExplorerTooltip
-                    trigger={
-                        <Button variant={"ghost"} size={"icon"}>
-                            <CaretSortIcon />
-                        </Button>
-                    }
-                    content="Collapse all"
-                />
+                    <FileExplorerTooltip
+                        trigger={
+                            <Button
+                                size={"icon"}
+                                variant={"ghost"}
+                                onClick={() =>
+                                    newDir(workspace?.filepath ?? "")
+                                }
+                            >
+                                <CardStackPlusIcon />
+                            </Button>
+                        }
+                        content="Create folder"
+                    />
+                    <FileExplorerTooltip
+                        trigger={
+                            <Button size={"icon"} variant={"ghost"}>
+                                <MixerVerticalIcon />
+                            </Button>
+                        }
+                        content="Sort"
+                    />
+                    <FileExplorerTooltip
+                        trigger={
+                            <Button variant={"ghost"} size={"icon"}>
+                                <CaretSortIcon />
+                            </Button>
+                        }
+                        content="Collapse all"
+                    />
+                </TooltipProvider>
             </div>
 
             <ScrollArea className="h-[90vh]">

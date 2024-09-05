@@ -1,6 +1,7 @@
 import {
     BaseDirectory,
     FileEntry,
+    createDir,
     exists,
     readTextFile,
     writeFile,
@@ -65,16 +66,16 @@ export const getFileWithMetadata = async (filepath: string) => {
 };
 
 // TODO : This is awful :/ but im tired
+// TODO : maybe should tell the user they can't create file with the same name as something else
 export const newFile = async (
     basepath: string,
     filename: string = "Untitled"
 ) => {
-    // TODO : Inefficient I think, fetching the entire directory then checking checking each file
     const files = await getAllFilesInFolder(basepath, false);
 
     // filter out folders
     // filter for files named "Untitled" in the same folder
-    // take only the part after "Untitled"
+    // Checking filepath because name doesn't add subfolder to the name
     const defaultFilepath = `${basepath}\\${filename}`;
     const untitledFiles = files
         .filter((file) => file.children == undefined)
@@ -82,26 +83,31 @@ export const newFile = async (
             return file.path?.includes(defaultFilepath);
         });
 
-    const prefixes = untitledFiles.map((file) =>
-        file.name!.substring(8, file.name!.length - 4)
-    );
+    // Get length of file extension + "."
+    // Get string between file name and the extension, so the suffix to untitled/new folder
+    const suffixes = untitledFiles.map((file) => {
+        const extLen = file.name!.length - file.name!.lastIndexOf(".");
+        return file.name!.substring(
+            filename.length,
+            file.name!.length - extLen
+        );
+    });
 
-    // search through found prefixes, check for availability 1 2 3 ...
+    // search through found suffixes, check for availability of 1 2 3 4 5 ...
     let foundValid: string | null = null;
 
-    // If doesn't include "" so Untitled.txt then use that
-    if (!prefixes.includes("")) foundValid = "";
+    // If doesn't include "", then Untitled.txt is available so use that
+    if (!suffixes.includes("")) foundValid = "";
 
     // If not Untitled files then use no prefix
-    if (prefixes.length == 0) {
+    if (suffixes.length == 0) {
         foundValid = "";
     } else {
         // check from 1 to n + 1, check each file to see if exists already, if not then use that as prefix
         let valid = null;
-        for (let i = 1; i < prefixes.length + 2; i++) {
+        for (let i = 1; i < suffixes.length + 2; i++) {
             const iAsString = i.toString();
-            for (const prefix of prefixes) {
-                console.log(prefix, iAsString);
+            for (const prefix of suffixes) {
                 if (prefix == iAsString) {
                     valid = null;
                     break;
@@ -122,6 +128,7 @@ export const newFile = async (
     }
 
     // If couldn't find a suitable prefix then just randomise it instead of wasting more time
+    // This shouldn't happen right??
     if (foundValid == null) foundValid = guidGenerator();
 
     // Last check, just to make sure we don't overwrite a file
@@ -130,9 +137,81 @@ export const newFile = async (
     }
 
     const filepath = `${basepath}\\${filename}${foundValid}.txt`;
-    await writeTextFile(`${basepath}\\${filename}${foundValid}.txt`, "");
+    await writeTextFile(filepath, "");
 
     return [`${filename}${foundValid}.txt`, filepath];
+};
+
+// TODO : duplicate code with newFile
+export const newDir = async (
+    basepath: string,
+    filename: string = "New folder"
+) => {
+    const files = await getAllFilesInFolder(basepath, false);
+
+    // filter out files
+    // filter for folders named "New folder" in the same folder
+    // Checking filepath because name doesn't add subfolder to the name
+    const defaultFilepath = `${basepath}\\${filename}`;
+    const untitledFiles = files
+        .filter((file) => file.children != undefined)
+        .filter((file) => {
+            return file.path?.includes(defaultFilepath);
+        });
+
+    // Get length of file extension + "."
+    // Get string between file name and the extension, so the suffix to untitled/new folder
+    const suffixes = untitledFiles.map((file) => {
+        return file.name!.substring(filename.length);
+    });
+
+    // search through found suffixes, check for availability of 1 2 3 4 5 ...
+    let foundValid: string | null = null;
+
+    // If doesn't include "", then Untitled.txt is available so use that
+    if (!suffixes.includes("")) foundValid = "";
+
+    // If not Untitled files then use no prefix
+    if (suffixes.length == 0) {
+        foundValid = "";
+    } else {
+        // check from 1 to n + 1, check each file to see if exists already, if not then use that as prefix
+        let valid = null;
+        for (let i = 1; i < suffixes.length + 2; i++) {
+            const iAsString = i.toString();
+            for (const prefix of suffixes) {
+                if (prefix == iAsString) {
+                    valid = null;
+                    break;
+                }
+
+                valid = iAsString;
+            }
+            if (valid) {
+                foundValid = valid;
+                break;
+            }
+        }
+    }
+
+    // Need this for when Untitled exists, without it will go straight to random
+    if (foundValid == "" && untitledFiles.length == 1) {
+        foundValid = "1";
+    }
+
+    // If couldn't find a suitable prefix then just randomise it instead of wasting more time
+    // This shouldn't happen right??
+    if (foundValid == null) foundValid = guidGenerator();
+
+    // Last check, just to make sure we don't overwrite a file
+    while (await exists(`${basepath}\\${filename}${foundValid}`)) {
+        foundValid = guidGenerator();
+    }
+
+    const filepath = `${basepath}\\${filename}${foundValid}`;
+    await createDir(filepath);
+
+    return [`${filename}${foundValid}`, filepath];
 };
 
 export const saveFile = (filepath: string, content: string) => {
