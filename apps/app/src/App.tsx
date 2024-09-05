@@ -10,7 +10,7 @@ import {
     ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import MainDialog from "./components/main-dialog";
-import CommandPalette from "./components/ui/command-palette";
+
 import FileExplorer from "./components/ui/file-explorer";
 import NewVault from "./components/ui/vault-manager";
 import Sidebar from "./components/ui/sidebar";
@@ -84,53 +84,58 @@ function App() {
 
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <TooltipProvider>
-                <div className={` w-full h-screen flex flex-col  pt-7`}>
-                    <Titlebar />
-                    {/* <MinimalTitlebar /> */}
-                    {uiState.section == "vault-manager" && <NewVault />}
-                    {uiState.section == "note-viewer" ||
-                        (uiState.section == "note-manager" && (
-                            <div className="h-screen overflow-hidden flex  ">
-                                {uiState.sidebar && <Sidebar />}
+            <div className={` w-full h-screen flex flex-col  pt-7`}>
+                <Titlebar />
+                {/* <MinimalTitlebar /> */}
+                {uiState.section == "vault-manager" && <NewVault />}
+                {(uiState.section == "note-viewer" ||
+                    uiState.section == "note-manager") && (
+                    <div className="h-screen overflow-hidden flex  ">
+                        {uiState.sidebar && <Sidebar />}
 
-                                <ResizablePanelGroup
-                                    direction="horizontal"
-                                    className="w-full     "
+                        <ResizablePanelGroup
+                            direction="horizontal"
+                            className="w-full     "
+                        >
+                            {uiState.sideSection != "none" && (
+                                <ResizablePanel
+                                    minSize={28}
+                                    id="file-explorer"
+                                    order={1}
                                 >
-                                    {uiState.sideSection != "none" && (
-                                        <ResizablePanel minSize={28}>
-                                            {uiState.sideSection ==
-                                                "file-explorer" && (
-                                                <FileExplorer />
-                                            )}
-                                        </ResizablePanel>
+                                    {uiState.sideSection == "file-explorer" && (
+                                        <FileExplorer />
                                     )}
-                                    <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
+                                </ResizablePanel>
+                            )}
+                            <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
 
-                                    <ResizablePanel className="bg-background">
-                                        {uiState.section == "note-manager" && (
-                                            <div>
-                                                <TabbedView />
-                                            </div>
-                                        )}
-                                        {uiState.section == "note-viewer" && (
-                                            <div className="mt-7 w-full ">
-                                                <MainPage />
-                                            </div>
-                                        )}
-                                    </ResizablePanel>
-                                </ResizablePanelGroup>
+                            <ResizablePanel
+                                className="bg-background"
+                                id="main-content"
+                                order={2}
+                            >
+                                {uiState.section == "note-manager" && (
+                                    <div>
+                                        <TabbedView />
+                                    </div>
+                                )}
+                                {uiState.section == "note-viewer" && (
+                                    <div className="mt-7 w-full ">
+                                        <MainPage />
+                                    </div>
+                                )}
+                            </ResizablePanel>
+                        </ResizablePanelGroup>
 
-                                <MainDialog />
-                            </div>
-                        ))}
-                    <Toaster />
-                    <CommandPalette />
-                    <CommandBox />
-                    <FileSearchBox />
-                </div>
-            </TooltipProvider>
+                        <MainDialog />
+                    </div>
+                )}
+                <Toaster />
+
+                <CommandBox />
+                <FileSearchBox />
+            </div>
         </ThemeProvider>
     );
 }
