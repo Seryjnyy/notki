@@ -1,22 +1,18 @@
 import { Badge } from "@repo/ui/badge";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@repo/ui/dialog-controlled";
 import { Input } from "@repo/ui/input";
-import { ScrollArea } from "@repo/ui/scroll-area";
 
 import { appWindow } from "@tauri-apps/api/window";
-import { current, produce } from "immer";
+import { produce } from "immer";
 import {
     createRef,
     forwardRef,
     ReactNode,
-    useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -31,10 +27,9 @@ import { useWorkspaceConfig } from "~/lib/workspace-store";
 
 interface CommandProps extends React.HTMLAttributes<HTMLDivElement> {
     title: string;
-    shortcut: React.ReactNode;
+    shortcut?: React.ReactNode;
 }
 
-// TODO : focus isn't currently correct, it should work more like vs code does
 const Command = forwardRef<HTMLDivElement, CommandProps>(
     ({ title, shortcut, ...props }, ref) => {
         return (
@@ -60,6 +55,13 @@ const CommandBadge = ({
 }) => {
     return <Badge className={cn("text-xs px-3", className)}>{children}</Badge>;
 };
+
+interface Command {
+    title: string;
+    desc: string;
+    action: (currUiState: UiState) => void;
+    shortcut: JSX.Element;
+}
 
 const CommandList = ({
     onCommandExecution,
@@ -158,7 +160,7 @@ const CommandList = ({
                 desc: "Changes view to note manager.",
                 action: async (currUiState: UiState) => {
                     setUiState(
-                        produce(uiState, (draft) => {
+                        produce(currUiState, (draft) => {
                             draft.section = "note-manager";
                         })
                     );
@@ -174,7 +176,7 @@ const CommandList = ({
                 desc: "Changes view to note viewer.",
                 action: async (currUiState: UiState) => {
                     setUiState(
-                        produce(uiState, (draft) => {
+                        produce(currUiState, (draft) => {
                             draft.section = "note-viewer";
                         })
                     );
@@ -193,7 +195,7 @@ const CommandList = ({
                 desc: "Chose which workspace you want to use.",
                 action: async (currUiState: UiState) => {
                     setUiState(
-                        produce(uiState, (draft) => {
+                        produce(currUiState, (draft) => {
                             draft.section = "note-manager";
                         })
                     );
@@ -253,8 +255,23 @@ const CommandList = ({
 
     const onSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
+        if (
+            filteredCommands.length <= 0 ||
+            currentFocus >= filteredCommands.length
+        ) {
+            return;
+        }
 
-        filteredCommands[0]?.action(uiState);
+        let chosenCommand = null;
+        if (currentFocus == -1) {
+            chosenCommand = filteredCommands[0];
+        } else {
+            chosenCommand = filteredCommands[currentFocus];
+        }
+
+        if (!chosenCommand) return;
+
+        chosenCommand.action(uiState);
         onCommandExecution();
         return;
     };
@@ -319,6 +336,11 @@ const CommandList = ({
         }
     );
 
+    const onClickCommand = (command: Command) => {
+        command.action(uiState);
+        onCommandExecution();
+    };
+
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -334,7 +356,7 @@ const CommandList = ({
             </form>
 
             <div className="overflow-hidden rounded-b-lg">
-                <div className="max-h-[28rem] overflow-auto  px-2 border-t border-secondary">
+                <div className="max-h-[28rem] overflow-auto  px-2 border-t border-secondary pb-1">
                     {filteredCommands.map((command, index) => (
                         <div
                             className={cn(` rounded-lg ring-primary mt-4`, {
@@ -346,7 +368,7 @@ const CommandList = ({
                                 key={command.title}
                                 title={command.title}
                                 shortcut={command.shortcut}
-                                onClick={() => onSubmit()}
+                                onClick={() => onClickCommand(command)}
                             />
                         </div>
                     ))}

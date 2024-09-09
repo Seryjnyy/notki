@@ -1,11 +1,10 @@
 import { ExclamationTriangleIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { Alert, AlertDescription, AlertTitle } from "../alert";
-import DropZone from "./drop-zone";
-import { ErrorBoundary } from "react-error-boundary";
-import { Button } from "../button";
 import { removePreferences } from "@repo/lib/preference-service";
+import { ErrorBoundary } from "react-error-boundary";
+import { Alert, AlertDescription, AlertTitle } from "../alert";
+import { Button } from "../button";
+import DropZone from "./drop-zone";
 import Notes from "./notes";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export default function MainPage() {
     const onResetPreferences = () => {

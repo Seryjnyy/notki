@@ -1,44 +1,55 @@
-import { BaseDirectory, FileEntry, readDir } from "@tauri-apps/api/fs";
-import { Metadata, metadata } from "tauri-plugin-fs-extra-api";
+import { readDir, readTextFile } from "@tauri-apps/api/fs";
 import { getMetadataForFileEntry } from "./file-service";
 
-// TODO : This has expensive operations and should cache the values somehow
-
-export const showAllFiles = async () => {
-  const entries = await readDir("C:\\Users\\jakub\\Documents\\test", {
-    recursive: true,
-  });
-
-  processEntries(entries);
-};
-
-export const getAllFilesInFolder = async (
-  folderPath: string,
-  recursive: boolean
+export const getAllFilesFolders = async (
+    folderPath: string,
+    recursive: boolean
 ) => {
-  const entries = await readDir(folderPath, {
-    recursive: recursive,
-  });
+    const entries = await readDir(folderPath, {
+        recursive: recursive,
+    });
 
-  return entries;
+    return entries;
 };
 
-export const getAllFilesInFolderWithMetadata = async (folderPath: string) => {
-  const entries = await getAllFilesInFolder(folderPath, true);
+export const getAllFilesFoldersWithMetadata = async (
+    folderPath: string,
+    recursive: boolean
+) => {
+    const entries = await getAllFilesFolders(folderPath, recursive);
 
-  const temp = [];
-  for (const entry of entries) {
-    temp.push(await getMetadataForFileEntry(entry));
-  }
-
-  return temp;
-};
-
-function processEntries(entries: FileEntry[]) {
-  for (const entry of entries) {
-    console.log(`Entry: ${entry.path}`);
-    if (entry.children) {
-      processEntries(entry.children);
+    const temp = [];
+    for (const entry of entries) {
+        temp.push(await getMetadataForFileEntry(entry));
     }
-  }
-}
+
+    return temp;
+};
+
+export const getTxtFilesWithAllDetail = async (
+    folderpath: string,
+    recursive: boolean
+) => {
+    let validFiles = await getAllFilesFoldersWithMetadata(
+        folderpath,
+        recursive
+    );
+
+    // Remove folders
+    validFiles = validFiles.filter((file) => file.children == undefined);
+
+    // Remove files that don't fit the extension type
+    validFiles = validFiles.filter(
+        (file) => file.name!.substring(file.name!.lastIndexOf(".") + 1) == "txt"
+    );
+
+    const res = [];
+
+    // Fetch text for each file
+    for (const file of validFiles) {
+        const content = await readTextFile(file.path);
+        res.push({ ...file, content: content });
+    }
+
+    return res;
+};

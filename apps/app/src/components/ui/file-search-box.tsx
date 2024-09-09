@@ -1,95 +1,155 @@
-import { Badge } from "@repo/ui/badge";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
+    DialogTitle,
 } from "@repo/ui/dialog-controlled";
 import { Input } from "@repo/ui/input";
 
-import { appWindow } from "@tauri-apps/api/window";
-import { current, produce } from "immer";
 import {
     createRef,
     forwardRef,
-    useCallback,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { getAllFilesFoldersWithMetadata } from "~/lib/file-services/directory-service";
+import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
 import { useOpenedTabs } from "~/lib/opene-tabs-store";
-import { UiState } from "~/lib/types";
 import { useUiState } from "~/lib/ui-store";
+import { cn } from "~/lib/utils";
+import { useWorkspaceConfig } from "~/lib/workspace-store";
 
-// TODO : Might be duplicate code with Command in command search
-interface FileSearchResultProps {
+interface FileProps extends React.HTMLAttributes<HTMLDivElement> {
     title: string;
+    path: string;
 }
 
-// TODO : focus isn't currently correct, it should work more like vs code does
-const FileSearchResult = forwardRef<HTMLDivElement, FileSearchResultProps>(
-    ({ title }, ref) => {
+const File = forwardRef<HTMLDivElement, FileProps>(
+    ({ title, path, ...props }, ref) => {
         return (
             <div
-                className="py-2 text-muted-foreground flex items-center justify-between focus:ring-1 focus:ring-white rounded-md"
+                className="py-2 text-muted-foreground flex items-center justify-between focus:ring-1 focus:ring-white rounded-md cursor-pointer hover:bg-secondary px-2"
                 ref={ref}
                 tabIndex={0}
+                {...props}
             >
-                <span>{title}</span>
+                <span className="font-semibold">{title}</span>
+                <span className="text-xs">{path}</span>
             </div>
         );
     }
 );
 
-// TODO : duplicate code with command, should have one solution for both
-const FileSearchList = ({
+const FileList = ({
     onCommandExecution,
 }: {
     onCommandExecution: () => void;
 }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const searchInput = useRef<HTMLInputElement>(null);
-    const currentFocus = useRef(-1);
-    const openedTabs = useOpenedTabs((state) => state.openedTabs);
-    const setCurrentTab = useOpenedTabs((state) => state.setCurrentTabId);
+    const [currentFocus, setCurrentFocus] = useState(-1);
+    const workspace = useWorkspaceConfig.use.currentWorkspace();
+    const [files, setFiles] = useState<FileEntryWithMetadata[]>([]);
+    const addOpenTab = useOpenedTabs.use.addOpenTab();
+    const setCurrentTabId = useOpenedTabs.use.setCurrentTabId();
 
-    const [filteredTabs, filteredTabsRefs] = useMemo(() => {
+    useEffect(() => {
+        const setUp = async () => {
+            if (!workspace) return;
+
+            const allFiles = await getAllFilesFoldersWithMetadata(
+                workspace?.filepath,
+                true
+            );
+
+            const onlyFiles = allFiles.filter(
+                (file) => file.children == undefined
+            );
+
+            setFiles(onlyFiles);
+        };
+
+        setUp();
+    }, []);
+
+    const onSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+        e?.preventDefault();
+        if (filteredFiles.length <= 0 || currentFocus >= filteredFiles.length) {
+            return;
+        }
+
+        let chosenFile = null;
+
+        if (currentFocus == -1) {
+            chosenFile = filteredFiles[0];
+        } else {
+            chosenFile = filteredFiles[currentFocus];
+        }
+
+        if (!chosenFile) return;
+
+        addOpenTab({
+            id: chosenFile.id,
+            filepath: chosenFile.path,
+            title: chosenFile.name ?? "???",
+            workspaceId: workspace!.id,
+        });
+        setCurrentTabId(chosenFile.id);
+
+        onCommandExecution();
+    };
+
+    const onClickFile = (file: FileEntryWithMetadata) => {
+        addOpenTab({
+            id: file.id,
+            filepath: file.path,
+            title: file.name ?? "???",
+            workspaceId: workspace!.id,
+        });
+        setCurrentTabId(file.id);
+
+        onCommandExecution();
+    };
+
+    useHotkeys("enter", () => onSubmit(), {
+        enableOnFormTags: false,
+    });
+
+    const [filteredFiles, filteredFilesRefs] = useMemo(() => {
         if (searchTerm == "")
-            return [
-                openedTabs,
-                openedTabs.map(() => createRef<HTMLDivElement>()),
-            ];
+            return [files, files.map(() => createRef<HTMLDivElement>())];
 
-        // TODO : doing this in all search function :/
         const formattedSearchTerm = searchTerm.toLocaleLowerCase();
 
-        const filtered = openedTabs.filter((tab) =>
-            tab.title.toLowerCase().includes(formattedSearchTerm)
+        const filtered = files.filter((file) =>
+            file.name?.toLocaleLowerCase().includes(formattedSearchTerm)
         );
-        return [filtered, filtered.map(() => createRef<HTMLDivElement>())];
-    }, [searchTerm, openedTabs]);
 
-    const filtered = [...filteredTabs];
-    const filteredRefs = [...filteredTabsRefs];
+        return [filtered, filtered.map(() => createRef<HTMLDivElement>())];
+    }, [searchTerm, files]);
 
     const updateCurrentFocus = (i: number) => {
+        let newCurrentFocus = currentFocus + i;
         if (
-            currentFocus.current + i < -1 ||
-            currentFocus.current + i >= filteredRefs.length
+            newCurrentFocus < -1 ||
+            newCurrentFocus >= filteredFilesRefs.length
         ) {
             return;
         }
 
-        currentFocus.current += i;
-        console.log(currentFocus.current);
+        if (currentFocus == -1 && newCurrentFocus == 0) newCurrentFocus += 1;
+        setCurrentFocus(newCurrentFocus);
 
-        if (currentFocus.current == -1) {
+        if (newCurrentFocus == -1) {
             searchInput.current?.focus();
         } else {
-            filteredRefs[currentFocus.current].current?.focus();
+            filteredFilesRefs[newCurrentFocus].current?.focus();
         }
     };
+
     useHotkeys(
         "down",
         () => {
@@ -99,6 +159,7 @@ const FileSearchList = ({
             enableOnFormTags: true,
         }
     );
+
     useHotkeys(
         "up",
         () => {
@@ -109,54 +170,44 @@ const FileSearchList = ({
         }
     );
 
-    // TODO : This is all wrong, it should take the one in "focus", this will always take the first value
-    const onSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
-
-        if (filtered.length == 1) {
-            //   filtered[0]?.action();
-            setCurrentTab(filtered[0].title);
-            onCommandExecution();
-            return;
-        }
-
-        if (currentFocus.current > -1) {
-            onCommandExecution();
-        }
-    };
-
-    useHotkeys("enter", () => onSubmit(), {
-        enableOnFormTags: false,
-    });
-
     return (
         <div>
             <form onSubmit={onSubmit}>
                 <Input
                     // autoFocus
                     ref={searchInput}
-                    onFocus={() => (currentFocus.current = -1)}
-                    placeholder="Enter command"
+                    onFocus={() => setCurrentFocus(-1)}
+                    placeholder="Enter filename"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    className="focus-visible:ring-violet-500 rounded-none"
                 />
             </form>
-            <div
-                className={`p-2 ${filtered.length == 1 ? "ring-1" : ""} rounded-md ring-primary mt-4`}
-            >
-                {filtered.map((result, index) => (
-                    <FileSearchResult
-                        ref={filteredRefs[index]}
-                        key={result.title}
-                        title={result.title}
-                    />
-                ))}
+
+            <div className="overflow-hidden rounded-b-lg">
+                <div className="max-h-[28rem] overflow-auto  px-2 border-t border-secondary pb-1">
+                    {filteredFiles.map((file, index) => (
+                        <div
+                            className={cn(` rounded-lg ring-primary mt-4`, {
+                                "ring-1": index == 0 && currentFocus == -1,
+                            })}
+                        >
+                            <File
+                                ref={filteredFilesRefs[index]}
+                                key={file.path ?? ""}
+                                title={file.name ?? ""}
+                                path={file.path}
+                                onClick={() => onClickFile(file)}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
 };
 
-export default function FileSearchBox() {
+export default function CommandBox() {
     const [opened, setOpened] = useState(false);
     const uiState = useUiState.use.uiState();
 
@@ -177,12 +228,13 @@ export default function FileSearchBox() {
 
     return (
         <Dialog open={opened}>
-            <DialogContent>
-                <DialogHeader>
-                    <FileSearchList
-                        onCommandExecution={() => setOpened(false)}
-                    />
+            <DialogContent className="p-0  ">
+                <DialogHeader className="p-0">
+                    <DialogTitle className="mx-auto sr-only">
+                        File search
+                    </DialogTitle>
                 </DialogHeader>
+                <FileList onCommandExecution={() => setOpened(false)} />
             </DialogContent>
         </Dialog>
     );

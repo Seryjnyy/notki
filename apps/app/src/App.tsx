@@ -1,8 +1,5 @@
-import MainPage from "@repo/ui/main-page";
 import { ThemeProvider } from "@repo/ui/theme-provider";
 import { Toaster } from "@repo/ui/toaster";
-import { TooltipProvider } from "@repo/ui/tooltip";
-import { invoke } from "@tauri-apps/api";
 import { useEffect } from "react";
 import {
     ResizableHandle,
@@ -12,18 +9,17 @@ import {
 import MainDialog from "./components/main-dialog";
 
 import FileExplorer from "./components/ui/file-explorer";
-import NewVault from "./components/ui/vault-manager";
 import Sidebar from "./components/ui/sidebar";
 import TabbedView from "./components/ui/tabbed-view";
 import Titlebar from "./components/ui/titlebar";
+import NewVault from "./components/ui/vault-manager";
 
+import { produce } from "immer";
+import NoteViewer from "./components/note-viewer";
 import CommandBox from "./components/ui/command-box";
 import FileSearchBox from "./components/ui/file-search-box";
 import { useUiState } from "./lib/ui-store";
 import { useWorkspaceConfig } from "./lib/workspace-store";
-import { produce } from "immer";
-import NoteTakingPage from "./components/note-taking-page";
-import MinimalTitlebar from "./components/ui/minimal-titlebar";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -84,7 +80,7 @@ function App() {
 
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <div className={` w-full h-screen flex flex-col  pt-7`}>
+            <div className={` w-full h-screen flex flex-col  pt-7 `}>
                 <Titlebar />
                 {/* <MinimalTitlebar /> */}
                 {uiState.section == "vault-manager" && <NewVault />}
@@ -111,7 +107,7 @@ function App() {
                             <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
 
                             <ResizablePanel
-                                className="bg-background"
+                                className="bg-background border-l border-secondary"
                                 id="main-content"
                                 order={2}
                             >
@@ -121,8 +117,9 @@ function App() {
                                     </div>
                                 )}
                                 {uiState.section == "note-viewer" && (
-                                    <div className="mt-7 w-full ">
-                                        <MainPage />
+                                    <div className="w-full ">
+                                        {/* <MainPage /> */}
+                                        <NoteViewer />
                                     </div>
                                 )}
                             </ResizablePanel>

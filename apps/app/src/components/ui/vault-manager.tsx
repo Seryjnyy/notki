@@ -3,7 +3,6 @@ import { ArchiveIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
 import { open } from "@tauri-apps/api/dialog";
-import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 
@@ -14,9 +13,9 @@ import {
     createVaultSchema,
     createVaultSchemaType,
 } from "~/lib/form-schemas/create-vault";
-import { open as shellOpen } from "@tauri-apps/api/shell";
 
 import { addVault, getVaults } from "~/lib/vaults";
+import { useWorkspaceConfig } from "~/lib/workspace-store";
 import {
     Form,
     FormControl,
@@ -26,8 +25,6 @@ import {
     FormLabel,
     FormMessage,
 } from "./form";
-import { useWorkspaceConfig } from "~/lib/workspace-store";
-import { invoke } from "@tauri-apps/api";
 // import { setCurrentWorkspace } from "~/lib/config-service";
 import { Vault } from "~/lib/backend-types";
 
@@ -153,7 +150,7 @@ const CreateVaultForm = () => {
                 <FormField
                     control={form.control}
                     name="location"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <div className="flex justify-between items-center">
                                 <div className="flex flex-col">

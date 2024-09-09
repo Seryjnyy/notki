@@ -6,13 +6,6 @@ import {
     TooltipTrigger,
 } from "@repo/ui/tooltip";
 
-import { ReactNode, useEffect, useState } from "react";
-import { getAllFilesInFolderWithMetadata } from "~/lib/file-services/directory-service";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "~/components/ui/collapsible";
 import {
     ArchiveIcon,
     CardStackPlusIcon,
@@ -23,63 +16,49 @@ import {
     FileIcon,
     FilePlusIcon,
     MixerVerticalIcon,
-    PlusIcon,
     ReloadIcon,
-    ResetIcon,
+    TrashIcon,
 } from "@radix-ui/react-icons";
-import { useOpenedTabs } from "~/lib/opene-tabs-store";
-import { produce } from "immer";
-import {
-    changeStoredCurrentTab,
-    changeStoredOpenedTabs,
-} from "~/lib/file-services/tab-service";
 import { Button } from "@repo/ui/button";
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuSeparator,
+    ContextMenuTrigger,
+} from "@repo/ui/context-menu";
 import { ScrollArea } from "@repo/ui/scroll-area";
+import { ReactNode, useEffect, useState } from "react";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "~/components/ui/collapsible";
+import { getAllFilesFoldersWithMetadata } from "~/lib/file-services/directory-service";
 import {
     FileEntryWithMetadata,
     newDir,
     newFile,
 } from "~/lib/file-services/file-service";
-import { useUiState } from "~/lib/ui-store";
+import { useOpenedTabs } from "~/lib/opene-tabs-store";
 import { useWorkspaceConfig } from "~/lib/workspace-store";
-import {
-    ContextMenu,
-    ContextMenuContent,
-    ContextMenuItem,
-    ContextMenuTrigger,
-} from "@repo/ui/context-menu";
 
 const File = ({ data }: { data: FileEntryWithMetadata }) => {
-    const currentTab = useOpenedTabs((state) => state.currentTabId);
-    const setCurrentTab = useOpenedTabs((state) => state.setCurrentTabId);
-    const openedTabs = useOpenedTabs((state) => state.openedTabs);
-    const setOpenedTabs = useOpenedTabs((state) => state.setOpenedTabs);
-    const uiState = useUiState((state) => state.uiState);
+    const currentTab = useOpenedTabs.use.currentTabId();
+    const setCurrentTab = useOpenedTabs.use.setCurrentTabId();
+    const addOpenTab = useOpenedTabs.use.addOpenTab();
+    const workspace = useWorkspaceConfig.use.currentWorkspace();
 
     const bgColour = currentTab == data.id ? "bg-secondary" : "";
 
     const onClick = () => {
-        console.log(data.metadata);
-        if (uiState.section != "note-manager") return;
-
+        addOpenTab({
+            id: data.id,
+            filepath: data.path,
+            title: data.name ?? "???",
+            workspaceId: workspace!.id,
+        });
         setCurrentTab(data.id);
-        changeStoredCurrentTab(data.id);
-
-        // Only add once
-        if (openedTabs.find((tab) => tab.id == data.id) == undefined) {
-            setOpenedTabs(
-                produce(openedTabs, (draft) => {
-                    draft.push({
-                        id: data.id,
-                        filepath: data.path,
-                        title: data.name ?? "unknown",
-                        workspaceId: "no workspace id",
-                    });
-                })
-            );
-            console.log("opened tabs", openedTabs);
-            changeStoredOpenedTabs(openedTabs);
-        }
     };
 
     return (
@@ -89,7 +68,7 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
                     <ContextMenu>
                         <ContextMenuTrigger>
                             <div
-                                className={`px-2 hover:bg-secondary ${bgColour} rounded-none text-start `}
+                                className={`px-2 hover:bg-secondary/50 ${bgColour} rounded-none text-start `}
                                 onClick={onClick}
                             >
                                 <span className="text-ellipsis text-nowrap flex items-center gap-1">
@@ -98,14 +77,27 @@ const File = ({ data }: { data: FileEntryWithMetadata }) => {
                                 </span>
                             </div>
                         </ContextMenuTrigger>
-                        <ContextMenuContent className="bg-background w-[19rem]">
-                            <ContextMenuItem className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold">
-                                Some stuff
+                        <ContextMenuContent className="w-[13rem]">
+                            <ContextMenuItem
+                                disabled
+                                className="hover:bg-secondary hover:text-secondary-foreground px-3 w-full py-1 space-x-2"
+                                // onClick={() => {
+                                //     deleteFile(data.path);
+                                // }}
+                            >
+                                <span className="flex  gap-2 text-destructive">
+                                    <TrashIcon /> Delete
+                                </span>
                             </ContextMenuItem>
                         </ContextMenuContent>
                     </ContextMenu>
                 </TooltipTrigger>
-                <TooltipContent className="flex flex-col px-4" side="bottom">
+                <TooltipContent
+                    className="flex flex-col px-4"
+                    side="right"
+                    sideOffset={20}
+                >
+                    <TooltipArrow className="text-white" />
                     <p>
                         modified at{" "}
                         <span className="font-semibold">
@@ -138,37 +130,70 @@ const Folder = ({ data }: { data: FileEntryWithMetadata }) => {
 
     return (
         <Collapsible open={open} className="w-full">
-            <CollapsibleTrigger
-                className="px-2 w-full hover:bg-secondary rounded-none "
-                onClick={() => {
-                    setOpen((prev) => !prev);
-                }}
-            >
-                <ContextMenu>
-                    <ContextMenuTrigger className=" flex items-center text-start ">
-                        {open && <CaretDownIcon />}
-                        {!open && <CaretRightIcon />}
-                        <span className="flex gap-1 items-center">
-                            <ArchiveIcon className="text-muted-foreground" />
-                            {data.name}
-                        </span>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent className="bg-background w-[19rem]">
-                        <ContextMenuItem
-                            className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold space-x-2"
-                            onClick={onNewFile}
+            <TooltipProvider>
+                <Tooltip delayDuration={1000}>
+                    <TooltipTrigger asChild>
+                        <CollapsibleTrigger
+                            className="px-2 w-full hover:bg-secondary/50 rounded-none "
+                            onClick={() => {
+                                setOpen((prev) => !prev);
+                            }}
                         >
-                            <FilePlusIcon /> <span>New file</span>
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            className="hover:bg-secondary hover:text-secondary-foreground px-6 w-full py-2 font-semibold space-x-2"
-                            onClick={onNewDir}
-                        >
-                            <CardStackPlusIcon /> <span>New folder</span>
-                        </ContextMenuItem>
-                    </ContextMenuContent>
-                </ContextMenu>
-            </CollapsibleTrigger>
+                            <ContextMenu>
+                                <ContextMenuTrigger className=" flex items-center text-start ">
+                                    {open && <CaretDownIcon />}
+                                    {!open && <CaretRightIcon />}
+                                    <span className="flex gap-1 items-center">
+                                        <ArchiveIcon className="text-muted-foreground" />
+                                        <span className="overflow-hidden text-ellipsis text-nowrap">
+                                            {data.name}
+                                        </span>
+                                    </span>
+                                </ContextMenuTrigger>
+                                <ContextMenuContent className="bg-background w-[13rem]">
+                                    <ContextMenuItem
+                                        className="hover:bg-secondary hover:text-secondary-foreground px-3 w-full py-1  space-x-2"
+                                        onClick={onNewFile}
+                                    >
+                                        <FilePlusIcon /> <span>New file</span>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem
+                                        className="hover:bg-secondary hover:text-secondary-foreground px-3 w-full py-1 space-x-2"
+                                        onClick={onNewDir}
+                                    >
+                                        <CardStackPlusIcon />{" "}
+                                        <span>New folder</span>
+                                    </ContextMenuItem>
+                                    <ContextMenuSeparator />
+                                    <ContextMenuItem
+                                        disabled
+                                        className="hover:bg-secondary hover:text-secondary-foreground px-3 w-full py-2  space-x-2 "
+                                    >
+                                        <span className="flex  gap-2 text-destructive">
+                                            <TrashIcon /> Delete
+                                        </span>
+                                    </ContextMenuItem>
+                                </ContextMenuContent>
+                            </ContextMenu>
+                        </CollapsibleTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent
+                        className="flex flex-col px-4"
+                        side="right"
+                        sideOffset={20}
+                    >
+                        <TooltipArrow className="text-white" />
+                        {/* TODO : This is counting folders as files */}
+                        <p className="flex gap-1 items-center">
+                            <span className="font-semibold">
+                                {data.children ? data.children.length : 0}
+                            </span>
+                            <span>files</span>
+                        </p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+
             <CollapsibleContent className="flex flex-col ml-4  border-l border-muted">
                 {data.children &&
                     data.children.map((file, index) => {
@@ -209,8 +234,9 @@ export default function FileExplorer() {
         const setUp = async () => {
             if (!workspace) return;
 
-            const res = await getAllFilesInFolderWithMetadata(
-                workspace.filepath
+            const res = await getAllFilesFoldersWithMetadata(
+                workspace.filepath,
+                true
             );
             console.log(res);
             setFiles(res);
@@ -220,7 +246,10 @@ export default function FileExplorer() {
 
     const onReload = async () => {
         if (!workspace) return;
-        const res = await getAllFilesInFolderWithMetadata(workspace.filepath);
+        const res = await getAllFilesFoldersWithMetadata(
+            workspace.filepath,
+            true
+        );
 
         setFiles(res);
     };
@@ -232,8 +261,8 @@ export default function FileExplorer() {
     };
 
     return (
-        <div className="h-full flex flex-col border-r">
-            <div className="py-2 w-full flex items-center justify-center  bg-inherit brightness-125">
+        <div className="h-full flex flex-col  mr-1">
+            <div className="py-2 w-full flex items-center justify-center  bg-inherit brightness-125 border-b border-secondary">
                 <TooltipProvider>
                     <FileExplorerTooltip
                         trigger={

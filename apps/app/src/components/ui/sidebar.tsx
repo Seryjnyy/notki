@@ -1,17 +1,15 @@
 import { ArchiveIcon, FileIcon, GearIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/button";
 import ModeToggle from "@repo/ui/mode-toggle";
-import { produce } from "immer";
-import { useTempUiState } from "~/lib/temp-uistate-store";
-import { useUiState } from "~/lib/ui-store";
 import {
     Tooltip,
-    TooltipArrow,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/tooltip";
+import { produce } from "immer";
 import { ReactNode } from "react";
+import { useUiState } from "~/lib/ui-store";
 
 interface SidebarButtonInterface {
     children: ReactNode;
