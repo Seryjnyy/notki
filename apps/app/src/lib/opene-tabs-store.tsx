@@ -1,7 +1,6 @@
 import { createSelectors } from "@repo/lib/create-zustand-selectors";
-import { invoke } from "@tauri-apps/api";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 export type Tab = {
@@ -15,7 +14,7 @@ interface OpenedTabsStore {
     openedTabs: Tab[];
     setOpenedTabs: (newOpenedTabs: Tab[]) => void;
     addOpenTab: (tab: Tab) => void;
-    removeOpenTab: (tab: Tab) => void;
+    removeOpenTab: (tab: Tab | string, replaceCurrent?: boolean) => void;
     currentTabId: string;
     setCurrentTabId: (newCurrentTab: string) => void;
 }
@@ -32,7 +31,7 @@ const defaults = {
 const useOpenedTabsBase = create<OpenedTabsStore>()(
     immer(
         persist(
-            (set, get) => ({
+            (set) => ({
                 ...defaults,
                 setOpenedTabs: (newOpenedTabs) =>
                     set((state) => {
@@ -62,8 +61,23 @@ const useOpenedTabsBase = create<OpenedTabsStore>()(
 
                         state.openedTabs.push(tab);
                     }),
-                removeOpenTab: (tab: Tab) =>
+                removeOpenTab: (tab: Tab | string, replaceCurrent?: boolean) =>
                     set((state) => {
+                        if (typeof tab == "string") {
+                            if (state.currentTabId == tab) {
+                                state.currentTabId = "";
+                            }
+
+                            state.openedTabs = state.openedTabs.filter(
+                                (x) => x.id != tab
+                            );
+                            if (replaceCurrent && state.openedTabs.length > 0) {
+                                state.currentTabId = state.openedTabs[0].id;
+                            }
+
+                            return;
+                        }
+
                         if (state.currentTabId == tab.id) {
                             state.currentTabId = "";
                         }
@@ -71,6 +85,10 @@ const useOpenedTabsBase = create<OpenedTabsStore>()(
                         state.openedTabs = state.openedTabs.filter(
                             (x) => x.id != tab.id
                         );
+
+                        if (replaceCurrent && state.openedTabs.length > 0) {
+                            state.currentTabId = state.openedTabs[0].id;
+                        }
                     }),
             }),
             {

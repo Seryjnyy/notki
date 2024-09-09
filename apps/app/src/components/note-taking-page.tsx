@@ -1,10 +1,8 @@
+import { ScrollArea } from "@repo/ui/scroll-area";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { Textarea } from "./ui/textarea";
 import { getFileContent, saveFile } from "~/lib/file-services/file-service";
-import { Button } from "@repo/ui/button";
-import { open } from "@tauri-apps/api/dialog";
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { Textarea } from "./ui/textarea";
 
 const DataWithLabel = ({
     amount,

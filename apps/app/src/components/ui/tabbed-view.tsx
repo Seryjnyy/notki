@@ -7,12 +7,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { useEffect } from "react";
 
+import { useHotkeys } from "react-hotkeys-hook";
 import { Tab, useOpenedTabs } from "~/lib/opene-tabs-store";
 import NoteTakingPage from "../note-taking-page";
-import { invoke } from "@tauri-apps/api";
-import { saveFile } from "~/lib/file-services/file-service";
+import { cn } from "~/lib/utils";
 
 interface TabProps {
     active: boolean;
@@ -25,7 +24,7 @@ const TabItem = ({ active, tab }: TabProps) => {
     const onCloseTab = async () => {
         // TODO:  unsaved changes?
 
-        removeOpenTab(tab);
+        removeOpenTab(tab, true);
     };
 
     const onChangeCurrentTab = () => {
@@ -34,7 +33,12 @@ const TabItem = ({ active, tab }: TabProps) => {
 
     return (
         <div
-            className={`${active && "bg-primary text-primary-foreground"}  flex justify-between gap-2   py-1 pr-1 group items-center`}
+            className={cn(
+                "flex justify-between gap-2   py-1 pr-1 group items-center ",
+                {
+                    "bg-primary text-primary-foreground rounded-t-lg ": active,
+                }
+            )}
         >
             <TooltipProvider>
                 <Tooltip delayDuration={1000}>
@@ -69,10 +73,21 @@ const TabItem = ({ active, tab }: TabProps) => {
 export default function TabbedView() {
     const openedTabs = useOpenedTabs.use.openedTabs();
     const currentTabId = useOpenedTabs.use.currentTabId();
+    const removeOpenTab = useOpenedTabs.use.removeOpenTab();
+
+    useHotkeys(
+        "ctrl+w",
+        () => {
+            if (currentTabId == "") return;
+
+            removeOpenTab(currentTabId, true);
+        },
+        { enableOnFormTags: true }
+    );
 
     return (
         <div>
-            <ScrollArea className="w-full whitespace-nowrap ">
+            <ScrollArea className="w-full whitespace-nowrap border-b">
                 <div className="flex bg-stone-950 ">
                     {openedTabs.map((tab) => (
                         <TabItem

@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api";
 // import { WorkspaceConfig } from "./workspace-store";
 
 // TODO : get_current_workspace wth, remove it from main.rs

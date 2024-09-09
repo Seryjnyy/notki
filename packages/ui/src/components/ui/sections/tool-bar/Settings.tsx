@@ -35,6 +35,7 @@ import {
     getDefaultPreferences,
 } from "@repo/lib/preference-service";
 import ModeToggle from "../../../mode-toggle";
+import { cn } from "../../../../lib/utils";
 
 interface NumericalSettingProps {
     title: string;
@@ -49,10 +50,11 @@ const NumericalSetting = ({
 }: NumericalSettingProps) => {
     return (
         <div>
-            <div className="flex items-center gap-2 pb-4">
-                <h4>{title}</h4>
+            <div className="flex items-center gap-2 justify-between">
+                <Label htmlFor={title}>{title}</Label>
                 <Button
-                    className=" px-1"
+                    id={title}
+                    size={"icon"}
                     variant={"ghost"}
                     onClick={reloadAction}
                 >
@@ -67,6 +69,7 @@ const NumericalSetting = ({
 interface CheckboxSettingProps {
     title: string;
     value: boolean;
+    heading?: boolean;
     onCheckedChange: (checked: boolean) => void;
 }
 
@@ -74,12 +77,27 @@ const CheckboxSetting = ({
     title,
     value,
     onCheckedChange,
+    heading = false,
 }: CheckboxSettingProps) => {
     return (
-        <div className="flex items-center gap-2">
-            {title}
+        <div
+            className={cn(
+                "flex items-center gap-2 p-1 border-l border-secondary w-full",
+                { "justify-between border-none": heading }
+            )}
+        >
+            <Label
+                htmlFor={title}
+                className={cn("font-normal", {
+                    "text-lg font-semibold": heading,
+                })}
+            >
+                {title}
+            </Label>
             <Checkbox
+                id={title}
                 checked={value}
+                className={cn({ "rounded-full": !heading })}
                 onCheckedChange={(checked: "indeterminate" | boolean) => {
                     if (checked == "indeterminate") return;
 
@@ -109,7 +127,7 @@ export default function Settings() {
                             <GearIcon />
                         </SheetTrigger>
                     </TooltipTrigger>
-                    <TooltipContent>
+                    <TooltipContent side="bottom">
                         <p>Settings</p>
                     </TooltipContent>
                 </Tooltip>
@@ -117,14 +135,16 @@ export default function Settings() {
 
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Settings</SheetTitle>
+                    <SheetTitle className="text-xl text-muted-foreground">
+                        Settings
+                    </SheetTitle>
                 </SheetHeader>
 
-                <ScrollArea className="pt-12 h-screen pb-[8rem]">
-                    <ScrollBar />
-                    <div className="border p-2">
+                <ScrollArea className="pt-4 h-[calc(100vh-4rem)]  pr-3">
+                    <div className="p-2 mb-8 border-b border-secondary">
                         <CheckboxSetting
-                            title="See header"
+                            heading
+                            title="Header"
                             value={settings.header.visible}
                             onCheckedChange={(checked) => {
                                 setSettings(
@@ -135,9 +155,9 @@ export default function Settings() {
                             }}
                         />
 
-                        <div className="pl-4">
+                        <div className="pl-4 ">
                             <CheckboxSetting
-                                title="See titles"
+                                title="Titles"
                                 value={settings.header.options.title}
                                 onCheckedChange={(checked) => {
                                     setSettings(
@@ -150,7 +170,7 @@ export default function Settings() {
                             />
 
                             <CheckboxSetting
-                                title="See actions"
+                                title="Actions"
                                 value={settings.header.options.actions.visible}
                                 onCheckedChange={(checked) => {
                                     setSettings(
@@ -164,7 +184,7 @@ export default function Settings() {
 
                             <div className="pl-4">
                                 <CheckboxSetting
-                                    title="See remove action"
+                                    title="Remove action"
                                     value={
                                         settings.header.options.actions.options
                                             .remove
@@ -180,7 +200,7 @@ export default function Settings() {
                                 />
 
                                 <CheckboxSetting
-                                    title="See copy action"
+                                    title="Copy action"
                                     value={
                                         settings.header.options.actions.options
                                             .copy
@@ -197,11 +217,68 @@ export default function Settings() {
                             </div>
                         </div>
                     </div>
+                    <div className="mb-8 p-2 border-b border-secondary">
+                        <CheckboxSetting
+                            heading
+                            title="Metadata"
+                            value={settings.metadata.visible}
+                            onCheckedChange={(checked) => {
+                                setSettings(
+                                    produce(settings, (draft) => {
+                                        draft.metadata.visible = checked;
+                                    })
+                                );
+                            }}
+                        />
 
-                    <div className="border p-2">
+                        <div className="pl-4">
+                            <CheckboxSetting
+                                title="Size"
+                                value={settings.metadata.options.size}
+                                onCheckedChange={(checked) => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.metadata.options.size =
+                                                checked;
+                                        })
+                                    );
+                                }}
+                            />
+
+                            <CheckboxSetting
+                                title="Last modified"
+                                value={settings.metadata.options.lastModified}
+                                onCheckedChange={(checked) => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.metadata.options.lastModified =
+                                                checked;
+                                        })
+                                    );
+                                }}
+                            />
+
+                            <CheckboxSetting
+                                title="Character count"
+                                value={settings.metadata.options.characterCount}
+                                onCheckedChange={(checked) => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.metadata.options.characterCount =
+                                                checked;
+                                        })
+                                    );
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-8 p-2 border-b border-secondary">
                         <div>
-                            <div>Notes view</div>
+                            <span className="font-semibold text-lg  leading-none">
+                                Notes view
+                            </span>
                             <RadioGroup
+                                className="ml-4 border-l pl-1 border-secondary"
                                 value={settings.view}
                                 onValueChange={(val: NoteView) => {
                                     setSettings(
@@ -211,7 +288,7 @@ export default function Settings() {
                                     );
                                 }}
                             >
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-2 mt-2">
                                     <RadioGroupItem
                                         value="all"
                                         id="option-all"
@@ -231,53 +308,18 @@ export default function Settings() {
                         </div>
                     </div>
 
-                    <div className="border p-2">
-                        <CheckboxSetting
-                            title="See metadata"
-                            value={settings.metadata.visible}
-                            onCheckedChange={(checked) => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.metadata.visible = checked;
-                                    })
-                                );
-                            }}
-                        />
-
-                        <div className="pl-4">
+                    <div className="mb-8 p-2 border-b border-secondary">
+                        <span className="text-lg font-semibold  leading-none">
+                            Other
+                        </span>
+                        <div className="ml-4 ">
                             <CheckboxSetting
-                                title="See size"
-                                value={settings.metadata.options.size}
+                                title="Note content selectable"
+                                value={settings.styling.note.textSelectable}
                                 onCheckedChange={(checked) => {
                                     setSettings(
                                         produce(settings, (draft) => {
-                                            draft.metadata.options.size =
-                                                checked;
-                                        })
-                                    );
-                                }}
-                            />
-
-                            <CheckboxSetting
-                                title="See last modified"
-                                value={settings.metadata.options.lastModified}
-                                onCheckedChange={(checked) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.metadata.options.lastModified =
-                                                checked;
-                                        })
-                                    );
-                                }}
-                            />
-
-                            <CheckboxSetting
-                                title="See character count"
-                                value={settings.metadata.options.characterCount}
-                                onCheckedChange={(checked) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.metadata.options.characterCount =
+                                            draft.styling.note.textSelectable =
                                                 checked;
                                         })
                                     );
@@ -285,250 +327,241 @@ export default function Settings() {
                             />
                         </div>
                     </div>
-
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="Line height"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.content.lineHeight =
-                                            getDefaultLineHeight();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.1"
-                                value={settings.content.lineHeight}
-                                onChange={(e) => {
+                    <div className=" mb-8 p-2 border-b border-secondary">
+                        <span className="text-lg font-semibold  leading-none">
+                            Text
+                        </span>
+                        <div className=" p-2 ml-4 border-l border-secondary">
+                            <NumericalSetting
+                                title="Line height"
+                                reloadAction={() => {
                                     setSettings(
                                         produce(settings, (draft) => {
-                                            draft.content.lineHeight = Number(
-                                                e.target.value
-                                            );
+                                            draft.content.lineHeight =
+                                                getDefaultLineHeight();
                                         })
                                     );
                                 }}
-                            />
-                        </NumericalSetting>
-                    </div>
-
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="Letter spacing"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.content.letterSpacing =
-                                            getDefaultLetterSpacing();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.01"
-                                value={settings.content.letterSpacing}
-                                onChange={(e) => {
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    value={settings.content.lineHeight}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.content.lineHeight =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+                            <NumericalSetting
+                                title="Letter spacing"
+                                reloadAction={() => {
                                     setSettings(
                                         produce(settings, (draft) => {
                                             draft.content.letterSpacing =
-                                                Number(e.target.value);
+                                                getDefaultLetterSpacing();
                                         })
                                     );
                                 }}
-                            />
-                        </NumericalSetting>
-                    </div>
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.01"
+                                    value={settings.content.letterSpacing}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.content.letterSpacing =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
 
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="Padding x"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.note.paddingX =
-                                            getDefaultPaddingX();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.1"
-                                value={settings.styling.note.paddingX}
-                                onChange={(e) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.styling.note.paddingX =
-                                                Number(e.target.value);
-                                        })
-                                    );
-                                }}
-                            />
-                        </NumericalSetting>
-
-                        <NumericalSetting
-                            title="Padding top"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.note.paddingTop =
-                                            getDefaultPaddingTop();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.1"
-                                value={settings.styling.note.paddingTop}
-                                onChange={(e) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.styling.note.paddingTop =
-                                                Number(e.target.value);
-                                        })
-                                    );
-                                }}
-                            />
-                        </NumericalSetting>
-
-                        <NumericalSetting
-                            title="Padding bottom"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.note.paddingBottom =
-                                            getDefaultPaddingBottom();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.1"
-                                value={settings.styling.note.paddingBottom}
-                                onChange={(e) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.styling.note.paddingBottom =
-                                                Number(e.target.value);
-                                        })
-                                    );
-                                }}
-                            />
-                        </NumericalSetting>
-                    </div>
-
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="Columns"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.list.columns =
-                                            getDefaultColumns();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="1"
-                                value={settings.styling.list.columns}
-                                onChange={(e) => {
-                                    setSettings(
-                                        produce(settings, (draft) => {
-                                            draft.styling.list.columns = Number(
-                                                e.target.value
-                                            );
-                                        })
-                                    );
-                                }}
-                            />
-                        </NumericalSetting>
-                    </div>
-
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="Font size"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.content.fontSize =
-                                            getDefaultFontSize();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.01"
-                                value={settings.styling.content.fontSize}
-                                onChange={(e) => {
+                            <NumericalSetting
+                                title="Font size"
+                                reloadAction={() => {
                                     setSettings(
                                         produce(settings, (draft) => {
                                             draft.styling.content.fontSize =
-                                                Number(e.target.value);
+                                                getDefaultFontSize();
                                         })
                                     );
                                 }}
-                            />
-                        </NumericalSetting>
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.01"
+                                    value={settings.styling.content.fontSize}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.content.fontSize =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+                        </div>
                     </div>
 
-                    <div className="border p-2">
-                        <NumericalSetting
-                            title="List padding x"
-                            reloadAction={() => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.list.paddingX =
-                                            getDefaultPaddingX();
-                                    })
-                                );
-                            }}
-                        >
-                            <Input
-                                type="number"
-                                step="0.1"
-                                value={settings.styling.list.paddingX}
-                                onChange={(e) => {
+                    <div className="mb-8 p-2 border-b border-secondary">
+                        <span className="text-lg font-semibold  leading-none">
+                            Card
+                        </span>
+                        <div className=" p-2 ml-4 border-l border-secondary">
+                            <NumericalSetting
+                                title="Padding x"
+                                reloadAction={() => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.styling.note.paddingX =
+                                                getDefaultPaddingX();
+                                        })
+                                    );
+                                }}
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    value={settings.styling.note.paddingX}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.note.paddingX =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+
+                            <NumericalSetting
+                                title="Padding top"
+                                reloadAction={() => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.styling.note.paddingTop =
+                                                getDefaultPaddingTop();
+                                        })
+                                    );
+                                }}
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    value={settings.styling.note.paddingTop}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.note.paddingTop =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+
+                            <NumericalSetting
+                                title="Padding bottom"
+                                reloadAction={() => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.styling.note.paddingBottom =
+                                                getDefaultPaddingBottom();
+                                        })
+                                    );
+                                }}
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    value={settings.styling.note.paddingBottom}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.note.paddingBottom =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+                        </div>
+
+                        <div className=" p-2 ml-4 border-l border-secondary">
+                            <NumericalSetting
+                                title="List padding x"
+                                reloadAction={() => {
                                     setSettings(
                                         produce(settings, (draft) => {
                                             draft.styling.list.paddingX =
-                                                Number(e.target.value);
+                                                getDefaultPaddingX();
                                         })
                                     );
                                 }}
-                            />
-                        </NumericalSetting>
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    value={settings.styling.list.paddingX}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.list.paddingX =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+                        </div>
                     </div>
 
-                    <div className="border p-2">
-                        <CheckboxSetting
-                            title="Note content selectable"
-                            value={settings.styling.note.textSelectable}
-                            onCheckedChange={(checked) => {
-                                setSettings(
-                                    produce(settings, (draft) => {
-                                        draft.styling.note.textSelectable =
-                                            checked;
-                                    })
-                                );
-                            }}
-                        />
+                    <div className="mb-8 p-2 border-b border-secondary">
+                        <span className="text-lg font-semibold">Layout</span>
+                        <div className=" p-2 ml-4 border-l border-secondary">
+                            <NumericalSetting
+                                title="Columns"
+                                reloadAction={() => {
+                                    setSettings(
+                                        produce(settings, (draft) => {
+                                            draft.styling.list.columns =
+                                                getDefaultColumns();
+                                        })
+                                    );
+                                }}
+                            >
+                                <Input
+                                    type="number"
+                                    step="1"
+                                    value={settings.styling.list.columns}
+                                    onChange={(e) => {
+                                        setSettings(
+                                            produce(settings, (draft) => {
+                                                draft.styling.list.columns =
+                                                    Number(e.target.value);
+                                            })
+                                        );
+                                    }}
+                                />
+                            </NumericalSetting>
+                        </div>
                     </div>
-                    <ModeToggle />
-                    <div className="border p-2">
+
+                    <div className="w-full">
                         <Button
-                            className="space-x-2"
+                            className="w-full flex items-center gap-2"
+                            variant={"secondary"}
                             onClick={onResetPreferences}
                         >
-                            <span>Reset preferences</span> <UpdateIcon />
+                            <span>Reset settings</span> <UpdateIcon />
                         </Button>
                     </div>
                 </ScrollArea>

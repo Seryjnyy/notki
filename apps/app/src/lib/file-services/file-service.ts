@@ -1,16 +1,16 @@
+import { guidGenerator } from "@repo/lib/metadata-utils";
 import {
-    BaseDirectory,
     FileEntry,
     createDir,
     exists,
     readTextFile,
+    removeFile,
     writeFile,
     writeTextFile,
 } from "@tauri-apps/api/fs";
-import { getAllFilesInFolder } from "./directory-service";
-import { guidGenerator } from "@repo/lib/metadata-utils";
 import { Metadata, metadata } from "tauri-plugin-fs-extra-api";
 import { generateFileID } from "../file";
+import { getAllFilesFolders } from "./directory-service";
 
 export interface FileEntryWithMetadata {
     id: string;
@@ -53,17 +53,17 @@ export const getMetadataForFile = async (filepath: string) => {
 };
 
 // TODO : Only for folders, not sure if need to specify
-export const getFileWithMetadata = async (filepath: string) => {
-    // const metadata = await getMetadataForFile(filepath);
-    // const split = filepath.split("\\");
-    // const name = split.length > 0 ? split[split.length - 1] : "unknown";
-    // return {
-    //   name: name,
-    //   path: filepath,
-    //   children: undefined,
-    //   metadata: metadata,
-    // };
-};
+// export const getFileWithMetadata = async (filepath: string) => {
+// const metadata = await getMetadataForFile(filepath);
+// const split = filepath.split("\\");
+// const name = split.length > 0 ? split[split.length - 1] : "unknown";
+// return {
+//   name: name,
+//   path: filepath,
+//   children: undefined,
+//   metadata: metadata,
+// };
+// };
 
 // TODO : This is awful :/ but im tired
 // TODO : maybe should tell the user they can't create file with the same name as something else
@@ -71,7 +71,7 @@ export const newFile = async (
     basepath: string,
     filename: string = "Untitled"
 ) => {
-    const files = await getAllFilesInFolder(basepath, false);
+    const files = await getAllFilesFolders(basepath, false);
 
     // filter out folders
     // filter for files named "Untitled" in the same folder
@@ -147,7 +147,7 @@ export const newDir = async (
     basepath: string,
     filename: string = "New folder"
 ) => {
-    const files = await getAllFilesInFolder(basepath, false);
+    const files = await getAllFilesFolders(basepath, false);
 
     // filter out files
     // filter for folders named "New folder" in the same folder
@@ -214,6 +214,14 @@ export const newDir = async (
     return [`${filename}${foundValid}`, filepath];
 };
 
+export const deleteFile = async (filepath: string) => {
+    return await removeFile(filepath);
+};
+
 export const saveFile = (filepath: string, content: string) => {
     writeFile(filepath, content);
+};
+
+export const readTextFileContent = async (filepath: string) => {
+    return await readTextFile(filepath);
 };

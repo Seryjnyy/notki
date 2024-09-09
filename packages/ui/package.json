@@ -33,6 +33,12 @@
     "./mode-toggle": "./src/components/mode-toggle.tsx",
     "./theme-provider": "./src/components/theme-provider.tsx",
     "./drop-zone": "./src/components/ui/sections/drop-zone.tsx",
+    "./CopyAllContent": "./src/components/ui/sections/tool-bar/CopyAllContent.tsx",
+    "./FilterAndSort": "./src/components/ui/sections/tool-bar/FilterAndSort.tsx",
+    "./ResetNotes": "./src/components/ui/sections/tool-bar/ResetNotes.tsx",
+    "./Search": "./src/components/ui/sections/tool-bar/Search.tsx",
+    "./Settings": "./src/components/ui/sections/tool-bar/Settings.tsx",
+    "./notes-view": "./src/components/ui/sections/notes-view.tsx",
     "./notes": "./src/components/ui/sections/notes.tsx",
     "./main-page": "./src/components/ui/sections/main-page.tsx"
   },

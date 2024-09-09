@@ -1,11 +1,5 @@
 import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
-import { readFile } from "fs";
 import { z } from "zod";
-
-type TabConfig = {
-    currentTab: string;
-    openedTabs: Tab[];
-};
 
 const zTab = z.object({
     id: z.string(),
