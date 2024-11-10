@@ -32,25 +32,6 @@ export const FontSelect = () => {
     };
     return (
         <Dialog>
-            <Setting
-                title="Text Size"
-                description="The text size is the size of the text in the game. The default size is 24px."
-                resetAction={() => setFontSize(DEFAULT_FONT_SIZE)}
-            >
-                <div className="flex gap-2">
-                    <div className="flex items-center gap-2">
-                        <FontSizeIcon className="text-muted-foreground" />
-                        <p className="min-w-[1.5rem] font-bold">
-                            {fontSize >> 0}
-                        </p>
-                    </div>
-                    <Slider
-                        step={10}
-                        value={[fontSizeSliderValue]}
-                        onValueChange={handleFontSizeChange}
-                    />
-                </div>
-            </Setting>
             <Setting title="Fonts" resetAction={() => setFont(DEFAULT_FONT)}>
                 <Label className="pl-1">Preview Text</Label>
                 <Input

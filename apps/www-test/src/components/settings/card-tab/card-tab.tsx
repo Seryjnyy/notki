@@ -209,7 +209,6 @@ export const CardTab = () => {
                     <Label className="pl-1">Preview</Label>
                     <div className="mb-2 resize-none  max-w-[40rem]">
                         <NoteCard
-                            handleDelete={() => {}}
                             note={{
                                 characterCount: 425,
                                 fileName: "test file",

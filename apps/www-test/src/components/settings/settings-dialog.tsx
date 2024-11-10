@@ -69,7 +69,7 @@ export const SettingsDialog = () => {
             <DialogTrigger asChild>
                 <Button
                     ref={dialogTriggerRef}
-                    variant="ghost"
+                    variant="secondary"
                     className="group gap-2 p-2"
                     // tooltipContent={KEYBINDS.SETTINGS.label}
                     // tooltipContentProps={{
