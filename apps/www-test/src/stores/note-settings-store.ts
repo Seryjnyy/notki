@@ -63,7 +63,7 @@ const padding: Padding = {
     paddingBottom: 4,
 };
 
-const defaults = { header, content, footer, padding };
+export const defaults = { header, content, footer, padding };
 
 interface Actions {
     reset: () => void;
