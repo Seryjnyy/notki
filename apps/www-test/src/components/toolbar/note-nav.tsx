@@ -81,8 +81,8 @@ export default function NoteNav() {
     if (notes.length === 0) return null;
 
     return (
-        <div className="select-none flex items-center gap-2   ">
-            <div className="flex items-center border pr-3">
+        <nav className="select-none flex items-center gap-2   ">
+            <section className="flex items-center border pr-3">
                 <Input
                     value={
                         intermediateActiveIndex === -1
@@ -94,8 +94,8 @@ export default function NoteNav() {
                     onChange={onIndexInputChange}
                 />
                 /{notes.length}
-            </div>
-            <div>
+            </section>
+            <section>
                 <TooltipProvider delayDuration={200}>
                     <div className="flex items-center gap-1">
                         <Tooltip>
@@ -154,7 +154,7 @@ export default function NoteNav() {
                         </Tooltip>
                     </div>
                 </TooltipProvider>
-            </div>
-        </div>
+            </section>
+        </nav>
     );
 }

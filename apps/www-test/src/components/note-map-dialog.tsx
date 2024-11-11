@@ -1,17 +1,25 @@
-import { useNoteStore } from "@repo/lib/note-store";
-import { usePreferenceStore } from "@repo/lib/preference-store";
 import { Button } from "@repo/ui/button";
 import {
-    Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@repo/ui/dialog";
-import NoteCard from "@repo/ui/note-card";
+
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@repo/ui/tooltip";
 import { Map } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { TOOLTIP_DELAY_DURATION } from "~/config/tooltip.config";
+import { useNotes } from "~/hooks/use-notes";
+import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
+import NoteCard from "./compound-ui/note-card";
+import { SettingsDialog } from "./settings/settings-dialog";
 
 const NoteMap = () => {
     const [scale, setScale] = useState(1);
@@ -19,8 +27,7 @@ const NoteMap = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
-    const notes = useNoteStore((state) => state.notes);
-    const settings = usePreferenceStore((state) => state.settings);
+    const { notes, removeNote } = useNotes();
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
@@ -44,7 +51,7 @@ const NoteMap = () => {
     };
     const handleWheel = (e: React.WheelEvent) => {
         e.preventDefault();
-        const delta = e.deltaY * -0.001; // Changed from -0.01 to -0.001
+        const delta = e.deltaY * -0.001;
         const newScale = Math.min(Math.max(0.1, scale + delta), 4);
         setScale(newScale);
     };
@@ -64,23 +71,30 @@ const NoteMap = () => {
     // TODO : potential problem with this, haven't tested it yet, but will notes rerender themselves when they change? like when note settings change?
     const memoedNotes = useMemo(() => {
         return notes.map((note) => (
-            <NoteCard
-                key={note.id}
-                note={note}
-                settings={settings}
-                handleDelete={() => {}}
-            />
+            <NoteCard key={note.id} note={note} onDelete={removeNote} />
         ));
     }, [notes]);
 
     return (
-        <Dialog>
+        <NavigationAwareDialog>
             <DialogTrigger asChild>
-                <Button size={"icon"}>
-                    <Map />
-                </Button>
+                <TooltipProvider delayDuration={TOOLTIP_DELAY_DURATION}>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Button size={"icon"}>
+                                <Map />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Note map</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </DialogTrigger>
-            <DialogContent className="min-w-full min-h-full p-0">
+            <DialogContent className="min-w-full min-h-full p-0 rounded-none sm:rounded-none ">
+                <div className="fixed bottom-4 right-4 z-50">
+                    <SettingsDialog />
+                </div>
                 <DialogHeader className="sr-only">
                     <DialogTitle className="sr-only">
                         Are you absolutely sure?
@@ -91,10 +105,10 @@ const NoteMap = () => {
                         servers.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="w-full h-full  relative select-none">
+                <div className="w-full h-full  relative select-none ">
                     <div
                         ref={containerRef}
-                        className="h-full  w-full  overflow-hidden bg-background cursor-move absolute top-0"
+                        className="h-full  w-full  overflow-hidden bg-background cursor-move absolute top-0 "
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
@@ -117,7 +131,7 @@ const NoteMap = () => {
                     </div>
                 </div>
             </DialogContent>
-        </Dialog>
+        </NavigationAwareDialog>
     );
 };
 
