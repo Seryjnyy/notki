@@ -17,6 +17,7 @@ import { TabButton } from "~/components/compound-ui/tab-button";
 import { useBorderRadius } from "~/atoms/atoms";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
+import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
@@ -65,7 +66,7 @@ export const SettingsDialog = () => {
     // })
 
     return (
-        <Dialog>
+        <NavigationAwareDialog>
             <DialogTrigger asChild>
                 <Button
                     ref={dialogTriggerRef}
@@ -115,6 +116,6 @@ export const SettingsDialog = () => {
                     </ScrollArea>
                 </div>
             </DialogContent>
-        </Dialog>
+        </NavigationAwareDialog>
     );
 };
