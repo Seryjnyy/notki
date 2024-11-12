@@ -28,4 +28,18 @@ files.forEach((file) => {
     exportedComponents[`./${filePath}${name}`] =
         `./${componentsFolderPath}/${filePath}${name}${ext}`;
 });
-console.log(exportedComponents)
+
+// Read in package.json
+const packageJson = JSON.parse(fs.readFileSync(packageJSONPath, "utf8"));
+
+// Update exports
+packageJson.exports = exportedComponents;
+
+// Increment the version (not necessary but eh)
+const version = packageJson.version.split(".");
+const newVersion = Number(version[2]) + 1;
+packageJson.version = version[0] + "." + version[1] + "." + newVersion;
+
+// Write the package.json file
+fs.writeFileSync(packageJSONPath, JSON.stringify(packageJson, null, 2));
+console.log("Exports generated successfully.");
