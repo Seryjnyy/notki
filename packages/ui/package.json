@@ -50,7 +50,8 @@
     "lint": "eslint . --max-warnings 0",
     "dev": "tailwindcss -i ./src/main.css -o ./dist/index.css --watch",
     "generate:component": "turbo gen react-component",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "generate-exports": "node generate-exports.js"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
