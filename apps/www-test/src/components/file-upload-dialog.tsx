@@ -11,10 +11,13 @@ import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Upload } from "lucide-react";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
+import { useState } from "react";
 
 export default function FileUploadDialog() {
+    const [open, setOpen] = useState(false);
+
     return (
-        <NavigationAwareDialog>
+        <NavigationAwareDialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button
                     size={"icon"}
@@ -32,7 +35,7 @@ export default function FileUploadDialog() {
                         replace the existing notes.
                     </DialogDescription>
                 </DialogHeader>
-                <DropZone />
+                <DropZone onSuccess={() => setOpen(false)} />
                 <RadioGroup defaultValue="option-one" className="flex">
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="option-one" id="option-one" />

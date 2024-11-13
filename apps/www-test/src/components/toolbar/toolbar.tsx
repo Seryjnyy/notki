@@ -18,9 +18,12 @@ export default function Toolbar() {
                         <FileUploadDialog />
                     </div>
                     <div className="border rounded-md flex items-center gap-1 ">
-                        <FilterAndSort />
+                        {/* <FilterAndSort /> */}
+                        <FilterSortDialog />
                         <Search />
+                        <div className="border-l">
                         <CopyAllContent />
+                        </div>
                     </div>
                     <NoteMap />
                 </div>

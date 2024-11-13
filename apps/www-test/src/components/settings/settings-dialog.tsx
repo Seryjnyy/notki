@@ -50,12 +50,12 @@ export const SettingsDialog = () => {
             {
                 label: "Grid",
                 icon: <LayoutPanelLeft className="h-4 w-4" />,
-                comp: (
-                    <AppearanceTab
-                        setBorderRadius={setBorderRadius}
-                        borderRadius={borderRadius}
-                    />
-                ),
+                comp: <div>hello</div>,
+            },
+            {
+                label: "Shortcuts",
+                icon: <Scissors className="h-4 w-4" />,
+                comp: <div>hello</div>,
             },
         ],
         [borderRadius, setBorderRadius]
@@ -72,10 +72,6 @@ export const SettingsDialog = () => {
                     ref={dialogTriggerRef}
                     variant="secondary"
                     className="group gap-2 p-2"
-                    // tooltipContent={KEYBINDS.SETTINGS.label}
-                    // tooltipContentProps={{
-                    //   className: 'text-xs',
-                    // }}
                 >
                     <SettingsIcon className="h-4 text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
                 </Button>

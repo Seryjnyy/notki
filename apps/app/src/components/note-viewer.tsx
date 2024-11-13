@@ -30,13 +30,19 @@ import { Metadata } from "tauri-plugin-fs-extra-api";
 import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
 import { PlusIcon } from "@radix-ui/react-icons";
 
+type Item = {
+    id: number;
+    name: string;
+    parentId: number;
+};
+
 export default function NoteViewer() {
     const setNotes = useNoteStore((state) => state.setNotes);
     const workspace = useWorkspaceConfig.use.currentWorkspace();
     const [files, setFiles] = useState<FileEntry[]>([]);
 
     useEffect(() => {
-        const setUp = async () => {
+        (async () => {
             if (!workspace) return;
             const filesAndFolders = await getAllFilesFolders(
                 workspace.filepath,
@@ -57,14 +63,81 @@ export default function NoteViewer() {
             //         };
             //     })
             // );
-        };
-
-        setUp();
+        })();
     }, []);
+
+    const recursive = (
+        file: FileEntry,
+        parentIndex: number,
+        currentIndex: number
+    ) => {
+        const newParentIndex = currentIndex;
+        let newCurrIndex = currentIndex + 1;
+
+        const rest: { id: number; name: string; parentId: number }[] = [
+            {
+                id: newParentIndex,
+                name: file.name ?? "???",
+                parentId: parentIndex,
+            },
+        ];
+
+        if (file.children) {
+            for (
+                let i = 0;
+                i < (file.children ? file.children?.length : 0);
+                i++
+            ) {
+                const { data, index } = recursive(
+                    file.children[i],
+                    newParentIndex,
+                    newCurrIndex
+                );
+                rest.push(...data);
+
+                newCurrIndex = index;
+            }
+        }
+
+        return { data: rest, index: newCurrIndex };
+    };
+
+    let idCounter = 0;
+
+    function buildTreeFromFileEntries(
+        entries: FileEntry[],
+        parentId: number
+    ): Item[] {
+        const treeNodes: Item[] = [];
+
+        entries.forEach((entry) => {
+            const currentId = idCounter++; // Generate a unique ID for the current entry
+
+            const node: Item = {
+                id: currentId,
+                parentId: parentId,
+                name: entry.name ?? "???",
+            };
+
+            treeNodes.push(node);
+
+            // If the entry has children, recursively process them
+            if (entry.children && entry.children.length > 0) {
+                const childNodes = buildTreeFromFileEntries(
+                    entry.children,
+                    currentId
+                );
+                treeNodes.push(...childNodes);
+            }
+        });
+
+        return treeNodes;
+    }
 
     const data = useMemo(() => {
         console.log(files.filter((x) => x.children == undefined));
-        let i = 1;
+
+        if (files.length == 0) return;
 
         // const rootFolders = files.filter((x) => x.children != undefined);
         // rootFolders.map(folder => {
@@ -75,16 +148,52 @@ export default function NoteViewer() {
         // })
 
         const rootFiles = files.filter((x) => x.children == undefined);
+        const rootFolders = files.filter((x) => x.children != undefined);
 
-        const res = rootFiles.map((file, index) => ({
-            id: index + 2,
-            name: file.name ?? "???",
-            parentId: 1,
-        }));
+        let index = 1;
 
+        // const res = rootFolders.map((file) => {
+        //     index++;
+
+        //     return {
+        //         id: index,
+        //         name: file.name ?? "???",
+        //         parentId: 1,
+        //     };
+        // });
+
+        // const res2 = rootFiles.map((file) => {
+        //     index++;
+
+        //     return {
+        //         id: index,
+        //         name: file.name ?? "???",
+        //         parentId: 1,
+        //     };
+        // });
+
+        // const res = rootFiles.map((file, index) => ({
+        //     id: index + 2,
+        //     name: file.name ?? "???",
+        //     parentId: 1,
+        // }));
+
+        // const ah = [...res, ...res2];
+
+        // const oh: { id: number; name: string; parentId: number }[] = [];
+
+        // let curr = 1;
+        // files.forEach((file) => {
+        //     const { data, index } = recursive(file, 1, curr);
+        //     oh.push(...data);
+        //     curr = index;
+        // });
+
+        const tree = buildTreeFromFileEntries(files, 1);
+        console.log("🚀 ~ data ~ tree:", tree);
         return [
             { id: 1, name: workspace?.filepath ?? "???", parentId: 0 },
-            ...res,
+            ...tree.slice(0, 12),
         ];
     }, [files]);
 
@@ -192,7 +301,7 @@ export default function NoteViewer() {
                                             Open
                                         </Button>
                                         <ScrollArea className="h-[calc(70vh-9rem)] border p-1 rounded-b-lg rounded-tl-lg">
-                                            <Tree data={data} />
+                                            {data && <Tree data={data} />}
                                         </ScrollArea>
                                     </TabsContent>
                                     <TabsContent value="dragndrop">

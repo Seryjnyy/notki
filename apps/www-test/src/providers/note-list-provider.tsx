@@ -1,3 +1,4 @@
+import { useFilteredNotes } from "@repo/lib/note-store";
 import { Note } from "@repo/lib/types";
 import {
     createContext,
@@ -24,7 +25,8 @@ export const NoteListProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { notes } = useNotes();
+    // const { notes } = useNotes();
+    const notes = useFilteredNotes();
     const itemsRef = useRef(new Map());
     const [activeIndex, setActiveIndex] = useState(0);
 

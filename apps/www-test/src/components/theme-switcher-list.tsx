@@ -139,14 +139,15 @@ export const ThemeSwitcherList = () => {
                     {!filteredStyleList.length && (
                         <h2 className="px-2 font-bold">No themes found :(</h2>
                     )}
-                    {filteredStyleList.map((currStyle, idx) => {
+                    {filteredStyleList.map((currStyle, index) => {
                         if (!currStyle) return;
                         const { index: i, name } = currStyle;
                         const isActive = name === focusedStyle;
                         const isSelected = name === style;
                         return (
                             <div
-                                id={`style-${idx}`}
+                                key={currStyle.name}
+                                id={`style-${index}`}
                                 onMouseEnter={() =>
                                     !isHoverDisabled && setFocusedStyle(name)
                                 }

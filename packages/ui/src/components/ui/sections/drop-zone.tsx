@@ -8,7 +8,7 @@ import { usePreferenceStore } from "@repo/lib/preference-store";
 import { sortNotes } from "@repo/lib/note-sorting";
 import { FilePlusIcon, UploadIcon } from "@radix-ui/react-icons";
 
-export default function DropZone() {
+export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
     const setNotes = useNoteStore((state) => state.setNotes);
     const settings = usePreferenceStore((state) => state.settings);
 
@@ -40,6 +40,7 @@ export default function DropZone() {
             }
 
             setNotes(sortNotes(readInNotes.slice(), settings));
+            onSuccess?.();
         },
         [settings]
     );

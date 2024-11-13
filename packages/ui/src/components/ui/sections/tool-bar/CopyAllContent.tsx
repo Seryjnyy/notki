@@ -40,7 +40,7 @@ export default function CopyAllContent() {
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Button
-                        variant={"ghost"}
+                        variant={"outline"}
                         onClick={onCopy}
                         disabled={content == ""}
                     >
