@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { toast } from "../use-toast";
+import { toast } from "@repo/ui/hooks/use-toast";
 import { useNoteStore } from "@repo/lib/note-store";
 import { Note } from "@repo/lib/types";
 import { guidGenerator } from "@repo/lib/metadata-utils";
