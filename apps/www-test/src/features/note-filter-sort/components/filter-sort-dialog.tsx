@@ -109,23 +109,23 @@ export default function FilterSortDialog() {
 
     return (
         <NavigationAwareDialog>
-            <DialogTrigger>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
                             <Button variant={"ghost"} className="relative">
                                 <MixerVerticalIcon />
                                 {isSortChanged && (
                                     <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
                                 )}
                             </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                            <p>Filter and sort</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            </DialogTrigger>
+                        </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        <p>Filter and sort</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DialogContent dialogOverlayVariant={{ variant: "partialOverlay" }}>
                 <DialogHeader>
                     <DialogTitle>Sort</DialogTitle>

@@ -12,31 +12,28 @@ export const ThemeSwitcher = () => {
 
     return (
         <div className="grid w-full grid-cols-6 flex-wrap gap-4">
-            {colors.map((color) => {
-                const primary = color.mainColor;
-                const bg = color.bgColor;
-                const text = color.textColor;
-                const displayColors = [primary, bg, text];
-                const isActive = color.name === colorStyle;
+            {colors.map(({ mainColor, bgColor, textColor, name }) => {
+                const displayColors = [mainColor, bgColor, textColor];
+                const isActive = name === colorStyle;
 
                 return (
                     <RadioCard
-                        key={color.name}
+                        key={name}
                         isActive={isActive}
                         className={cn(
                             "col-span-6 flex-grow md:col-span-3",
                             isActive && "outline-primary"
                         )}
                         onClick={() => {
-                            setColorStyle(color.name);
+                            setColorStyle(name);
                         }}
                     >
                         <RadioCardDescription className="mb-1 flex items-center justify-between font-medium">
-                            {formatThemeName(color.name)}
+                            {formatThemeName(name)}
                             <div className="flex gap-1">
-                                {displayColors.map((col) => (
+                                {displayColors.map((col, i) => (
                                     <div
-                                        key={col}
+                                        key={name + col + i}
                                         style={{
                                             background: col,
                                         }}
@@ -48,7 +45,7 @@ export const ThemeSwitcher = () => {
                         <RadioCardContent
                             className="flex flex-col gap-2"
                             style={{
-                                background: bg,
+                                background: bgColor,
                             }}
                         ></RadioCardContent>
                     </RadioCard>
