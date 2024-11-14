@@ -2,7 +2,7 @@ import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 // TODO : This stuff should just be in @repo/lib
-import { cn } from "../../lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
 const Dialog = DialogPrimitive.Root;

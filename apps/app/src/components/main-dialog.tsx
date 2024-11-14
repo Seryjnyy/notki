@@ -5,7 +5,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@repo/ui/dialog";
+} from "@repo/ui/components/ui/dialog";
 import { produce } from "immer";
 
 import { useUiState } from "~/lib/ui-store";

@@ -4,7 +4,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 
 import {
     ArchiveIcon,
@@ -19,15 +19,15 @@ import {
     ReloadIcon,
     TrashIcon,
 } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
     ContextMenuSeparator,
     ContextMenuTrigger,
-} from "@repo/ui/context-menu";
-import { ScrollArea } from "@repo/ui/scroll-area";
+} from "@repo/ui/components/ui/context-menu";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { ReactNode, useEffect, useState } from "react";
 import {
     Collapsible,

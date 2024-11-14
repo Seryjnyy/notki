@@ -1,4 +1,4 @@
-import { ScrollArea } from "@repo/ui/scroll-area";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { getFileContent, saveFile } from "~/lib/file-services/file-service";

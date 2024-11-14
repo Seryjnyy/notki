@@ -1,11 +1,11 @@
-import { Badge } from "@repo/ui/badge";
+import { Badge } from "@repo/ui/components/ui/badge";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@repo/ui/dialog-controlled";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/ui/dialog-controlled";
+import { Input } from "@repo/ui/components/ui/input";
 
 import { appWindow } from "@tauri-apps/api/window";
 import { produce } from "immer";

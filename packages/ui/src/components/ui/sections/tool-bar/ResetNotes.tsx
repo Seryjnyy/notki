@@ -14,8 +14,8 @@ export default function ResetNotes() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button onClick={() => setNotes([])} variant={"ghost"}>
-                        <UpdateIcon />
+                    <Button onClick={() => setNotes([])} variant={"secondary"}>
+                        <UpdateIcon className="mr-2 text-primary" /> Restart
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">

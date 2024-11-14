@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useState } from "react";
-import { Checkbox } from "@repo/ui/checkbox";
+import { Checkbox } from "@repo/ui/components/ui/checkbox";
 import { MinusIcon } from "@radix-ui/react-icons";
 
 enum CheckboxState {

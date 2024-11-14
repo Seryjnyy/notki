@@ -1,12 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArchiveIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { Button } from "@repo/ui/components/ui/button";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@repo/ui/components/ui/tabs";
 import { open } from "@tauri-apps/api/dialog";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@repo/ui/components/ui/popover";
 
-import { Input } from "@repo/ui/input";
+import { Input } from "@repo/ui/components/ui/input";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {

@@ -1,12 +1,12 @@
 import { ArchiveIcon, FileIcon, GearIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import ModeToggle from "@repo/ui/mode-toggle";
+import { Button } from "@repo/ui/components/ui/button";
+import ModeToggle from "@repo/ui/components/mode-toggle";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 import { produce } from "immer";
 import { ReactNode } from "react";
 import { useUiState } from "~/lib/ui-store";

@@ -8,7 +8,7 @@ import {
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card";
 // import { Note, NoteSettings } from "./types";
-import { cn } from "../../lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import { CopyIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { useMemo } from "react";
 import { Button } from "./button";
