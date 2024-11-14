@@ -1,5 +1,5 @@
-import { ThemeProvider } from "@repo/ui/theme-provider";
-import { Toaster } from "@repo/ui/toaster";
+import { ThemeProvider } from "@repo/ui/components/theme-provider";
+import { Toaster } from "@repo/ui/components/ui/toaster";
 import { useEffect } from "react";
 import {
     ResizableHandle,

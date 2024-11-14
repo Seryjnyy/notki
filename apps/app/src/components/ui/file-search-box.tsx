@@ -3,8 +3,8 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@repo/ui/dialog-controlled";
-import { Input } from "@repo/ui/input";
+} from "@repo/ui/components/ui/dialog-controlled";
+import { Input } from "@repo/ui/components/ui/input";
 
 import {
     createRef,

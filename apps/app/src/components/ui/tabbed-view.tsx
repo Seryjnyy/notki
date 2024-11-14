@@ -1,12 +1,12 @@
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
-import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
+import { Button } from "@repo/ui/components/ui/button";
+import { ScrollArea, ScrollBar } from "@repo/ui/components/ui/scroll-area";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 
 import { useHotkeys } from "react-hotkeys-hook";
 import { Tab, useOpenedTabs } from "~/lib/opene-tabs-store";
