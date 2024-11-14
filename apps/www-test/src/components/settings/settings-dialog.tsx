@@ -1,10 +1,17 @@
 import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@repo/ui/components/ui/collapsible";
+import {
     LayoutPanelLeft,
+    MenuIcon,
     NotebookText,
     PaintbrushIcon,
     Scissors,
     SettingsIcon,
     TextCursor,
+    XIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -24,9 +31,12 @@ import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
 import { DisplayTab } from "./display-tab/display-tab";
+import { cn } from "~/lib/utils";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     const [borderRadius, setBorderRadius] = useBorderRadius();
     const SETTINGS_TABS = useMemo(
         () => [
@@ -82,25 +92,56 @@ export const SettingsDialog = () => {
                     <SettingsIcon className="h-4 text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex h-3/4 w-full max-w-5xl overflow-hidden">
-                <div className="max-h-full w-fit">
+            <DialogContent className="flex h-[90vh] sm:h-3/4 flex-col sm:flex-row w-full max-w-5xl overflow-hidden">
+                <div className="max-h-full w-fit hidden sm:block">
                     <h2 className="mb-4 text-2xl font-bold">Settings</h2>
                     <div className="flex w-[12rem] flex-col gap-2">
-                        {SETTINGS_TABS.map((tab, i) => (
+                        {SETTINGS_TABS.map((tab) => (
                             <TabButton
                                 key={tab.label}
                                 label={tab.label}
                                 icon={tab.icon}
-                                tabIndex={i}
                                 isActive={currentTab === tab.label}
                                 setCurrentTab={setCurrentTab}
                             />
                         ))}
                     </div>
                 </div>
+                <Collapsible
+                    open={isMobileMenuOpen}
+                    onOpenChange={setIsMobileMenuOpen}
+                    className={cn(
+                        "mt-4 pt-1 px-2  sm:hidden",
+                        isMobileMenuOpen && "border-t  border-b"
+                    )}
+                >
+                    <CollapsibleTrigger>
+                        {!isMobileMenuOpen && <MenuIcon />}
+                        {isMobileMenuOpen && (
+                            <span className="flex gap-2 items-center">
+                                <XIcon />
+                            </span>
+                        )}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pb-2">
+                        <div>
+                            {SETTINGS_TABS.map((tab, i) => (
+                                <TabButton
+                                    key={tab.label}
+                                    label={tab.label}
+                                    icon={tab.icon}
+                                    isActive={currentTab === tab.label}
+                                    setCurrentTab={setCurrentTab}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                />
+                            ))}
+                        </div>
+                    </CollapsibleContent>
+                </Collapsible>
+
                 <div className="flex flex-1 flex-col">
                     <h2 className="mb-4 text-xl font-bold">{currentTab}</h2>
-                    <ScrollArea className="w-full overflow-y-auto">
+                    <ScrollArea className="w-full overflow-y-auto h-[70vh] sm:h-full">
                         <Tabs
                             className="pb-8 pl-1 pr-4"
                             value={currentTab}
