@@ -4,6 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 // TODO : This stuff should just be in @repo/lib
 import { cn } from "@repo/ui/lib/utils";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { cva, VariantProps } from "class-variance-authority";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -13,27 +14,47 @@ const DialogPortal = DialogPrimitive.Portal;
 
 const DialogClose = DialogPrimitive.Close;
 
+const dialogOverlayVariants = cva(
+    "fixed inset-0 z-50  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+    {
+        variants: {
+            variant: {
+                default: "bg-black/80",
+                partialOverlay: "bg-black/50",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+        },
+    }
+);
+
+interface DialogOverlayProps
+    extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>,
+        VariantProps<typeof dialogOverlayVariants> {}
 const DialogOverlay = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Overlay>,
-    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+    DialogOverlayProps
+>(({ className, variant, ...props }, ref) => (
     <DialogPrimitive.Overlay
         ref={ref}
-        className={cn(
-            "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-            className
-        )}
+        className={cn(dialogOverlayVariants({ variant, className }))}
         {...props}
     />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+interface DialogContentProps
+    extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+    dialogOverlayVariant?: VariantProps<typeof dialogOverlayVariants>;
+}
+
 const DialogContent = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+    DialogContentProps
+>(({ className, dialogOverlayVariant, children, ...props }, ref) => (
     <DialogPortal>
-        <DialogOverlay />
+        <DialogOverlay variant={dialogOverlayVariant?.variant} />
         <DialogPrimitive.Content
             ref={ref}
             className={cn(

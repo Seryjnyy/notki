@@ -126,7 +126,7 @@ export default function FilterSortDialog() {
                     </Tooltip>
                 </TooltipProvider>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent dialogOverlayVariant={{ variant: "partialOverlay" }}>
                 <DialogHeader>
                     <DialogTitle>Sort</DialogTitle>
                     <DialogDescription className="sr-only">

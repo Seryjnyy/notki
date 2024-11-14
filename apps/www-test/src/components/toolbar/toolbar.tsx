@@ -7,6 +7,7 @@ import { SettingsDialog } from "~/components/settings/settings-dialog";
 
 import FileUploadDialog from "~/components/file-upload-dialog";
 import FilterSortDialog from "~/features/note-filter-sort/components/filter-sort-dialog";
+import SearchDialog from "~/features/note-filter-sort/components/search-dialog";
 
 // TODO : currently is not responsive
 export default function Toolbar() {
@@ -21,7 +22,7 @@ export default function Toolbar() {
                     <div className="border rounded-md flex items-center gap-1 ">
                         {/* <FilterAndSort /> */}
                         <FilterSortDialog />
-                        <Search />
+                        <SearchDialog />
                         <div className="border-l">
                             <CopyAllContent />
                         </div>
