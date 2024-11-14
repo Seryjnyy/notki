@@ -1,21 +1,20 @@
-import { Checkbox } from "@repo/ui/components/ui/checkbox";
 import { Label } from "@repo/ui/components/ui/label";
-import { Slider } from "@repo/ui/components/ui/slider";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
-import { ReactNode } from "react";
 import NoteCard from "~/components/compound-ui/note-card";
-import { ResetButton } from "~/components/compound-ui/reset-button";
 import useNoteContentSettings from "~/hooks/note-settings/use-note-content-settings";
 import useNoteFooterSettings from "~/hooks/note-settings/use-note-footer-settings";
 import useNoteHeaderSettings from "~/hooks/note-settings/use-note-header-settings";
 import useNotePaddingSettings from "~/hooks/note-settings/use-note-padding-settings";
-import { Setting } from "../setting";
 import { useNoteSettings } from "~/stores/note-settings-store";
+import CheckSetting from "../check-setting";
+import { Setting } from "../setting";
+import { TabContent, TabTitle } from "../setting-tab";
+import SliderSetting from "../slider-setting";
 
 // TODO : is it bad that onChange is ignoring the value and just calling toggle?
 const HeaderTab = () => {
@@ -138,25 +137,6 @@ const ContentTab = () => {
     );
 };
 
-const TabTitle = ({
-    children,
-    onReset,
-}: {
-    children: ReactNode;
-    onReset: () => void;
-}) => {
-    return (
-        <div className="flex items-center mb-4">
-            <h3 className="font-semibold text-lg">{children}</h3>
-            <ResetButton onClick={onReset} />
-        </div>
-    );
-};
-
-const TabContent = ({ children }: { children: ReactNode }) => (
-    <div className=" flex flex-wrap gap-2 w-full ">{children}</div>
-);
-
 const PaddingTab = () => {
     const {
         padding,
@@ -249,71 +229,6 @@ export const CardTab = () => {
                     </TabsContent>
                 </Tabs>
             </Setting>
-        </div>
-    );
-};
-
-const SliderSetting = ({
-    label,
-    value,
-    limits,
-    step = 1,
-    onChange,
-    onReset,
-}: {
-    label: string;
-    value: number;
-    step?: number;
-    limits?: { min: number; max: number };
-    onChange: (val: number) => void;
-    onReset?: () => void;
-}) => {
-    return (
-        <div className="w-full border py-3 px-4 rounded-[var(--radius)]">
-            <div className="flex justify-between items-center w-full">
-                <Label className="select-none">{label}</Label>
-                {onReset && <ResetButton onClick={onReset} />}
-            </div>
-            <div className="flex gap-2">
-                <div className="flex items-center gap-2">
-                    <p className="min-w-[1.5rem] font-bold">{value}</p>
-                </div>
-                <Slider
-                    max={limits?.max}
-                    min={limits?.min}
-                    step={step}
-                    value={[value]}
-                    onValueChange={(val) => onChange(val[0])}
-                />
-            </div>
-        </div>
-    );
-};
-
-interface CheckSettingProps {
-    label: string;
-    value: boolean;
-    onChange: (val: boolean) => void;
-}
-
-const CheckSetting = ({ label, value, onChange }: CheckSettingProps) => {
-    return (
-        <div className="flex items-center justify-between w-full border py-3 px-4 rounded-[var(--radius)]">
-            <div className="flex gap-2 items-center">
-                <Label className="max-w-[10rem]  py-1 truncate capitalize">
-                    {label}
-                </Label>
-            </div>
-            <Checkbox
-                checked={value}
-                onCheckedChange={(val) => {
-                    if (val == "indeterminate") {
-                        onChange(false);
-                        return;
-                    }
-                    onChange(val);
-                }}
-            />
         </div>
     );
 };

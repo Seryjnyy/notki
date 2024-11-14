@@ -8,7 +8,6 @@ import {
     useRef,
     useState,
 } from "react";
-import { useNotes } from "~/hooks/use-notes";
 
 type NoteListContextType = {
     notes: Note[];
@@ -25,7 +24,6 @@ export const NoteListProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    // const { notes } = useNotes();
     const notes = useFilteredNotes();
     const itemsRef = useRef(new Map());
     const [activeIndex, setActiveIndex] = useState(0);

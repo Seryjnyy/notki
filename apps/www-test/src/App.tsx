@@ -15,10 +15,12 @@ import { ThemeSwitcherList } from "./components/theme-switcher-list";
 import { useNotes } from "./hooks/use-notes";
 import { cn } from "./lib/utils";
 
+import { ReactNode, useCallback } from "react";
 import SkipToNavLink from "./components/skip-to-nav-link";
 import NoteNav from "./components/toolbar/note-nav";
 import Toolbar from "./components/toolbar/toolbar";
 import { NoteListProvider, useNoteList } from "./providers/note-list-provider";
+import { useNoteDisplaySettings } from "./stores/note-display-settings-store";
 
 function App() {
     return (
@@ -120,14 +122,67 @@ const BottomToolbarAndNav = () => {
     );
 };
 
+const NotesList = ({ children }: { children: ReactNode }) => {
+    const cols = useNoteDisplaySettings.use.cols();
+    const colsGap = useNoteDisplaySettings.use.colsGap();
+    const paddingX = useNoteDisplaySettings.use.paddingX();
+    const paddingY = useNoteDisplaySettings.use.paddingY();
+
+    return (
+        <ul
+            className="grid mb-16"
+            style={{
+                gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+                gap: `${colsGap}px`,
+                padding: `${paddingY}px ${paddingX}px`,
+            }}
+        >
+            {children}
+        </ul>
+    );
+};
+
+const SingleNote = () => {
+    const paddingX = useNoteDisplaySettings.use.paddingX();
+    const paddingY = useNoteDisplaySettings.use.paddingY();
+    const { notes, activeIndex } = useNoteList();
+
+    const getNote = useCallback(() => {
+        if (notes.length == 0 || activeIndex < 0 || activeIndex >= notes.length)
+            return null;
+
+        const note = notes[activeIndex];
+        return <NoteCard note={note} key={note.id} />;
+    }, [notes, activeIndex]);
+
+    return (
+        <div
+            className="mb-16"
+            style={{
+                padding: `${paddingY}px ${paddingX}px`,
+            }}
+        >
+            <div className="relative">
+                {getNote()}
+                <div className="absolute bottom-2  right-2">
+                    <Circle className="size-3 text-primary" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Notes = () => {
     const { removeNote } = useNotes(); // TODO : useNoteList context already uses this hook, should it get it from there?
     const { notes, activeIndex, setActiveIndex, getRef } = useNoteList();
+    const display = useNoteDisplaySettings.use.display();
+
+    if (display === "slideshow") return <SingleNote />;
 
     // TODO : rerenders everything every time notes are navigated, could be a issue with lots of notes
     // TODO : should this be virtualized?
     return (
-        <ul className="flex flex-col gap-4 px-4 mb-16">
+        <NotesList>
             {notes.map((note, index) => (
                 <li
                     key={note.id}
@@ -143,7 +198,7 @@ const Notes = () => {
                     )}
                 </li>
             ))}
-        </ul>
+        </NotesList>
     );
 };
 

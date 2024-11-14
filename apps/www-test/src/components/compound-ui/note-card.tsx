@@ -60,7 +60,7 @@ const Header = ({
     if (!header.header) return null;
 
     return (
-        <CardHeader className="flex flex-row items-center justify-between py-0 my-0">
+        <CardHeader className="flex flex-row items-center justify-between py-0 my-0 pt-2">
             <CardTitle
                 className={cn("text-muted-foreground select-none", {
                     "sr-only": !header.title,
@@ -69,7 +69,7 @@ const Header = ({
                 <div className="w-[16rem] overflow-x-clip">{note.fileName}</div>
             </CardTitle>
             {(header.copy || header.remove) && (
-                <div className="w-fit ml-auto space-x-8">
+                <div className="w-fit ml-auto space-x-8 h-fit">
                     {header.copy && <CopyButton content={note.content} />}
 
                     {header.remove && (

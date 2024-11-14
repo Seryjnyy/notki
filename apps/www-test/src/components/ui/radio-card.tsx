@@ -51,7 +51,7 @@ export const RadioCard = ({
                     className={cn(
                         "cursor-pointer rounded-md px-4 py-2 text-left outline outline-1 outline-foreground/20 transition-all hover:bg-foreground/5 hover:outline-foreground focus:outline-2 focus:outline-foreground",
                         {
-                            "focus:outline-initial bg-primary/10 outline-2 outline-primary":
+                            "focus:outline-initial bg-primary/10 outline-2 focus:outline-4 outline-primary":
                                 isActive,
                         },
                         className
