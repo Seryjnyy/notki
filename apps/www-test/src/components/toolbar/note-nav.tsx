@@ -82,7 +82,7 @@ export default function NoteNav() {
 
     return (
         <nav className="select-none flex items-center gap-2   ">
-            <section className="flex items-center border pr-3">
+            <section className="flex items-center border pr-3 rounded-[var(--radius)]">
                 <Input
                     value={
                         intermediateActiveIndex === -1
@@ -90,7 +90,7 @@ export default function NoteNav() {
                             : intermediateActiveIndex + 1
                     }
                     type="number"
-                    className="w-[4rem] rounded-none border-none"
+                    className="w-[4rem] rounded-none rounded-l-[var(--radius)] border-none mr-1"
                     onChange={onIndexInputChange}
                 />
                 /{notes.length}

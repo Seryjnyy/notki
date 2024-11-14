@@ -95,7 +95,9 @@ const Main = () => {
                         }
                     >
                         <NoteListProvider>
-                            <Notes />
+                            <div className="mb-40 sm:mb-16 ">
+                                <Notes />
+                            </div>
                             <BottomToolbarAndNav />
                         </NoteListProvider>
                     </ErrorBoundary>
@@ -107,16 +109,18 @@ const Main = () => {
 
 const BottomToolbarAndNav = () => {
     return (
-        <div
-            className="bottom-0 fixed left-0 w-full  flex justify-between "
-            id="main-nav"
-            tabIndex={-1}
-        >
-            <div className="backdrop-blur-md rounded-tr-[var(--radius)] border-t border-r p-2 w-fit">
-                <NoteNav />
-            </div>
-            <div className="z-50 backdrop-blur-md p-2 border-t border-l rounded-tl-[var(--radius)] w-fit">
-                <Toolbar />
+        <div className="bottom-0 fixed left-0   flex justify-center w-full">
+            <div
+                className="flex  border-t border-l rounded-t-[var(--radius)] backdrop-blur-md border-r  w-fit flex-wrap"
+                tabIndex={-1}
+                id="main-nav"
+            >
+                <div className="z-50  p-2  w-full ">
+                    <Toolbar />
+                </div>
+                <div className="  p-2 w-fit mx-auto">
+                    <NoteNav />
+                </div>
             </div>
         </div>
     );
@@ -130,7 +134,7 @@ const NotesList = ({ children }: { children: ReactNode }) => {
 
     return (
         <ul
-            className="grid mb-16"
+            className="grid"
             style={{
                 gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
                 gap: `${colsGap}px`,
@@ -193,7 +197,8 @@ const Notes = () => {
                     <NoteCard note={note} onDelete={removeNote} />
                     {index === activeIndex && (
                         <div className="absolute bottom-2  right-2">
-                            <Circle className="size-3 text-primary" />
+                            {/* <Circle className="size-3 text-primary" /> */}
+                            <div className="size-3 border-2 border-primary rounded-[var(--radius)]"></div>
                         </div>
                     )}
                 </li>
