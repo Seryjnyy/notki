@@ -184,51 +184,55 @@ export const CardTab = () => {
     const reset = useNoteSettings.use.reset();
 
     return (
-        <div>
-            <Setting
-                title="Appearance"
-                description="Changes how the cards look."
-                resetAction={reset}
-            >
-                <div className="py-8">
-                    <Label className="pl-1">Preview</Label>
-                    <div className="mb-2 resize-none  max-w-[40rem]">
-                        <NoteCard
-                            note={{
-                                characterCount: 425,
-                                fileName: "test file",
-                                id: "123",
-                                lastModified: Date.now(),
-                                size: 1234,
-                                content: "lorem ipsum some text and stuff.",
-                            }}
-                        />
-                    </div>
+        <Setting
+            title="Appearance"
+            description="Changes how the cards look."
+            resetAction={reset}
+        >
+            <div className="py-8">
+                <Label className="pl-1">Preview</Label>
+                <div className="mb-2 resize-none  max-w-[40rem]">
+                    <NoteCard
+                        note={{
+                            characterCount: 425,
+                            fileName: "test file",
+                            id: "123",
+                            lastModified: Date.now(),
+                            size: 1234,
+                            content:
+                                "lorem ipsum some text and stuff.\n New line more stuff.",
+                        }}
+                    />
                 </div>
-                <Tabs
-                    defaultValue="header"
-                    className="border p-3 rounded-[var(--radius)]"
-                >
-                    <TabsList>
-                        <TabsTrigger value="header">Header</TabsTrigger>
-                        <TabsTrigger value="content">Content</TabsTrigger>
-                        <TabsTrigger value="footer">Footer</TabsTrigger>
-                        <TabsTrigger value="padding">Padding</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="header">
-                        <HeaderTab />
-                    </TabsContent>
-                    <TabsContent value="content">
-                        <ContentTab />
-                    </TabsContent>
-                    <TabsContent value="footer">
-                        <FooterTab />
-                    </TabsContent>
-                    <TabsContent value="padding">
-                        <PaddingTab />
-                    </TabsContent>
-                </Tabs>
-            </Setting>
-        </div>
+            </div>
+            <Tabs
+                defaultValue="header"
+                className="border p-3 rounded-[var(--radius)]"
+            >
+                <TabsList>
+                    <TabsTrigger value="header">Header</TabsTrigger>
+                    <TabsTrigger value="content">Content</TabsTrigger>
+                    <TabsTrigger value="footer">Footer</TabsTrigger>
+                    <TabsTrigger
+                        value="padding"
+                        className="w-[3.9rem] sm:w-fit "
+                    >
+                        Padding
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value="header">
+                    <HeaderTab />
+                </TabsContent>
+                <TabsContent value="content">
+                    <ContentTab />
+                </TabsContent>
+                <TabsContent value="footer">
+                    <FooterTab />
+                </TabsContent>
+                <TabsContent value="padding">
+                    <PaddingTab />
+                </TabsContent>
+            </Tabs>
+        </Setting>
     );
 };

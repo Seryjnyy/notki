@@ -58,7 +58,7 @@ type Padding = {
 };
 
 const padding: Padding = {
-    paddingX: 4,
+    paddingX: 24,
     paddingTop: 4,
     paddingBottom: 4,
 };

@@ -65,7 +65,7 @@ const Header = ({
                     "sr-only": !header.title,
                 })}
             >
-                <div className="w-[8rem] sm:w-[20rem] md:w-[24rem] lg:w-[32rem] xl:w-[36rem] overflow-x-clip ">
+                <div className="max-w-[8rem] sm:max-w-[20rem] md:max-w-[24rem] lg:max-w-[32rem] xl:max-w-[36rem] overflow-x-clip ">
                     {note.fileName}
                 </div>
             </CardTitle>

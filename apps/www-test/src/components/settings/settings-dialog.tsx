@@ -112,7 +112,8 @@ export const SettingsDialog = () => {
                     onOpenChange={setIsMobileMenuOpen}
                     className={cn(
                         "mt-4 pt-1 px-2  sm:hidden",
-                        isMobileMenuOpen && "border-t  border-b"
+                        isMobileMenuOpen &&
+                            "border-t  border-b backdrop-brightness-95"
                     )}
                 >
                     <CollapsibleTrigger>
@@ -125,7 +126,7 @@ export const SettingsDialog = () => {
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pb-2">
                         <div>
-                            {SETTINGS_TABS.map((tab, i) => (
+                            {SETTINGS_TABS.map((tab) => (
                                 <TabButton
                                     key={tab.label}
                                     label={tab.label}

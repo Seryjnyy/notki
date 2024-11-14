@@ -28,16 +28,6 @@ export default function useNoteFooterSettings() {
         [content, setContent]
     );
 
-    // const updateLineHeight = React.useCallback(
-    //     (size: number) => {
-    //         if (size < limits.lineHeight.min || size > limits.lineHeight.max)
-    //             return;
-
-    //         setContent({ ...content, lineHeight: size });
-    //     },
-    //     [content, setContent]
-    // );
-
     const updateLetterSpacing = React.useCallback(
         (size: number) => {
             if (
@@ -71,7 +61,6 @@ export default function useNoteFooterSettings() {
         limits,
         toggleTextSelectable,
         updateFontSize,
-        // updateLineHeight,
         updateLetterSpacing,
         resetContent,
         resetLineHeight,
