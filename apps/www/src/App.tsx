@@ -1,8 +1,8 @@
-import Footer from "@repo/ui/footer";
-import MainPage from "@repo/ui/main-page";
-import ModeToggle from "@repo/ui/mode-toggle";
-import { ThemeProvider } from "@repo/ui/theme-provider";
-import { Toaster } from "@repo/ui/toaster";
+import Footer from "@repo/ui/components/ui/footer";
+import MainPage from "@repo/ui/components/ui/sections/main-page";
+import ModeToggle from "@repo/ui/components/mode-toggle";
+import { ThemeProvider } from "@repo/ui/components/theme-provider";
+import { Toaster } from "@repo/ui/components/ui/toaster";
 
 function App() {
     return (
