@@ -1,8 +1,9 @@
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { FONTS } from "~/config/fonts.config";
 import * as LK from "~/config/local-storage-keys.config";
 
+// TOOO : is there a need for atoms tbh, we already use zustand, do we need jotai as well?
 export const styleAtom = atomWithStorage(LK.CURRENT_STYLE_KEY, "carbon");
 export const useStyle = () => useAtom(styleAtom);
 

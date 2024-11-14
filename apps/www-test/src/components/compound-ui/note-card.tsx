@@ -22,7 +22,6 @@ import useNoteFooterSettings from "~/hooks/note-settings/use-note-footer-setting
 import useNoteHeaderSettings from "~/hooks/note-settings/use-note-header-settings";
 import useNotePaddingSettings from "~/hooks/note-settings/use-note-padding-settings";
 import { useCopyToClipboard } from "~/hooks/use-copy-to-clipboard";
-import { useNotes } from "~/hooks/use-notes";
 import { cn } from "~/lib/utils";
 
 const CopyButton = ({ content }: { content: string }) => {
@@ -66,10 +65,12 @@ const Header = ({
                     "sr-only": !header.title,
                 })}
             >
-                <div className="w-[16rem] overflow-x-clip">{note.fileName}</div>
+                <div className="w-[8rem] sm:w-[20rem] md:w-[24rem] lg:w-[32rem] xl:w-[36rem] overflow-x-clip ">
+                    {note.fileName}
+                </div>
             </CardTitle>
             {(header.copy || header.remove) && (
-                <div className="w-fit ml-auto space-x-8 h-fit">
+                <div className="w-fit ml-auto sm:gap-8 gap-2 h-fit   flex">
                     {header.copy && <CopyButton content={note.content} />}
 
                     {header.remove && (
@@ -149,8 +150,6 @@ const Content = ({ note }: { note: Note }) => {
                         paddingBottom: `${padding.paddingBottom}px`,
                         paddingTop: `${padding.paddingTop}px`,
                         fontFamily: "inherit",
-                        // fontSize: `${content.fontSize}rem`,
-                        // lineHeight: `${content.lineHeight}rem`,
                     }}
                     className={content.textSelectable ? "" : "select-none"}
                 >
@@ -170,7 +169,7 @@ export default function NoteCard({
     onDelete?: (id: string) => void;
 }) {
     return (
-        <Card className="p-0 ">
+        <Card className="p-0 rounded-[var(--radius)]">
             <Header note={note} onRemove={(note) => onDelete?.(note.id)} />
             <Content note={note} />
             <Footer note={note} />

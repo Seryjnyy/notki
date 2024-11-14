@@ -10,7 +10,7 @@ type BorderRadiusVisualizerProps = ComponentProps<typeof Button> & {
 export const BorderRadiusVisualizer = ({
     radius,
     isActive,
-    ...rest
+    ...props
 }: BorderRadiusVisualizerProps) => {
     return (
         <div className="flex flex-col items-center">
@@ -20,7 +20,7 @@ export const BorderRadiusVisualizer = ({
                     "relative h-8 w-8 overflow-hidden rounded-md outline outline-1 outline-foreground/20 hover:bg-foreground/10",
                     isActive && "bg-primary/20 outline-2 outline-primary"
                 )}
-                {...rest}
+                {...props}
             >
                 <div
                     style={{

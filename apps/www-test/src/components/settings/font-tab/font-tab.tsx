@@ -1,35 +1,27 @@
-import { DEFAULT_FONT, DEFAULT_FONT_SIZE, FONTS } from "~/config/fonts.config";
-import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
-import { useFont, useFontSize, useUserFonts } from "~/atoms/atoms";
-import { Label } from "@repo/ui/components/ui/label";
+import { Button } from "@repo/ui/components/ui/button";
+import { Dialog } from "@repo/ui/components/ui/dialog";
 import { Input } from "@repo/ui/components/ui/input";
+import { Label } from "@repo/ui/components/ui/label";
+import { PlusIcon } from "lucide-react";
+import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
+import { useFont, useUserFonts } from "~/atoms/atoms";
 import {
     RadioCard,
     RadioCardContent,
     RadioCardDescription,
 } from "~/components/ui/radio-card";
-import { Button } from "@repo/ui/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { AddFontModal } from "./add-font-modal";
-import { Dialog } from "@repo/ui/components/ui/dialog";
+import { DEFAULT_FONT, FONTS } from "~/config/fonts.config";
 import { generateFontCss } from "~/lib/utils";
-import { Slider } from "@repo/ui/components/ui/slider";
-import { FontSizeIcon } from "@radix-ui/react-icons";
 import { Setting } from "../setting";
+import { AddFontModal } from "./add-font-modal";
 
 export const FontSelect = () => {
     const [userFonts] = useUserFonts();
-    const [, setFont] = useFont();
+    const [_, setFont] = useFont();
     const [value, setValue] = useState(
         "The Quick Brown fox jumps over the lazy dog."
     );
-    const [fontSize, setFontSize] = useFontSize();
-    const fontSizeSliderValue = (fontSize / 24) * 100 - 50;
-    const handleFontSizeChange = (value: [number]) => {
-        const updatedPercentage = value[0] + 50;
-        const updatedFontSize = (24 * updatedPercentage) / 100;
-        setFontSize(updatedFontSize);
-    };
+
     return (
         <Dialog>
             <Setting title="Fonts" resetAction={() => setFont(DEFAULT_FONT)}>

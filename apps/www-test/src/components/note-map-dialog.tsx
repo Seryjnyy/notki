@@ -81,7 +81,11 @@ const NoteMap = () => {
                 <TooltipProvider delayDuration={TOOLTIP_DELAY_DURATION}>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Button size={"icon"}>
+                            <Button
+                                size={"icon"}
+                                variant={"outline"}
+                                className="border-primary"
+                            >
                                 <Map />
                             </Button>
                         </TooltipTrigger>
