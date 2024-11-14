@@ -23,6 +23,7 @@ import { useBorderRadius } from "~/atoms/atoms";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
+import { DisplayTab } from "./display-tab/display-tab";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
@@ -53,9 +54,9 @@ export const SettingsDialog = () => {
                 comp: <CardTab />,
             },
             {
-                label: "Grid",
+                label: "Display",
                 icon: <LayoutPanelLeft className="h-4 w-4" />,
-                comp: <div>hello</div>,
+                comp: <DisplayTab />,
             },
             {
                 label: "Shortcuts",
