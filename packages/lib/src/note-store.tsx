@@ -12,8 +12,8 @@ const useNoteStoreBase = create<NotesState>()((set) => ({
     setNotes: (newNotes) => set(() => ({ notes: newNotes })),
 }));
 
-type SortOrder = "asc" | "desc";
-type SortBy = "time" | "title" | "size" | "characterCount";
+export type SortOrder = "asc" | "desc";
+export type SortBy = "time" | "title" | "size" | "characterCount";
 
 type NoteFilterState = {
     filter: string;
