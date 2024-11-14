@@ -2,14 +2,19 @@ import {
     LayoutPanelLeft,
     NotebookText,
     PaintbrushIcon,
+    Scissors,
     SettingsIcon,
     TextCursor,
 } from "lucide-react";
-import { Button } from "@repo/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@repo/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@repo/ui/components/ui/dialog";
 import { FontFamilyIcon, KeyboardIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@repo/ui/scroll-area";
-import { Tabs, TabsContent } from "@repo/ui/tabs";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { Tabs, TabsContent } from "@repo/ui/components/ui/tabs";
 import { useMemo, useRef, useState } from "react";
 import { FontSelect } from "./font-tab/font-tab";
 import { useHotkeys } from "react-hotkeys-hook";

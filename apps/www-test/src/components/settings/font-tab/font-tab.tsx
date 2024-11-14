@@ -1,19 +1,19 @@
 import { DEFAULT_FONT, DEFAULT_FONT_SIZE, FONTS } from "~/config/fonts.config";
 import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
 import { useFont, useFontSize, useUserFonts } from "~/atoms/atoms";
-import { Label } from "@repo/ui/label";
-import { Input } from "@repo/ui/input";
+import { Label } from "@repo/ui/components/ui/label";
+import { Input } from "@repo/ui/components/ui/input";
 import {
     RadioCard,
     RadioCardContent,
     RadioCardDescription,
 } from "~/components/ui/radio-card";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { AddFontModal } from "./add-font-modal";
-import { Dialog } from "@repo/ui/dialog";
+import { Dialog } from "@repo/ui/components/ui/dialog";
 import { generateFontCss } from "~/lib/utils";
-import { Slider } from "@repo/ui/slider";
+import { Slider } from "@repo/ui/components/ui/slider";
 import { FontSizeIcon } from "@radix-ui/react-icons";
 import { Setting } from "../setting";
 

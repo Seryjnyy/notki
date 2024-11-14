@@ -3,7 +3,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 
 import {
     Sheet,
@@ -11,12 +11,12 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@repo/ui/sheet";
+} from "@repo/ui/components/ui/sheet";
 import { MixerVerticalIcon } from "@radix-ui/react-icons";
 // import { produce } from "immer";
-import { buttonVariants } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
+import { buttonVariants } from "@repo/ui/components/ui/button";
+import { Label } from "@repo/ui/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
 import { usePreferenceStore } from "@repo/lib/preference-store";
 import { Order, SortBy } from "@repo/lib/types";
 import { cn } from "~/lib/utils";

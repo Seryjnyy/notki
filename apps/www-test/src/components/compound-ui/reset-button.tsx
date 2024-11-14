@@ -1,5 +1,5 @@
 import { ResetIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import { ComponentProps } from "react";
 
 type ResetButtonProps = ComponentProps<typeof Button>;

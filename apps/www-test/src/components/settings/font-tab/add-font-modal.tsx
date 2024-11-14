@@ -4,14 +4,14 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@repo/ui/dialog";
+} from "@repo/ui/components/ui/dialog";
 import { FONTS } from "~/config/fonts.config";
 import { ReactNode, useRef } from "react";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { Input } from "@repo/ui/components/ui/input";
 import { useUserFonts } from "~/atoms/atoms";
 import { MyFonts } from "./my-fonts";
-import { useToast } from "@repo/ui/use-toast";
+import { useToast } from "@repo/ui/hooks/use-toast";
 
 const Content = () => {
     const { toast, dismiss } = useToast();

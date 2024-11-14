@@ -1,14 +1,14 @@
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@repo/ui/dialog";
-import DropZone from "@repo/ui/drop-zone";
-import { Label } from "@repo/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
+} from "@repo/ui/components/ui/dialog";
+import DropZone from "@repo/ui/components/ui/sections/drop-zone";
+import { Label } from "@repo/ui/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
 import { Upload } from "lucide-react";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 import { useState } from "react";

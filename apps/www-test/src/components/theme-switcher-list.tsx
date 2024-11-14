@@ -8,8 +8,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@repo/ui/dialog";
-import { Button } from "@repo/ui/button";
+} from "@repo/ui/components/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
 
 import styleList from "~/lib/styles/theme-list.json";
 import { applyTheme } from "~/lib/utils";

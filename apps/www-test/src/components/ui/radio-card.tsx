@@ -1,6 +1,10 @@
 import { cn } from "~/lib/utils";
 import { ComponentProps, HTMLAttributes, ReactNode } from "react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@repo/ui/components/ui/tooltip";
 
 type RadioTitleProps = HTMLAttributes<HTMLHeadingElement>;
 

@@ -1,4 +1,4 @@
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import { ReactNode } from "react";
 import { cn } from "~/lib/utils";
 

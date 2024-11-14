@@ -1,20 +1,20 @@
 import { formatBytes, unixToTimestamp } from "@repo/lib/metadata-utils";
 import { Note } from "@repo/lib/types";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@repo/ui/card";
-import { ScrollArea, ScrollBar } from "@repo/ui/scroll-area";
+} from "@repo/ui/components/ui/card";
+import { ScrollArea, ScrollBar } from "@repo/ui/components/ui/scroll-area";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 import { CopyIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
 import useNoteContentSettings from "~/hooks/note-settings/use-note-content-settings";

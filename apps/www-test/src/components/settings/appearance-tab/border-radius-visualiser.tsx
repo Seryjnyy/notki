@@ -1,4 +1,4 @@
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import { ComponentProps } from "react";
 import { cn } from "~/lib/utils";
 

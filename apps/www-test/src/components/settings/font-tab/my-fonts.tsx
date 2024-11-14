@@ -1,8 +1,12 @@
-import { DialogDescription, DialogHeader, DialogTitle } from "@repo/ui/dialog";
+import {
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@repo/ui/components/ui/dialog";
 import { useCallback } from "react";
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import { useFont, useUserFonts } from "~/atoms/atoms";
-import { useToast } from "@repo/ui/use-toast";
+import { useToast } from "@repo/ui/hooks/use-toast";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { cn, generateFontCss } from "~/lib/utils";
 

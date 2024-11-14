@@ -1,18 +1,18 @@
-import { Button } from "@repo/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@repo/ui/dialog";
+} from "@repo/ui/components/ui/dialog";
 
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@repo/ui/tooltip";
+} from "@repo/ui/components/ui/tooltip";
 import { Map } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TOOLTIP_DELAY_DURATION } from "~/config/tooltip.config";

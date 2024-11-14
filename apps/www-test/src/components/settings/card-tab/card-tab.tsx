@@ -1,7 +1,12 @@
-import { Checkbox } from "@repo/ui/checkbox";
-import { Label } from "@repo/ui/label";
-import { Slider } from "@repo/ui/slider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+import { Checkbox } from "@repo/ui/components/ui/checkbox";
+import { Label } from "@repo/ui/components/ui/label";
+import { Slider } from "@repo/ui/components/ui/slider";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@repo/ui/components/ui/tabs";
 import { ReactNode } from "react";
 import NoteCard from "~/components/compound-ui/note-card";
 import { ResetButton } from "~/components/compound-ui/reset-button";

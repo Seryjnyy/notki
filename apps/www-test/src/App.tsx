@@ -1,9 +1,13 @@
 import { ExclamationTriangleIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
-import { Button } from "@repo/ui/button";
-import DropZone from "@repo/ui/drop-zone";
-import { Toaster } from "@repo/ui/toaster";
-import { TooltipProvider } from "@repo/ui/tooltip";
+import {
+    Alert,
+    AlertDescription,
+    AlertTitle,
+} from "@repo/ui/components/ui/alert";
+import { Button } from "@repo/ui/components/ui/button";
+import DropZone from "@repo/ui/components/ui/sections/drop-zone";
+import { Toaster } from "@repo/ui/components/ui/toaster";
+import { TooltipProvider } from "@repo/ui/components/ui/tooltip";
 import { Circle } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
 import NoteCard from "./components/compound-ui/note-card";
