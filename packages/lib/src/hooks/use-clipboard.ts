@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-// TODO : duplicate with use-clipboard in repo/lib, needs addressing
+// TODO : There are like 3 versions of useCopy/useClipboard hooks in the codebase, needs to be unified
 // https://github.com/omeralpi/shadcn-phone-input/blob/main/hooks/use-copy.tsx
 function useClipboard() {
     const [isCopied, setIsCopied] = useState(false);

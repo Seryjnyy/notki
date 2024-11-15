@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { Note } from "./types";
-import { createSelectors } from "./create-zustand-selectors";
+import { Note } from "../types/types";
+import { createSelectors } from "../utils/create-zustand-selectors";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface NotesState {
     notes: Note[];

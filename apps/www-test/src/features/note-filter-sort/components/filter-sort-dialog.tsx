@@ -4,7 +4,7 @@ import {
     SortOrder,
     useNoteFilterStore,
     useNoteStore,
-} from "@repo/lib/note-store";
+} from "@repo/lib/stores/note-store";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,

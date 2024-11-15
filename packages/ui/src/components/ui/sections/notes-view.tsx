@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import { sortNotes } from "@repo/lib/note-sorting";
-import { useNoteStore } from "@repo/lib/note-store";
-import { usePreferenceStore } from "@repo/lib/preference-store";
-import { useSearch } from "@repo/lib/search-store";
-import { Note, NoteSettings } from "@repo/lib/types";
+import { sortNotes } from "@repo/lib/utils/note-sorting";
+import { useNoteStore } from "@repo/lib/stores/note-store";
+import { usePreferenceStore } from "@repo/lib/stores/preference-store";
+import { useSearch } from "@repo/lib/stores/search-store";
+import { Note, NoteSettings } from "@repo/lib/types/types";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../button";
 import NoteCard from "../note-card";

@@ -1,5 +1,5 @@
 import { Copy } from "lucide-react";
-import { useNoteStore } from "@repo/lib/note-store";
+import { useNoteStore } from "@repo/lib/stores/note-store";
 import { Button } from "../../button";
 import {
     Tooltip,
@@ -8,7 +8,7 @@ import {
     TooltipTrigger,
 } from "../../tooltip";
 
-import useClipboard from "@repo/lib/use-clipboard";
+import useClipboard from "@repo/lib/hooks/use-clipboard";
 import { useMemo } from "react";
 export default function CopyAllContent() {
     const clipboard = useClipboard();

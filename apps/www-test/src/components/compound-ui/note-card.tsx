@@ -1,5 +1,5 @@
-import { formatBytes, unixToTimestamp } from "@repo/lib/metadata-utils";
-import { Note } from "@repo/lib/types";
+import { formatBytes, unixToTimestamp } from "@repo/lib/utils/metadata-utils";
+import { Note } from "@repo/lib/types/types";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     Card,

@@ -1,5 +1,5 @@
 import { ExclamationTriangleIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { removePreferences } from "@repo/lib/preference-service";
+import { removePreferences } from "@repo/lib/services/preferences-service";
 import { ErrorBoundary } from "react-error-boundary";
 import { Alert, AlertDescription, AlertTitle } from "../alert";
 import { Button } from "../button";

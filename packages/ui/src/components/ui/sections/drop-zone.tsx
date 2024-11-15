@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "@repo/ui/hooks/use-toast";
-import { useNoteStore } from "@repo/lib/note-store";
-import { Note } from "@repo/lib/types";
-import { guidGenerator } from "@repo/lib/metadata-utils";
-import { usePreferenceStore } from "@repo/lib/preference-store";
-import { sortNotes } from "@repo/lib/note-sorting";
+import { useNoteStore } from "@repo/lib/stores/note-store";
+import { Note } from "@repo/lib/types/types";
+import { guidGenerator } from "@repo/lib/utils/metadata-utils";
+import { usePreferenceStore } from "@repo/lib/stores/preference-store";
+import { sortNotes } from "@repo/lib/utils/note-sorting";
 import { FilePlusIcon, UploadIcon } from "@radix-ui/react-icons";
 
 export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {

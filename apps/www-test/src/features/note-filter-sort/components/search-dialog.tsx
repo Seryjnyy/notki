@@ -1,5 +1,8 @@
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { useFilteredNotes, useNoteFilterStore } from "@repo/lib/note-store";
+import {
+    useFilteredNotes,
+    useNoteFilterStore,
+} from "@repo/lib/stores/note-store";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,

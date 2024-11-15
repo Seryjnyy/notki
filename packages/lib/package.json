@@ -4,15 +4,14 @@
   "private": true,
   "license": "MIT",
   "exports": {
-    "./create-zustand-selectors": "./src/create-zustand-selectors.ts",
-    "./metadata-utils": "./src/metadata-utils.ts",
-    "./note-sorting": "./src/note-sorting.ts",
-    "./note-store": "./src/note-store.tsx",
-    "./preference-store": "./src/preference-store.tsx",
-    "./preference-service": "./src/preferences-service.ts",
-    "./search-store": "./src/search-store.tsx",
-    "./types": "./src/types.ts",
-    "./use-clipboard": "./src/hooks/use-clipboard.tsx"
+    "./hooks/*": [
+      "./src/hooks/*.ts",
+      "./src/hooks/*.tsx"
+    ],
+    "./utils/*": "./src/utils/*.ts",
+    "./stores/*": "./src/stores/*.ts",
+    "./services/*": "./src/services/*.ts",
+    "./types/*": "./src/types/*.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

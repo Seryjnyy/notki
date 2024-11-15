@@ -1,5 +1,5 @@
-import { useFilteredNotes } from "@repo/lib/note-store";
-import { Note } from "@repo/lib/types";
+import { useFilteredNotes } from "@repo/lib/stores/note-store";
+import { Note } from "@repo/lib/types/types";
 import {
     createContext,
     createRef,

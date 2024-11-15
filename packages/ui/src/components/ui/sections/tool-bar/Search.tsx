@@ -19,8 +19,8 @@ import { MagnifyingGlassIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { Button, buttonVariants } from "../../button";
 import { Input } from "../../input";
 import { Label } from "../../label";
-import { useSearch } from "@repo/lib/search-store";
-import { SearchTarget } from "@repo/lib/types";
+import { useSearch } from "@repo/lib/stores/search-store";
+import { SearchTarget } from "@repo/lib/types/types";
 import { cn } from "../../../../lib/utils";
 
 export default function Search() {

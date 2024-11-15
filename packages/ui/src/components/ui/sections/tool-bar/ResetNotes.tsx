@@ -5,7 +5,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "../../tooltip";
-import { useNoteStore } from "@repo/lib/note-store";
+import { useNoteStore } from "@repo/lib/stores/note-store";
 import { RefreshCcw } from "lucide-react";
 
 export default function ResetNotes() {

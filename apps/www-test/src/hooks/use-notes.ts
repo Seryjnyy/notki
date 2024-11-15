@@ -1,5 +1,6 @@
-import { useNoteStore } from "@repo/lib/note-store";
+import { useNoteStore } from "@repo/lib/stores/note-store";
 
+// TODO : Is there a need for this?
 export const useNotes = () => {
     const notes = useNoteStore.use.notes();
     const setNotes = useNoteStore.use.setNotes();

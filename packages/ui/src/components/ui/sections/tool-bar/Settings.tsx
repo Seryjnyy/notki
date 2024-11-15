@@ -22,8 +22,8 @@ import { Input } from "../../input";
 import { Label } from "../../label";
 import { RadioGroup, RadioGroupItem } from "../../radio-group";
 import { ScrollArea, ScrollBar } from "../../scroll-area";
-import { usePreferenceStore } from "@repo/lib/preference-store";
-import { NoteView } from "@repo/lib/types";
+import { usePreferenceStore } from "@repo/lib/stores/preference-store";
+import { NoteView } from "@repo/lib/types/types";
 import {
     getDefaultColumns,
     getDefaultFontSize,
@@ -33,9 +33,9 @@ import {
     getDefaultPaddingTop,
     getDefaultPaddingX,
     getDefaultPreferences,
-} from "@repo/lib/preference-service";
+} from "@repo/lib/services/preferences-service";
 import ModeToggle from "../../../mode-toggle";
-import { cn } from "../../../../lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 interface NumericalSettingProps {
     title: string;

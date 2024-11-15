@@ -15,7 +15,7 @@ import {
 } from "@repo/ui/components/ui/tooltip";
 import { Map } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { TOOLTIP_DELAY_DURATION } from "~/config/tooltip.config";
+
 import { useNotes } from "~/hooks/use-notes";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 import NoteCard from "./compound-ui/note-card";
