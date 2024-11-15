@@ -19,10 +19,13 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
 
 export default function FileUploadDialog() {
     const [open, setOpen] = useState(false);
     const { enableNavigation } = useNavigationLock();
+    const setReplace = useUploadSettingsStore.use.setReplace();
+    const replace = useUploadSettingsStore.use.replace();
 
     const onUpload = () => {
         // When dialog is closed manually it needs to update navigation lock
@@ -56,13 +59,19 @@ export default function FileUploadDialog() {
                     </DialogDescription>
                 </DialogHeader>
                 <DropZone onSuccess={onUpload} />
-                <RadioGroup defaultValue="option-one" className="flex">
+                <RadioGroup
+                    value={replace ? "replace" : "add"}
+                    onValueChange={(val) => {
+                        setReplace(val === "replace");
+                    }}
+                    className="flex"
+                >
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="option-one" id="option-one" />
+                        <RadioGroupItem value="add" id="option-add" />
                         <Label>Add</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="option-two" id="option-two" />
+                        <RadioGroupItem value="replace" id="option-replace" />
                         <Label>Replace</Label>
                     </div>
                 </RadioGroup>
