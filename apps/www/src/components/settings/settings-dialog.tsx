@@ -21,11 +21,11 @@ import { useMemo, useRef, useState } from "react";
 import { useBorderRadius } from "~/atoms/atoms";
 import { TabButton } from "~/components/compound-ui/tab-button";
 import { cn } from "~/lib/utils";
-import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
-import { AppearanceTab } from "./appearance-tab/appearance-tab";
-import { CardTab } from "./card-tab/card-tab";
-import { DisplayTab } from "./display-tab/display-tab";
-import { FontSelect } from "./font-tab/font-tab";
+import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components.js";
+import { AppearanceTab } from "./appearance-tab/appearance-tab.js";
+import { CardTab } from "./card-tab/card-tab.js";
+import { DisplayTab } from "./display-tab/display-tab.js";
+import { FontSelect } from "./font-tab/font-tab.js";
 import {
     Tooltip,
     TooltipContent,

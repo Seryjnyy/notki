@@ -17,9 +17,9 @@ import { Map } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { useNotes } from "~/hooks/use-notes";
-import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
-import NoteCard from "./compound-ui/note-card";
-import { SettingsDialog } from "./settings/settings-dialog";
+import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components.js";
+import NoteCard from "./compound-ui/note-card.js";
+import { SettingsDialog } from "./settings/settings-dialog.js";
 
 const NoteMap = () => {
     const [scale, setScale] = useState(1);

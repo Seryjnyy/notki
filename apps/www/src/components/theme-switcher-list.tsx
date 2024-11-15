@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cn, formatThemeName } from "../lib/utils";
+import { cn, formatThemeName } from "../lib/utils.js";
 import { useStyle } from "~/atoms/atoms";
 import {
     Dialog,
@@ -14,7 +14,7 @@ import { Button } from "@repo/ui/components/ui/button";
 import styleList from "~/lib/styles/theme-list.json";
 import { applyTheme } from "~/lib/utils";
 import { Check, Palette, Search } from "lucide-react";
-import { Input } from "./ui/input";
+import { Input } from "./ui/input.js";
 
 export const ThemeSwitcherList = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);

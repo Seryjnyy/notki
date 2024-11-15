@@ -12,8 +12,8 @@ import {
 } from "~/components/ui/radio-card";
 import { DEFAULT_FONT, FONTS } from "~/config/fonts.config";
 import { generateFontCss } from "~/lib/utils";
-import { Setting } from "../setting";
-import { AddFontModal } from "./add-font-modal";
+import { Setting } from "../setting.js";
+import { AddFontModal } from "./add-font-modal.js";
 
 export const FontSelect = () => {
     const [userFonts] = useUserFonts();
