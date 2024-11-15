@@ -10,7 +10,7 @@ import { ReactNode, useRef } from "react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { useUserFonts } from "~/atoms/atoms";
-import { MyFonts } from "./my-fonts";
+import { MyFonts } from "./my-fonts.js";
 import { useToast } from "@repo/ui/hooks/use-toast";
 
 const Content = () => {

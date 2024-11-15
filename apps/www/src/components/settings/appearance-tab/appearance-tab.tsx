@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from "./theme-switcher";
+import { ThemeSwitcher } from "./theme-switcher.js";
 import { useStyle } from "~/atoms/atoms";
 import { BorderRadiusVisualizer } from "~/components/settings/appearance-tab/border-radius-visualiser";
 import {
@@ -6,7 +6,7 @@ import {
     DEFAULT_BORDER_RADIUS,
     DEFAULT_THEME,
 } from "~/config/appearance.config";
-import { Setting } from "../setting";
+import { Setting } from "../setting.js";
 
 export const AppearanceTab = ({
     setBorderRadius,
