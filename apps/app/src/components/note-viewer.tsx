@@ -1,4 +1,4 @@
-import { useNoteStore } from "@repo/lib/note-store";
+import { useNoteStore } from "@repo/lib/stores/note-store";
 import { Button, buttonVariants } from "@repo/ui/components/ui/button";
 import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/CopyAllContent";
 import FilterAndSort from "@repo/ui/components/ui/sections/tool-bar/FilterAndSort";
