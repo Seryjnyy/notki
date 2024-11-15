@@ -1,5 +1,6 @@
-import { formatBytes, unixToTimestamp } from "@repo/lib/utils/metadata-utils";
 import { Note } from "@repo/lib/types/types";
+import { formatBytes, unixToTimestamp } from "@repo/lib/utils/metadata-utils";
+import { CopyButton } from "@repo/ui/components/copy-button";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     Card,
@@ -15,37 +16,13 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { CopyIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useMemo } from "react";
 import useNoteContentSettings from "~/hooks/note-settings/use-note-content-settings";
 import useNoteFooterSettings from "~/hooks/note-settings/use-note-footer-settings";
 import useNoteHeaderSettings from "~/hooks/note-settings/use-note-header-settings";
 import useNotePaddingSettings from "~/hooks/note-settings/use-note-padding-settings";
-import { useCopyToClipboard } from "~/hooks/use-copy-to-clipboard";
 import { cn } from "~/lib/utils";
-
-const CopyButton = ({ content }: { content: string }) => {
-    const [_, copy] = useCopyToClipboard();
-
-    const onCopy = () => {
-        copy(content);
-    };
-
-    return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button variant={"ghost"} onClick={onCopy} size={"icon"}>
-                        <CopyIcon className="size-4" />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>Copy contents</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-    );
-};
 
 const Header = ({
     note,
@@ -71,7 +48,21 @@ const Header = ({
             </CardTitle>
             {(header.copy || header.remove) && (
                 <div className="w-fit ml-auto sm:gap-8 gap-2 h-fit   flex">
-                    {header.copy && <CopyButton content={note.content} />}
+                    {header.copy && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <CopyButton
+                                        value={note.content}
+                                        className="[&_svg]:size-4"
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Copy contents</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
 
                     {header.remove && (
                         <TooltipProvider>

@@ -8,13 +8,13 @@ import {
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card";
 // import { Note, NoteSettings } from "./types";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { Note, NoteSettings } from "@repo/lib/types/types";
+import { formatBytes, unixToTimestamp } from "@repo/lib/utils/metadata-utils";
 import { cn } from "@repo/ui/lib/utils";
-import { CopyIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { useMemo } from "react";
+import { CopyButton } from "../copy-button";
 import { Button } from "./button";
-import { Note, NoteSettings } from "@repo/lib/types";
-import { formatBytes, unixToTimestamp } from "@repo/lib/metadata-utils";
-import useClipboard from "@repo/lib/use-clipboard";
 
 export default function NoteCard({
     note,
@@ -25,7 +25,6 @@ export default function NoteCard({
     settings: NoteSettings;
     handleDelete: (id: string) => void;
 }) {
-    const clipboard = useClipboard();
     const formattedDate = useMemo(() => {
         return unixToTimestamp(note.lastModified);
     }, [note]);
@@ -34,17 +33,6 @@ export default function NoteCard({
 
     const onDelete = () => {
         handleDelete(note.id);
-    };
-
-    const onCopy = () => {
-        clipboard
-            .copyToClipboard(note.content)
-            .then(() => {
-                // TODO : implement
-            })
-            .catch(() => {
-                // TODO : implement
-            });
     };
 
     return (
@@ -68,14 +56,11 @@ export default function NoteCard({
                             {settings.header.options.actions.options.copy && (
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                className="px-2 py-0"
-                                                variant={"ghost"}
-                                                onClick={onCopy}
-                                            >
-                                                <CopyIcon />
-                                            </Button>
+                                        <TooltipTrigger>
+                                            <CopyButton
+                                                value={note.content}
+                                                className="[&_svg]:size-4"
+                                            />
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>Copy contents</p>
