@@ -1,16 +1,13 @@
-import { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { toast } from "@repo/ui/hooks/use-toast";
-import { useNoteStore } from "@repo/lib/stores/note-store";
+import { UploadIcon } from "@radix-ui/react-icons";
+import useUploadNotes from "@repo/lib/hooks/use-upload-notes";
 import { Note } from "@repo/lib/types/types";
 import { guidGenerator } from "@repo/lib/utils/metadata-utils";
-import { usePreferenceStore } from "@repo/lib/stores/preference-store";
-import { sortNotes } from "@repo/lib/utils/note-sorting";
-import { FilePlusIcon, UploadIcon } from "@radix-ui/react-icons";
+import { toast } from "@repo/ui/hooks/use-toast";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
-    const setNotes = useNoteStore((state) => state.setNotes);
-    const settings = usePreferenceStore((state) => state.settings);
+    const uploadNotes = useUploadNotes();
 
     const onDrop = useCallback(
         async (acceptedFiles: File[]) => {
@@ -39,10 +36,10 @@ export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
                 });
             }
 
-            setNotes(sortNotes(readInNotes.slice(), settings));
+            uploadNotes(readInNotes);
             onSuccess?.();
         },
-        [settings]
+        [uploadNotes]
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
