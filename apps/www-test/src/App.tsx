@@ -146,17 +146,34 @@ const NotesList = ({ children }: { children: ReactNode }) => {
     );
 };
 
-const SingleNote = () => {
+const SingleNote = ({
+    removeNote,
+}: {
+    removeNote: (noteID: string) => void;
+}) => {
     const paddingX = useNoteDisplaySettings.use.paddingX();
     const paddingY = useNoteDisplaySettings.use.paddingY();
-    const { notes, activeIndex } = useNoteList();
+    const { notes, activeIndex, setActiveIndex } = useNoteList();
+
+    const handleRemoveNote = useCallback(
+        (noteID: string) => {
+            removeNote(noteID);
+
+            if (activeIndex >= notes.length - 1) {
+                setActiveIndex(activeIndex - 1);
+            }
+        },
+        [activeIndex, notes, removeNote]
+    );
 
     const getNote = useCallback(() => {
         if (notes.length == 0 || activeIndex < 0 || activeIndex >= notes.length)
             return null;
 
         const note = notes[activeIndex];
-        return <NoteCard note={note} key={note.id} />;
+        return (
+            <NoteCard note={note} key={note.id} onDelete={handleRemoveNote} />
+        );
     }, [notes, activeIndex]);
 
     return (
@@ -181,7 +198,7 @@ const Notes = () => {
     const { notes, activeIndex, setActiveIndex, getRef } = useNoteList();
     const display = useNoteDisplaySettings.use.display();
 
-    if (display === "slideshow") return <SingleNote />;
+    if (display === "slideshow") return <SingleNote removeNote={removeNote} />;
 
     // TODO : rerenders everything every time notes are navigated, could be a issue with lots of notes
     // TODO : should this be virtualized?
