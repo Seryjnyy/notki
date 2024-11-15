@@ -108,6 +108,14 @@ const LayoutTab = () => {
     );
 };
 
+const PreviewNote = () => {
+    return (
+        <div className="h-8 w-full border overflow-hidden flex justify-center items-center rounded-[var(--radius)]">
+            <span className="text-xs text-muted-foreground">note</span>
+        </div>
+    );
+};
+
 export const DisplayTab = () => {
     const reset = useNoteDisplaySettings.use.reset();
     const cols = useNoteDisplaySettings.use.cols();
@@ -125,7 +133,7 @@ export const DisplayTab = () => {
             >
                 <div className="py-8">
                     <Label className="pl-1">Preview</Label>
-                    <div className="mb-2 resize-none border max-w-[40rem]">
+                    <div className="mb-2 resize-none  border-2 max-w-[40rem]">
                         {display === "grid" && (
                             <div
                                 className=" grid"
@@ -136,14 +144,7 @@ export const DisplayTab = () => {
                                 }}
                             >
                                 {Array.from({ length: 6 }).map((_, i) => (
-                                    <div
-                                        key={i}
-                                        className="h-8 w-full border overflow-hidden flex justify-center items-center"
-                                    >
-                                        <span className="text-xs text-muted-foreground">
-                                            note
-                                        </span>
-                                    </div>
+                                    <PreviewNote key={i} />
                                 ))}
                             </div>
                         )}
@@ -153,11 +154,7 @@ export const DisplayTab = () => {
                                     padding: `${paddingY}px ${paddingX}px`,
                                 }}
                             >
-                                <div className="h-8 w-full border overflow-hidden flex justify-center items-center">
-                                    <span className="text-xs text-muted-foreground">
-                                        note
-                                    </span>
-                                </div>
+                                <PreviewNote />
                             </div>
                         )}
                     </div>
@@ -166,7 +163,7 @@ export const DisplayTab = () => {
                     defaultValue="layout"
                     className="border p-3 rounded-[var(--radius)]"
                 >
-                    <TabsList>
+                    <TabsList className="mb-4">
                         <TabsTrigger value="layout">Layout</TabsTrigger>
 
                         <TabsTrigger value="padding">Padding</TabsTrigger>

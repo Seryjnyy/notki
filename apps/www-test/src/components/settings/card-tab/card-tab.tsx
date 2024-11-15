@@ -207,9 +207,9 @@ export const CardTab = () => {
             </div>
             <Tabs
                 defaultValue="header"
-                className="border p-3 rounded-[var(--radius)]"
+                className="border p-3 rounded-[var(--radius)] "
             >
-                <TabsList>
+                <TabsList className="mb-4">
                     <TabsTrigger value="header">Header</TabsTrigger>
                     <TabsTrigger value="content">Content</TabsTrigger>
                     <TabsTrigger value="footer">Footer</TabsTrigger>

@@ -17,7 +17,7 @@ export default function Toolbar() {
                         <ResetNotes />
                         <FileUploadDialog />
                     </div>
-                    <div className="border rounded-md flex items-center gap-1 ">
+                    <div className="border rounded-md flex items-center gap-1 p-1">
                         <FilterSortDialog />
                         <SearchDialog />
                         <div className="border-l">
