@@ -16,6 +16,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { Search } from "lucide-react";
 import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
 import { Input } from "~/components/ui/input";
 import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
@@ -65,7 +66,7 @@ export default function SearchDialog() {
                     <TooltipTrigger asChild>
                         <DialogTrigger asChild>
                             <Button variant={"ghost"} className="relative">
-                                <MagnifyingGlassIcon />
+                                <Search />
                                 {filter != "" && (
                                     <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
                                 )}

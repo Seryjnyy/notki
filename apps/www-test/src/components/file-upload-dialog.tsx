@@ -29,7 +29,7 @@ export default function FileUploadDialog() {
         <NavigationAwareDialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button size={"icon"} variant={"secondary"}>
-                    <Upload className="text-primary size-4" />
+                    <Upload className="text-primary" />
                 </Button>
             </DialogTrigger>
             <DialogContent>

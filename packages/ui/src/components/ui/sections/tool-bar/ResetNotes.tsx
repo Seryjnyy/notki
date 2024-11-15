@@ -6,7 +6,8 @@ import {
     TooltipTrigger,
 } from "../../tooltip";
 import { useNoteStore } from "@repo/lib/note-store";
-import { UpdateIcon } from "@radix-ui/react-icons";
+import { RefreshCcw } from "lucide-react";
+
 export default function ResetNotes() {
     const setNotes = useNoteStore((state) => state.setNotes);
 
@@ -15,7 +16,7 @@ export default function ResetNotes() {
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Button onClick={() => setNotes([])} variant={"secondary"}>
-                        <UpdateIcon className="mr-2 text-primary" /> Restart
+                        <RefreshCcw className="mr-2 text-primary" /> Restart
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">

@@ -1,8 +1,13 @@
+import { FontFamilyIcon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
+import { DialogContent, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { Tabs, TabsContent } from "@repo/ui/components/ui/tabs";
 import {
     LayoutPanelLeft,
     MenuIcon,
@@ -10,28 +15,17 @@ import {
     PaintbrushIcon,
     Scissors,
     SettingsIcon,
-    TextCursor,
     XIcon,
 } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
-} from "@repo/ui/components/ui/dialog";
-import { FontFamilyIcon, KeyboardIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { Tabs, TabsContent } from "@repo/ui/components/ui/tabs";
 import { useMemo, useRef, useState } from "react";
-import { FontSelect } from "./font-tab/font-tab";
-import { useHotkeys } from "react-hotkeys-hook";
-import { TabButton } from "~/components/compound-ui/tab-button";
 import { useBorderRadius } from "~/atoms/atoms";
+import { TabButton } from "~/components/compound-ui/tab-button";
+import { cn } from "~/lib/utils";
+import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
-import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
 import { DisplayTab } from "./display-tab/display-tab";
-import { cn } from "~/lib/utils";
+import { FontSelect } from "./font-tab/font-tab";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
@@ -89,7 +83,7 @@ export const SettingsDialog = () => {
                     variant="secondary"
                     className="group gap-2 p-2"
                 >
-                    <SettingsIcon className="h-4 text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
+                    <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
                 </Button>
             </DialogTrigger>
             <DialogContent className="flex h-[90vh] sm:h-3/4 flex-col sm:flex-row w-full max-w-5xl overflow-hidden">

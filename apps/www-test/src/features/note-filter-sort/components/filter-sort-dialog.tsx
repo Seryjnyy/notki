@@ -32,6 +32,7 @@ import {
     RadioCardContent,
     RadioCardTitle,
 } from "~/components/ui/radio-card";
+import { Filter } from "lucide-react";
 
 const Order = () => {
     const sortOrder = useNoteFilterStore.use.sortOrder();
@@ -114,7 +115,7 @@ export default function FilterSortDialog() {
                     <TooltipTrigger asChild>
                         <DialogTrigger asChild>
                             <Button variant={"ghost"} className="relative">
-                                <MixerVerticalIcon />
+                                <Filter />
                                 {isSortChanged && (
                                     <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
                                 )}

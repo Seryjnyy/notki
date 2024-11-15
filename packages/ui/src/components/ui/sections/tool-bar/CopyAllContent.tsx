@@ -1,4 +1,4 @@
-import { CopyIcon } from "@radix-ui/react-icons";
+import { Copy } from "lucide-react";
 import { useNoteStore } from "@repo/lib/note-store";
 import { Button } from "../../button";
 import {
@@ -22,8 +22,6 @@ export default function CopyAllContent() {
             : "";
     }, [notes]);
 
-    console.log(content);
-
     const onCopy = () => {
         clipboard
             .copyToClipboard(content)
@@ -44,7 +42,7 @@ export default function CopyAllContent() {
                         onClick={onCopy}
                         disabled={content == ""}
                     >
-                        <CopyIcon />
+                        <Copy />
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
