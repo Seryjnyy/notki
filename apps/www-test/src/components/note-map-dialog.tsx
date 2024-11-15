@@ -78,7 +78,7 @@ const NoteMap = () => {
     return (
         <NavigationAwareDialog>
             <DialogTrigger asChild>
-                <TooltipProvider delayDuration={TOOLTIP_DELAY_DURATION}>
+                <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
                             <Button

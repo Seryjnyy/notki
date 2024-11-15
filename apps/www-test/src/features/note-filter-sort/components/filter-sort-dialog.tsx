@@ -122,7 +122,7 @@ export default function FilterSortDialog() {
                             </Button>
                         </DialogTrigger>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">
+                    <TooltipContent side="top">
                         <p>Filter and sort</p>
                     </TooltipContent>
                 </Tooltip>

@@ -45,7 +45,7 @@ export default function CopyAllContent() {
                         <Copy />
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
+                <TooltipContent side="top">
                     <p>Copy all content</p>
                 </TooltipContent>
             </Tooltip>

@@ -19,7 +19,7 @@ export default function ResetNotes() {
                         <RefreshCcw className="mr-2 text-primary" /> Restart
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
+                <TooltipContent side="top">
                     <p>Reset notes</p>
                 </TooltipContent>
             </Tooltip>

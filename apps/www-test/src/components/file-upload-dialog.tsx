@@ -13,6 +13,12 @@ import { Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigationLock } from "~/hooks/use-navigation-lock";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@repo/ui/components/ui/tooltip";
 
 export default function FileUploadDialog() {
     const [open, setOpen] = useState(false);
@@ -27,11 +33,20 @@ export default function FileUploadDialog() {
 
     return (
         <NavigationAwareDialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button size={"icon"} variant={"secondary"}>
-                    <Upload className="text-primary" />
-                </Button>
-            </DialogTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                            <Button size={"icon"} variant={"secondary"}>
+                                <Upload className="text-primary" />
+                            </Button>
+                        </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Add txt files</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add txt files</DialogTitle>

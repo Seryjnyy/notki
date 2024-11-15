@@ -32,7 +32,7 @@ const CopyButton = ({ content }: { content: string }) => {
     };
 
     return (
-        <TooltipProvider delayDuration={200}>
+        <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Button variant={"ghost"} onClick={onCopy} size={"icon"}>
@@ -74,7 +74,7 @@ const Header = ({
                     {header.copy && <CopyButton content={note.content} />}
 
                     {header.remove && (
-                        <TooltipProvider delayDuration={200}>
+                        <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button

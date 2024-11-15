@@ -26,6 +26,12 @@ import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { DisplayTab } from "./display-tab/display-tab";
 import { FontSelect } from "./font-tab/font-tab";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@repo/ui/components/ui/tooltip";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
@@ -77,15 +83,24 @@ export const SettingsDialog = () => {
 
     return (
         <NavigationAwareDialog>
-            <DialogTrigger asChild>
-                <Button
-                    ref={dialogTriggerRef}
-                    variant="secondary"
-                    className="group gap-2 p-2"
-                >
-                    <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
-                </Button>
-            </DialogTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                            <Button
+                                ref={dialogTriggerRef}
+                                variant="secondary"
+                                className="group gap-2 p-2"
+                            >
+                                <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
+                            </Button>
+                        </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                        <p>Settings</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DialogContent className="flex h-[90vh] sm:h-3/4 flex-col sm:flex-row w-full max-w-5xl overflow-hidden">
                 <div className="max-h-full w-fit hidden sm:block">
                     <h2 className="mb-4 text-2xl font-bold">Settings</h2>
@@ -110,16 +125,30 @@ export const SettingsDialog = () => {
                             "border-t  border-b backdrop-brightness-95"
                     )}
                 >
-                    <CollapsibleTrigger>
-                        {!isMobileMenuOpen && <MenuIcon />}
-                        {isMobileMenuOpen && (
-                            <span className="flex gap-2 items-center">
-                                <XIcon />
-                            </span>
-                        )}
-                    </CollapsibleTrigger>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <CollapsibleTrigger className="mb-2" asChild>
+                                    <Button variant={"ghost"} size={"icon"}>
+                                        {!isMobileMenuOpen ? (
+                                            <MenuIcon />
+                                        ) : (
+                                            <XIcon />
+                                        )}
+                                    </Button>
+                                </CollapsibleTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                <p>
+                                    {isMobileMenuOpen
+                                        ? "Close menu"
+                                        : "Open menu"}
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                     <CollapsibleContent className="pb-2">
-                        <div>
+                        <div className="flex flex-wrap gap-1">
                             {SETTINGS_TABS.map((tab) => (
                                 <TabButton
                                     key={tab.label}

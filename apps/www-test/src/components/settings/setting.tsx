@@ -19,8 +19,8 @@ export const Setting = ({
     return (
         <div className="mb-8" {...props}>
             <div className="mb-4">
-                <h2 className="mb-1 flex items-center text-xl font-bold">
-                    {title}
+                <h2 className="mb-1 flex items-center">
+                    <span className=" text-xl font-bold">{title}</span>
                     {resetAction && <ResetButton onClick={resetAction} />}
                 </h2>
                 {subtitle && (

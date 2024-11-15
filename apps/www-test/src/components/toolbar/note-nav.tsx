@@ -90,13 +90,13 @@ export default function NoteNav() {
                             : intermediateActiveIndex + 1
                     }
                     type="number"
-                    className="w-[4rem] rounded-none rounded-l-[var(--radius)] border-none mr-1"
+                    className="w-[4rem] rounded-none rounded-l-[var(--radius)] border  mr-1 pr-1   "
                     onChange={onIndexInputChange}
                 />
                 /{notes.length}
             </section>
             <section>
-                <TooltipProvider delayDuration={200}>
+                <TooltipProvider>
                     <div className="flex items-center gap-1">
                         <Tooltip>
                             <TooltipTrigger asChild>
