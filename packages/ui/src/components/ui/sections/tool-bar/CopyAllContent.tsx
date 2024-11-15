@@ -9,7 +9,7 @@ import {
 import { CopyButton } from "@repo/ui/components/copy-button";
 import { useMemo } from "react";
 export default function CopyAllContent() {
-    const notes = useNoteStore((state) => state.notes);
+    const notes = useNoteStore.use.notes();
 
     const content = useMemo(() => {
         return notes.length > 0
@@ -22,7 +22,7 @@ export default function CopyAllContent() {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                     <CopyButton value={content} />
                 </TooltipTrigger>
                 <TooltipContent side="top">

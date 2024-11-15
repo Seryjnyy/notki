@@ -51,7 +51,7 @@ const Header = ({
                     {header.copy && (
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <CopyButton
                                         value={note.content}
                                         className="[&_svg]:size-4"
