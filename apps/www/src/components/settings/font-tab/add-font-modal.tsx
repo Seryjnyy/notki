@@ -9,8 +9,8 @@ import {
 import { Input } from "@repo/ui/components/ui/input";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { ReactNode, useRef } from "react";
-import { FONT_OPTIONS, useStyleStore } from "~/stores/style-store.js";
-import { MyFonts } from "./my-fonts.js";
+import { FONT_OPTIONS, useStyleStore } from "~/stores/style-store";
+import { MyFonts } from "./my-fonts";
 
 const Content = () => {
     const { toast, dismiss } = useToast();

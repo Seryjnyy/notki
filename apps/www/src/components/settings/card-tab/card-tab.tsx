@@ -11,10 +11,10 @@ import useNoteFooterSettings from "~/hooks/note-settings/use-note-footer-setting
 import useNoteHeaderSettings from "~/hooks/note-settings/use-note-header-settings";
 import useNotePaddingSettings from "~/hooks/note-settings/use-note-padding-settings";
 import { useNoteSettings } from "~/stores/note-settings-store";
-import CheckSetting from "../check-setting.js";
-import { Setting } from "../setting.js";
-import { TabContent, TabTitle } from "../setting-tab.js";
-import SliderSetting from "../slider-setting.js";
+import CheckSetting from "../check-setting";
+import { Setting } from "../setting";
+import { TabContent, TabTitle } from "../setting-tab";
+import SliderSetting from "../slider-setting";
 
 // TODO : is it bad that onChange is ignoring the value and just calling toggle?
 const HeaderTab = () => {

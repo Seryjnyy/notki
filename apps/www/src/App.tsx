@@ -7,23 +7,19 @@ import {
 import { Button } from "@repo/ui/components/ui/button";
 import DropZone from "@repo/ui/components/ui/sections/drop-zone";
 import { Toaster } from "@repo/ui/components/ui/toaster";
-import { TooltipProvider } from "@repo/ui/components/ui/tooltip";
 import { Circle } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
-import NoteCard from "./components/compound-ui/note-card.js";
-import { ThemeSwitcherList } from "./components/theme-switcher-list.js";
-import { useNotes } from "./hooks/use-notes.js";
-import { cn } from "./lib/utils.js";
+import NoteCard from "./components/compound-ui/note-card";
+import { ThemeSwitcherList } from "./components/theme-switcher-list";
+import { useNotes } from "./hooks/use-notes";
+import { cn } from "./lib/utils";
 
 import { ReactNode, useCallback } from "react";
-import SkipToNavLink from "./components/skip-to-nav-link.js";
-import NoteNav from "./components/toolbar/note-nav.js";
-import Toolbar from "./components/toolbar/toolbar.js";
-import {
-    NoteListProvider,
-    useNoteList,
-} from "./providers/note-list-provider.js";
-import { useNoteDisplaySettings } from "./stores/note-display-settings-store.js";
+import FixedBottomNavBar from "./components/navbar/fixed-bottom-bar";
+import SkipToNavLink from "./components/skip-to-nav-link";
+import { NoteListProvider, useNoteList } from "./providers/note-list-provider";
+import { StyleProvider } from "./providers/style-provider";
+import { useNoteDisplaySettings } from "./stores/note-display-settings-store";
 
 function App() {
     return (

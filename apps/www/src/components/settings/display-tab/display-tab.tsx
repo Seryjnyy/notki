@@ -10,9 +10,9 @@ import {
     limits,
     useNoteDisplaySettings,
 } from "~/stores/note-display-settings-store";
-import { Setting } from "../setting.js";
-import SliderSetting from "../slider-setting.js";
-import { TabContent, TabTitle } from "../setting-tab.js";
+import { Setting } from "../setting";
+import SliderSetting from "../slider-setting";
+import { TabContent, TabTitle } from "../setting-tab";
 
 const PaddingTab = () => {
     const colGaps = useNoteDisplaySettings.use.colsGap();

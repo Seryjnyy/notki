@@ -1,8 +1,8 @@
 import { BorderRadiusVisualizer } from "~/components/settings/appearance-tab/border-radius-visualiser";
 
-import { BORDER_RADIUS_OPTIONS, useStyleStore } from "~/stores/style-store.js";
-import { Setting } from "../setting.js";
-import { ThemeSwitcher } from "./theme-switcher.js";
+import { BORDER_RADIUS_OPTIONS, useStyleStore } from "~/stores/style-store";
+import { Setting } from "../setting";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export const AppearanceTab = ({
     setBorderRadius,

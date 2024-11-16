@@ -12,7 +12,7 @@ import DropZone from "@repo/ui/components/ui/sections/drop-zone";
 import { Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigationLock } from "~/hooks/use-navigation-lock";
-import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components.js";
+import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 import {
     Tooltip,
     TooltipContent,

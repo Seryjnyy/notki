@@ -8,13 +8,13 @@ import {
     DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cn, formatThemeName } from "../lib/utils.js";
+import { cn, formatThemeName } from "../lib/utils";
 
 import { Check, Palette, Search } from "lucide-react";
 import styleList from "~/lib/styles/theme-list.json";
 import { applyTheme } from "~/lib/utils";
-import { useStyleStore } from "~/stores/style-store.js";
-import { Input } from "./ui/input.js";
+import { useStyleStore } from "~/stores/style-store";
+import { Input } from "./ui/input";
 
 export const ThemeSwitcherList = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
