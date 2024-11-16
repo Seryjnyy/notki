@@ -1,10 +1,3 @@
-import { ExclamationTriangleIcon, UpdateIcon } from "@radix-ui/react-icons";
-import {
-    Alert,
-    AlertDescription,
-    AlertTitle,
-} from "@repo/ui/components/ui/alert";
-import { Button } from "@repo/ui/components/ui/button";
 import DropZone from "@repo/ui/components/ui/sections/drop-zone";
 import { Toaster } from "@repo/ui/components/ui/toaster";
 import { Circle } from "lucide-react";
@@ -17,6 +10,7 @@ import { cn } from "./lib/utils";
 import { ReactNode, useCallback } from "react";
 import FixedBottomNavBar from "./components/navbar/fixed-bottom-bar";
 import SkipToNavLink from "./components/skip-to-nav-link";
+import SomethingWentWrong from "./components/something-went-wrong";
 import { NoteListProvider, useNoteList } from "./providers/note-list-provider";
 import { StyleProvider } from "./providers/style-provider";
 import { useNoteDisplaySettings } from "./stores/note-display-settings-store";
@@ -60,38 +54,14 @@ const Main = () => {
                     </div>
                 </section>
             )}
+
             {hasNotes && (
                 <section className="w-full h-fit  pt-4 mt-4 ">
                     <SkipToNavLink />
                     <h2 className="text-muted-foreground text-center text-sm">
                         YOUR NOTES
                     </h2>
-
-                    <ErrorBoundary
-                        fallback={
-                            <div className="flex flex-col gap-4 pt-8 px-8">
-                                <Alert variant="destructive">
-                                    <ExclamationTriangleIcon className="h-4 w-4" />
-                                    <AlertTitle>
-                                        Something went wrong
-                                    </AlertTitle>
-                                    <AlertDescription>
-                                        Refresh the page, if error persists try
-                                        resetting <br />
-                                        preferences. If nothing works please let
-                                        me know.
-                                    </AlertDescription>
-                                </Alert>
-                                <Button
-                                    className="space-x-2"
-                                    // onClick={onResetPreferences}
-                                >
-                                    <span>Reset preferences</span>{" "}
-                                    <UpdateIcon />
-                                </Button>
-                            </div>
-                        }
-                    >
+                    <ErrorBoundary fallback={<SomethingWentWrong />}>
                         <NoteListProvider>
                             <div className="mb-40 sm:mb-16 ">
                                 <Notes />
