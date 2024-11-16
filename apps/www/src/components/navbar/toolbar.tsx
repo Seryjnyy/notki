@@ -1,11 +1,11 @@
 import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/CopyAllContent";
 import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/ResetNotes";
-import NoteMap from "~/components/note-map-dialog";
 import { SettingsDialog } from "~/components/settings/settings-dialog";
 
 import FileUploadDialog from "~/components/file-upload-dialog";
-import FilterSortDialog from "~/features/note-filter-sort/components/filter-sort-dialog";
-import SearchDialog from "~/features/note-filter-sort/components/search-dialog";
+import FilterSortDialog from "~/components/note-filter-sort/filter-sort-dialog";
+import SearchDialog from "~/components/note-filter-sort/search-dialog";
+import NoteMap from "../note-map-dialog";
 
 // TODO : currently is not responsive
 export default function Toolbar() {
@@ -24,7 +24,7 @@ export default function Toolbar() {
                             <CopyAllContent />
                         </div>
                     </div>
-                    {/* <NoteMap /> */}
+                    <NoteMap />
                 </div>
 
                 <SettingsDialog />

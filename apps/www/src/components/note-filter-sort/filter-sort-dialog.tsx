@@ -1,9 +1,7 @@
-import { MixerVerticalIcon } from "@radix-ui/react-icons";
 import {
     SortBy as SortByType,
     SortOrder,
     useNoteFilterStore,
-    useNoteStore,
 } from "@repo/lib/stores/note-store";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -20,19 +18,10 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import {
-    ArrowDownNarrowWide,
-    ArrowDownWideNarrow,
-    ArrowUpNarrowWide,
-} from "lucide-react";
-import { ReactNode, useState } from "react";
+import { ArrowDownWideNarrow, ArrowUpNarrowWide, Filter } from "lucide-react";
+import { ReactNode } from "react";
 import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
-import {
-    RadioCard,
-    RadioCardContent,
-    RadioCardTitle,
-} from "~/components/ui/radio-card";
-import { Filter } from "lucide-react";
+import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
 
 const Order = () => {
     const sortOrder = useNoteFilterStore.use.sortOrder();
