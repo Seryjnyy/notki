@@ -90,6 +90,7 @@ export const SettingsDialog = () => {
                     <TooltipTrigger asChild>
                         <DialogTrigger asChild>
                             <Button
+                                size={"icon"}
                                 ref={dialogTriggerRef}
                                 variant="secondary"
                                 className="group gap-2 p-2"
