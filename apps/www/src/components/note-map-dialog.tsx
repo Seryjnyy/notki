@@ -200,10 +200,10 @@ const NoteMap = () => {
                     <div
                         ref={containerRef}
                         className="h-full  w-full  overflow-hidden bg-background cursor-move absolute top-0 "
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
+                        onPointerDown={handleMouseDown}
+                        onPointerMove={handleMouseMove}
+                        onPointerUp={handleMouseUp}
+                        onPointerLeave={handleMouseUp}
                     >
                         <div
                             className="relative"
