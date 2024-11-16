@@ -8,7 +8,11 @@ import SearchDialog from "~/components/note-filter-sort/search-dialog";
 import NoteMap from "../note-map-dialog";
 
 // TODO : currently is not responsive
-export default function Toolbar() {
+export default function Toolbar({
+    exclude,
+}: {
+    exclude?: { noteMap?: boolean };
+}) {
     return (
         <div className="w-full">
             <div className="flex items-center justify-between">
@@ -20,14 +24,16 @@ export default function Toolbar() {
                     <div className="border rounded-md flex items-center gap-1 p-1">
                         <FilterSortDialog />
                         <SearchDialog />
-                        <div className="border-l">
+                        <div className="border-l pl-1">
                             <CopyAllContent />
                         </div>
                     </div>
-                    <NoteMap />
+                    {(!exclude || !exclude?.noteMap) && <NoteMap />}
                 </div>
 
-                <SettingsDialog />
+                <div className="ml-2">
+                    <SettingsDialog />
+                </div>
             </div>
         </div>
     );
