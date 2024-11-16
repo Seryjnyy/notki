@@ -86,24 +86,24 @@ const NoteMap = () => {
 
     return (
         <NavigationAwareDialog>
-            <DialogTrigger asChild>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
                             <Button
                                 size={"icon"}
                                 variant={"outline"}
-                                className="border-primary"
+                                className="border-primary/50"
                             >
                                 <Map />
                             </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Note map</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-            </DialogTrigger>
+                        </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Note map</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DialogContent className="min-w-full min-h-full p-0 rounded-none sm:rounded-none ">
                 <div className="fixed bottom-4 right-4 z-50">
                     <SettingsDialog />
