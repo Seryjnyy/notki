@@ -13,13 +13,30 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { Map } from "lucide-react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Map, Minus, Plus, Search, Undo2 } from "lucide-react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 
+import { useFilteredNotes } from "@repo/lib/stores/note-store";
 import { useNotes } from "~/hooks/use-notes";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 import NoteCard from "./compound-ui/note-card";
 import Toolbar from "./navbar/toolbar";
+
+const Notes = memo(() => {
+    const { removeNote } = useNotes();
+    const filteredSortedNotes = useFilteredNotes();
+
+    // Double memoization, is it needed?
+    const memoedNotes = useMemo(() => {
+        return filteredSortedNotes.map((note) => (
+            <li key={note.id}>
+                <NoteCard note={note} onDelete={removeNote} />
+            </li>
+        ));
+    }, [filteredSortedNotes, removeNote]);
+
+    return <ul>{memoedNotes}</ul>;
+});
 
 const NoteMap = () => {
     const [scale, setScale] = useState(1);
@@ -27,7 +44,6 @@ const NoteMap = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
-    const { notes, removeNote } = useNotes();
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
@@ -67,13 +83,6 @@ const NoteMap = () => {
             container.removeEventListener("wheel", handleWheel as any);
         };
     }, [scale]);
-
-    // TODO : potential problem with this, haven't tested it yet, but will notes rerender themselves when they change? like when note settings change?
-    const memoedNotes = useMemo(() => {
-        return notes.map((note) => (
-            <NoteCard key={note.id} note={note} onDelete={removeNote} />
-        ));
-    }, [notes]);
 
     return (
         <NavigationAwareDialog>
@@ -129,7 +138,7 @@ const NoteMap = () => {
                             }}
                         >
                             <div className="w-[300vw] flex flex-wrap gap-4">
-                                {memoedNotes}
+                                <Notes />
                             </div>
                         </div>
                     </div>
