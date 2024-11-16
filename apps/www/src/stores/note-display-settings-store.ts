@@ -13,7 +13,7 @@ type Display = {
     paddingY: number;
 };
 
-type ResetableField = keyof Display;
+type ResettableField = keyof Display;
 
 const defaults: Display = {
     cols: 1,
@@ -36,7 +36,7 @@ interface Actions {
     setDisplay: (display: NoteDisplay) => void;
     setPaddingX: (paddingX: number) => void;
     setPaddingY: (paddingY: number) => void;
-    reset: (fields?: ResetableField[]) => void;
+    reset: (fields?: ResettableField[]) => void;
 }
 
 const useNoteDisplaySettingsBase = create<Display & Actions>()(

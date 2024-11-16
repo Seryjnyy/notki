@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { cn, formatThemeName } from "../lib/utils.js";
-import { useStyle } from "~/atoms/atoms";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -9,16 +7,19 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
-import { Button } from "@repo/ui/components/ui/button";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { cn, formatThemeName } from "../lib/utils.js";
 
+import { Check, Palette, Search } from "lucide-react";
 import styleList from "~/lib/styles/theme-list.json";
 import { applyTheme } from "~/lib/utils";
-import { Check, Palette, Search } from "lucide-react";
+import { useStyleStore } from "~/stores/style-store.js";
 import { Input } from "./ui/input.js";
 
 export const ThemeSwitcherList = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
-    const [style, setStyle] = useStyle();
+    const style = useStyleStore.use.style();
+    const setStyle = useStyleStore.use.setStyle();
     const [isOpen, setIsOpen] = useState(false);
     const [focusedStyle, setFocusedStyle] = useState(style);
     const [search, setSearch] = useState("");

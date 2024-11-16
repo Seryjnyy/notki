@@ -4,27 +4,28 @@ import { Input } from "@repo/ui/components/ui/input";
 import { Label } from "@repo/ui/components/ui/label";
 import { PlusIcon } from "lucide-react";
 import { Dispatch, HTMLAttributes, SetStateAction, useState } from "react";
-import { useFont, useUserFonts } from "~/atoms/atoms";
 import {
     RadioCard,
     RadioCardContent,
     RadioCardDescription,
 } from "~/components/ui/radio-card";
-import { DEFAULT_FONT, FONTS } from "~/config/fonts.config";
+import { FONT_OPTIONS } from "~/stores/style-store";
 import { generateFontCss } from "~/lib/utils";
+import { useStyleStore } from "~/stores/style-store.js";
 import { Setting } from "../setting.js";
 import { AddFontModal } from "./add-font-modal.js";
 
 export const FontSelect = () => {
-    const [userFonts] = useUserFonts();
-    const [_, setFont] = useFont();
+    const userFonts = useStyleStore.use.userFonts();
+    const reset = useStyleStore.use.reset();
+
     const [value, setValue] = useState(
         "The Quick Brown fox jumps over the lazy dog."
     );
 
     return (
         <Dialog>
-            <Setting title="Fonts" resetAction={() => setFont(DEFAULT_FONT)}>
+            <Setting title="Fonts" resetAction={() => reset(["font"])}>
                 <Label className="pl-1">Preview Text</Label>
                 <Input
                     className="mb-8 resize-none border border-border bg-muted"
@@ -34,7 +35,7 @@ export const FontSelect = () => {
                 />
                 <Setting subtitle="Preinstalled Fonts">
                     <div className="grid max-h-full grid-cols-2 gap-4">
-                        {FONTS.map((font, i) => (
+                        {FONT_OPTIONS.map((font, i) => (
                             <FontItem
                                 key={i}
                                 font={font}
@@ -85,7 +86,9 @@ export const FontSelect = () => {
                                 {userFonts.map((font, i) => (
                                     <FontItem
                                         key={i}
-                                        font={font as (typeof FONTS)[number]}
+                                        font={
+                                            font as (typeof FONT_OPTIONS)[number]
+                                        }
                                         inputValue={value}
                                         setValue={setValue}
                                     />
@@ -104,12 +107,14 @@ const FontItem = ({
     font,
     inputValue,
 }: {
-    font: (typeof FONTS)[number];
+    font: (typeof FONT_OPTIONS)[number];
     inputValue: string;
     setValue: Dispatch<SetStateAction<string>>;
     titleProps?: HTMLAttributes<HTMLElement>;
 }) => {
-    const [currentFont, setCurrentFont] = useFont();
+    const setCurrentFont = useStyleStore.use.setFont();
+    const currentFont = useStyleStore.use.font();
+
     return (
         <RadioCard
             className="col-span-2 min-w-[12rem] overflow-x-hidden md:col-span-1"

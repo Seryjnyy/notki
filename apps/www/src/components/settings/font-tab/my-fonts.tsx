@@ -1,19 +1,22 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@repo/ui/components/ui/dialog";
-import { useCallback } from "react";
-import { Button } from "@repo/ui/components/ui/button";
-import { useFont, useUserFonts } from "~/atoms/atoms";
 import { useToast } from "@repo/ui/hooks/use-toast";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { useCallback } from "react";
 import { cn, generateFontCss } from "~/lib/utils";
+import { useStyleStore } from "~/stores/style-store";
 
 export const MyFonts = () => {
     const { toast, dismiss } = useToast();
-    const [userFonts, setUserFonts] = useUserFonts();
-    const [currentFont, setCurrentFont] = useFont();
+    const userFonts = useStyleStore.use.userFonts();
+    const setUserFonts = useStyleStore.use.setUserFonts();
+
+    const setCurrentFont = useStyleStore.use.setFont();
+    const currentFont = useStyleStore.use.font();
 
     const handleRemoveFont = useCallback(
         (font: string) => {

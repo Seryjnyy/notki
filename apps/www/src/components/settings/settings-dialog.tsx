@@ -9,6 +9,12 @@ import { DialogContent, DialogTrigger } from "@repo/ui/components/ui/dialog";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { Tabs, TabsContent } from "@repo/ui/components/ui/tabs";
 import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@repo/ui/components/ui/tooltip";
+import {
     LayoutPanelLeft,
     MenuIcon,
     NotebookText,
@@ -18,26 +24,22 @@ import {
     XIcon,
 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { useBorderRadius } from "~/atoms/atoms";
 import { TabButton } from "~/components/compound-ui/tab-button";
 import { cn } from "~/lib/utils";
+import { useStyleStore } from "~/stores/style-store.js";
 import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components.js";
 import { AppearanceTab } from "./appearance-tab/appearance-tab.js";
 import { CardTab } from "./card-tab/card-tab.js";
 import { DisplayTab } from "./display-tab/display-tab.js";
 import { FontSelect } from "./font-tab/font-tab.js";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@repo/ui/components/ui/tooltip";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const [borderRadius, setBorderRadius] = useBorderRadius();
+    const borderRadius = useStyleStore.use.borderRadius();
+    const setBorderRadius = useStyleStore.use.setBorderRadius();
+
     const SETTINGS_TABS = useMemo(
         () => [
             {

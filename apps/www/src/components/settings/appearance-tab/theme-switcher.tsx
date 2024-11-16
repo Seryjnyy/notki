@@ -1,20 +1,22 @@
-import { cn, formatThemeName } from "~/lib/utils";
-import colors from "~/lib/styles/theme-list.json";
-import { useStyle } from "~/atoms/atoms";
 import {
     RadioCard,
     RadioCardContent,
     RadioCardDescription,
 } from "~/components/ui/radio-card";
+import colors from "~/lib/styles/theme-list.json";
+import { cn, formatThemeName } from "~/lib/utils";
+import { useStyleStore } from "~/stores/style-store";
 
 export const ThemeSwitcher = () => {
-    const [colorStyle, setColorStyle] = useStyle();
+    // const [colorStyle, setColorStyle] = useStyle();
+    const style = useStyleStore.use.style();
+    const setStyle = useStyleStore.use.setStyle();
 
     return (
         <div className="grid w-full grid-cols-6 flex-wrap gap-4">
             {colors.map(({ mainColor, bgColor, textColor, name }) => {
                 const displayColors = [mainColor, bgColor, textColor];
-                const isActive = name === colorStyle;
+                const isActive = name === style;
 
                 return (
                     <RadioCard
@@ -25,7 +27,7 @@ export const ThemeSwitcher = () => {
                             isActive && "outline-primary"
                         )}
                         onClick={() => {
-                            setColorStyle(name);
+                            setStyle(name);
                         }}
                     >
                         <RadioCardDescription className="mb-1 flex items-center justify-between font-medium">

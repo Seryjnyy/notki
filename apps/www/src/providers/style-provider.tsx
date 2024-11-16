@@ -1,30 +1,28 @@
-import {
-    useBorderRadius,
-    useFont,
-    useStyle,
-    useUserFonts,
-} from "~/atoms/atoms";
 import { useEffect } from "react";
-import { applyTheme, generateFontCss } from "~/lib/utils";
-import { DEFAULT_FONT, FONTS } from "~/config/fonts.config";
 
+import { applyTheme, generateFontCss } from "~/lib/utils";
+import { useAllFonts, useStyleStore } from "~/stores/style-store";
+
+// TODO : not sure how efficient this is, but it works for now
 export const StyleProvider = () => {
     const root = document.documentElement;
-    const [currentFont, setCurrentFont] = useFont();
-    const [userFonts] = useUserFonts();
-    const [style] = useStyle();
-    const [radius] = useBorderRadius();
+    const reset = useStyleStore.use.reset();
+    const currentFont = useStyleStore.use.font();
+
+    const style = useStyleStore.use.style();
+    const allFonts = useAllFonts();
 
     useEffect(() => {
-        const fontCollection = [...userFonts, ...FONTS];
-        if (!fontCollection.some((font) => font === currentFont)) {
-            setCurrentFont(DEFAULT_FONT);
+        if (!allFonts.some((font) => font === currentFont)) {
+            reset(["font"]);
         }
-    }, [userFonts, currentFont]);
+    }, [allFonts]);
+
+    const borderRadius = useStyleStore.use.borderRadius();
 
     useEffect(() => {
-        root.attributeStyleMap.set("--radius", `${radius}px`);
-    }, [radius]);
+        root.attributeStyleMap.set("--radius", `${borderRadius}px`);
+    }, [borderRadius]);
 
     useEffect(() => {
         root.style.fontFamily = generateFontCss(currentFont);

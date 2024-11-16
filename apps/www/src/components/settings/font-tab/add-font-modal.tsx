@@ -1,3 +1,4 @@
+import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
     DialogDescription,
@@ -5,17 +6,18 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
-import { FONTS } from "~/config/fonts.config";
-import { ReactNode, useRef } from "react";
-import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
-import { useUserFonts } from "~/atoms/atoms";
-import { MyFonts } from "./my-fonts.js";
 import { useToast } from "@repo/ui/hooks/use-toast";
+import { ReactNode, useRef } from "react";
+import { FONT_OPTIONS, useStyleStore } from "~/stores/style-store.js";
+import { MyFonts } from "./my-fonts.js";
 
 const Content = () => {
     const { toast, dismiss } = useToast();
-    const [userFonts, setUserFonts] = useUserFonts();
+
+    const userFonts = useStyleStore.use.userFonts();
+    const setUserFonts = useStyleStore.use.setUserFonts();
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -32,9 +34,10 @@ const Content = () => {
             .filter(Boolean)
             .map((s) => {
                 trueFontInput.push(s);
-                const fontAlreadyAdded = [...FONTS, ...userFontsCopy].some(
-                    (i) => i.toLowerCase() === s.toLowerCase()
-                );
+                const fontAlreadyAdded = [
+                    ...FONT_OPTIONS,
+                    ...userFontsCopy,
+                ].some((i) => i.toLowerCase() === s.toLowerCase());
 
                 if (!fontAlreadyAdded) {
                     userFontsCopy.push(s);
