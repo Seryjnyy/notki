@@ -24,9 +24,8 @@ import { useNoteDisplaySettings } from "./stores/note-display-settings-store";
 function App() {
     return (
         <>
-            <TooltipProvider>
-                <Main />
-            </TooltipProvider>
+            <StyleProvider />
+            <Main />
             <Toaster />
         </>
     );

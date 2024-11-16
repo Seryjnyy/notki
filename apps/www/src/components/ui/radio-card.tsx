@@ -3,6 +3,7 @@ import { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import {
     Tooltip,
     TooltipContent,
+    TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
 
@@ -45,25 +46,27 @@ export const RadioCard = ({
     ...rest
 }: RadioCardProps) => {
     return (
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <button
-                    className={cn(
-                        "cursor-pointer rounded-md px-4 py-2 text-left outline outline-1 outline-foreground/20 transition-all hover:bg-foreground/5 hover:outline-foreground focus:outline-2 focus:outline-foreground",
-                        {
-                            "focus:outline-initial bg-primary/10 outline-2 focus:outline-4 outline-primary":
-                                isActive,
-                        },
-                        className
-                    )}
-                    {...rest}
-                />
-            </TooltipTrigger>
-            {!!tooltipContent && (
-                <TooltipContent {...tooltipContentProps}>
-                    {tooltipContent}
-                </TooltipContent>
-            )}
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        className={cn(
+                            "cursor-pointer rounded-md px-4 py-2 text-left outline outline-1 outline-foreground/20 transition-all hover:bg-foreground/5 hover:outline-foreground focus:outline-2 focus:outline-foreground",
+                            {
+                                "focus:outline-initial bg-primary/10 outline-2 focus:outline-4 outline-primary":
+                                    isActive,
+                            },
+                            className
+                        )}
+                        {...rest}
+                    />
+                </TooltipTrigger>
+                {!!tooltipContent && (
+                    <TooltipContent {...tooltipContentProps}>
+                        {tooltipContent}
+                    </TooltipContent>
+                )}
+            </Tooltip>
+        </TooltipProvider>
     );
 };
