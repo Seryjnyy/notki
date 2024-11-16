@@ -158,13 +158,11 @@ const NoteMap = () => {
             </TooltipProvider>
             <DialogContent className="min-w-full min-h-full p-0 rounded-none sm:rounded-none ">
                 <DialogHeader className="sr-only">
-                    <DialogTitle className="sr-only">
-                        Are you absolutely sure?
-                    </DialogTitle>
+                    <DialogTitle className="z-50 ">Note map</DialogTitle>
                     <DialogDescription className="sr-only">
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
+                        This is the note map dialog, where the notes are
+                        arranged on a canvas that you can move around in and
+                        zoom in and out of.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="fixed  z-50 bottom-0 left-0 w-full px-3 backdrop-blur-md p-2 flex gap-4 border-t border-x justify-between rounded-t-[var(--radius)] flex-wrap ">
