@@ -66,31 +66,12 @@ const Main = () => {
                             <div className="mb-40 sm:mb-16 ">
                                 <Notes />
                             </div>
-                            <BottomToolbarAndNav />
+                            <FixedBottomNavBar />
                         </NoteListProvider>
                     </ErrorBoundary>
                 </section>
             )}
         </main>
-    );
-};
-
-const BottomToolbarAndNav = () => {
-    return (
-        <div className="bottom-0 fixed left-0   flex justify-center w-full">
-            <div
-                className="flex  border-t border-l rounded-t-[var(--radius)] backdrop-blur-md border-r  w-fit flex-wrap"
-                tabIndex={-1}
-                id="main-nav"
-            >
-                <div className="z-50  p-2  w-full ">
-                    <Toolbar />
-                </div>
-                <div className="  p-2 w-fit mx-auto">
-                    <NoteNav />
-                </div>
-            </div>
-        </div>
     );
 };
 
