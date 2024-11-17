@@ -10,6 +10,9 @@ export const mapShortcutKey = (hotkey: string) => {
     if (hotkey === "up") return "up arrow key";
     if (hotkey === "left") return "left arrow key";
     if (hotkey === "right") return "right arrow key";
+
+    if (hotkey.includes("+")) return hotkey + " keys";
+
     return hotkey + " key";
 };
 

@@ -46,8 +46,8 @@ const defaults: State = {
             enabled: true,
         },
         {
-            hotkeys: ["r"],
-            defaultHotkeys: ["r"],
+            hotkeys: ["alt+r"],
+            defaultHotkeys: ["alt+r"],
             id: AVAILABLE_SHORTCUTS.RESTART,
             label: "Restart",
             enabled: true,
