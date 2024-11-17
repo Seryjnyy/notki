@@ -32,6 +32,7 @@ import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { DisplayTab } from "./display-tab/display-tab";
 import { FontSelect } from "./font-tab/font-tab";
+import ShortcutTab from "./shortcut-tab/shortcut-tab";
 
 export const SettingsDialog = () => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
@@ -73,16 +74,12 @@ export const SettingsDialog = () => {
             {
                 label: "Shortcuts",
                 icon: <Scissors className="h-4 w-4" />,
-                comp: <div>hello</div>,
+                comp: <ShortcutTab />,
             },
         ],
         [borderRadius, setBorderRadius]
     );
     const [currentTab, setCurrentTab] = useState(SETTINGS_TABS[0].label);
-    // useHotkeys(KEYBINDS.SETTINGS.hotkey, () => {
-    //   dialogTriggerRef.current?.click()
-    // })
-
     return (
         <NavigationAwareDialog>
             <TooltipProvider>

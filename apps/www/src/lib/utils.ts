@@ -6,6 +6,14 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
+export const mapShortcutKey = (hotkey: string) => {
+    if (hotkey === "down") return "down arrow";
+    if (hotkey === "up") return "up arrow";
+    if (hotkey === "left") return "left arrow";
+    if (hotkey === "right") return "right arrow";
+    return hotkey;
+};
+
 export const applyTheme = (style: string) => {
     import(`~/lib/styles/themes/theme_${style}.ts`)
         .then((module) => module["theme_" + style])
