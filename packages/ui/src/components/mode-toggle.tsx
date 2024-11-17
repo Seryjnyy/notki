@@ -1,10 +1,10 @@
-import { Button } from "./ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@repo/ui/components/ui/dropdown-menu";
 import { useTheme } from "./theme-provider";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 

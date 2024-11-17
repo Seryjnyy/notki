@@ -2,7 +2,7 @@ import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@repo/ui/lib/utils";
-import { TOOLTIP_DELAY_DURATION } from "@repo/ui/config/tooltip";
+import { TOOLTIP_DELAY_DURATION } from "@repo/ui/config/tooltip.config";
 const TooltipProvider = React.forwardRef<
     React.ElementRef<typeof TooltipPrimitive.Provider>,
     React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>
