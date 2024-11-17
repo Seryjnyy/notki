@@ -1,31 +1,39 @@
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { Label } from "@repo/ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
 import DropZone from "@repo/ui/components/ui/sections/drop-zone";
-import { Upload } from "lucide-react";
-import { useState } from "react";
-import { useNavigationLock } from "~/hooks/use-navigation-lock";
-import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
+import { Upload } from "lucide-react";
+import { useState } from "react";
+import { useNavigationLock } from "~/hooks/use-navigation-lock";
+import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
 
 export default function FileUploadDialog() {
     const [open, setOpen] = useState(false);
     const { enableNavigation } = useNavigationLock();
     const setReplace = useUploadSettingsStore.use.setReplace();
     const replace = useUploadSettingsStore.use.replace();
+    const toggleFileUploadDialogShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_UPLOAD
+    );
 
     const onUpload = () => {
         // When dialog is closed manually it needs to update navigation lock
@@ -39,14 +47,22 @@ export default function FileUploadDialog() {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
+                        <ShortcutAwareDialogTrigger
+                            asChild
+                            shortcut={toggleFileUploadDialogShortcut}
+                        >
                             <Button size={"icon"} variant={"secondary"}>
                                 <Upload className="text-primary" />
                             </Button>
-                        </DialogTrigger>
+                        </ShortcutAwareDialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>Add txt files</p>
+                        <p>
+                            Add txt files{" "}
+                            <TooltipShortcutKeys
+                                shortcut={toggleFileUploadDialogShortcut}
+                            />
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
