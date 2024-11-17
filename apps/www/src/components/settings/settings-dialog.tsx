@@ -1,11 +1,17 @@
 import { FontFamilyIcon } from "@radix-ui/react-icons";
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
-import { DialogContent, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import { DialogContent } from "@repo/ui/components/ui/dialog";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { Tabs, TabsContent } from "@repo/ui/components/ui/tabs";
 import {
@@ -40,6 +46,9 @@ export const SettingsDialog = () => {
 
     const borderRadius = useStyleStore.use.borderRadius();
     const setBorderRadius = useStyleStore.use.setBorderRadius();
+    const toggleSettingsShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
+    );
 
     const SETTINGS_TABS = useMemo(
         () => [
@@ -80,12 +89,16 @@ export const SettingsDialog = () => {
         [borderRadius, setBorderRadius]
     );
     const [currentTab, setCurrentTab] = useState(SETTINGS_TABS[0].label);
+
     return (
         <NavigationAwareDialog>
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
+                        <ShortcutAwareDialogTrigger
+                            asChild
+                            shortcut={toggleSettingsShortcut}
+                        >
                             <Button
                                 size={"icon"}
                                 ref={dialogTriggerRef}
@@ -94,10 +107,15 @@ export const SettingsDialog = () => {
                             >
                                 <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
                             </Button>
-                        </DialogTrigger>
+                        </ShortcutAwareDialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                        <p>Settings</p>
+                        <p>
+                            Settings
+                            <TooltipShortcutKeys
+                                shortcut={toggleSettingsShortcut}
+                            />
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
