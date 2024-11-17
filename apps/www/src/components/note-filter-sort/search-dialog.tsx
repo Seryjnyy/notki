@@ -3,6 +3,11 @@ import {
     useFilteredNotes,
     useNoteFilterStore,
 } from "@repo/lib/stores/note-store";
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
@@ -10,7 +15,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { Label } from "@repo/ui/components/ui/label";
 import {
@@ -21,6 +25,7 @@ import {
 } from "@repo/ui/components/ui/tooltip";
 import { Search } from "lucide-react";
 import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Input } from "~/components/ui/input";
 import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
 
@@ -61,23 +66,34 @@ export default function SearchDialog() {
     const filter = useNoteFilterStore.use.filter();
     const setFilter = useNoteFilterStore.use.setFilter();
     const filteredNotes = useFilteredNotes();
+    const toggleSearchDialogShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_SEARCH
+    );
 
     return (
         <NavigationAwareDialog>
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
+                        <ShortcutAwareDialogTrigger
+                            asChild
+                            shortcut={toggleSearchDialogShortcut}
+                        >
                             <Button variant={"ghost"} className="relative">
                                 <Search />
                                 {filter != "" && (
                                     <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
                                 )}
                             </Button>
-                        </DialogTrigger>
+                        </ShortcutAwareDialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                        <p>Search</p>
+                        <p>
+                            Search{" "}
+                            <TooltipShortcutKeys
+                                shortcut={toggleSearchDialogShortcut}
+                            />
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
