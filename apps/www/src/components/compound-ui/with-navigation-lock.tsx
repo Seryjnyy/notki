@@ -5,6 +5,7 @@ interface OpenChangeProps {
     children?: React.ReactNode;
 }
 
+// TODO : rename stuff here since its not only a dialog that can use this, it can be any component that implements OpenChangeProps
 export function withNavigationLock<T extends OpenChangeProps>(
     WrappedDialog: React.ComponentType<T>
 ) {
