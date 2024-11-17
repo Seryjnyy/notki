@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
+  
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
@@ -23,5 +24,6 @@
     "packages/*"
   ],
   "dependencies": {
+    "react-hotkeys-hook": "^4.6.1"
   }
 }
