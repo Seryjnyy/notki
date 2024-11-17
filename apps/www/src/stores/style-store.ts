@@ -1,4 +1,5 @@
 import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
+import { formatLocalStorageKey } from "@repo/lib/utils/local-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -64,7 +65,7 @@ const useStyleStoreBase = create<State & Actions>()(
                 }),
         }),
         {
-            name: "style-store",
+            name: formatLocalStorageKey("style-store"),
             storage: createJSONStorage(() => localStorage),
         }
     )

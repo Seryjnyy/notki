@@ -1,6 +1,7 @@
 import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { formatLocalStorageKey } from "@repo/lib/utils/local-storage";
 
 type NoteDisplay = "grid" | "slideshow";
 
@@ -65,7 +66,7 @@ const useNoteDisplaySettingsBase = create<Display & Actions>()(
                 }),
         }),
         {
-            name: "note-display-settings",
+            name: formatLocalStorageKey("note-display-settings-store"),
             storage: createJSONStorage(() => localStorage),
         }
     )

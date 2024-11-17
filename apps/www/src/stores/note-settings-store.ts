@@ -1,4 +1,5 @@
 import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
+import { formatLocalStorageKey } from "@repo/lib/utils/local-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -92,7 +93,7 @@ const useNoteSettingsBase = create<State & Actions>()(
             resetPadding: () => set({ padding }),
         }),
         {
-            name: "note-settings",
+            name: formatLocalStorageKey("note-settings-store"),
             storage: createJSONStorage(() => localStorage),
         }
     )

@@ -1,6 +1,7 @@
 import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { formatLocalStorageKey } from "../utils/local-storage";
 
 export const AVAILABLE_SHORTCUTS = {
     NEXT_NOTE: "next-note",
@@ -132,7 +133,7 @@ const useShortcutsStoreBase = create<State & Actions>()(
             reset: () => set(defaults),
         }),
         {
-            name: "shortcuts-store",
+            name: formatLocalStorageKey("shortcuts-store"),
             storage: createJSONStorage(() => localStorage),
         }
     )

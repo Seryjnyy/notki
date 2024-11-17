@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createSelectors } from "../utils/create-zustand-selectors";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { formatLocalStorageKey } from "../utils/local-storage";
 
 type State = {
     replace: boolean;
@@ -21,7 +22,7 @@ const useUploadSettingsStoreBase = create<State & Actions>()(
             setReplace: (replace) => set(() => ({ replace })),
         }),
         {
-            name: "upload-settings",
+            name: formatLocalStorageKey("upload-settings-store"),
             storage: createJSONStorage(() => localStorage),
         }
     )
