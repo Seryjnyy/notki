@@ -1,5 +1,5 @@
 import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/copy-all-content";
-import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/ResetNotes";
+import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/reset-notes";
 import { SettingsDialog } from "~/components/settings/settings-dialog";
 
 import FileUploadDialog from "~/components/file-upload-dialog";
