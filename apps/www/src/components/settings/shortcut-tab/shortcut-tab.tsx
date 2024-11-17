@@ -16,7 +16,7 @@ export default function ShortcutTab() {
         >
             <ul className="flex flex-col gap-2">
                 {shortcuts.map((shortcut) => (
-                    <li>
+                    <li key={shortcut.id}>
                         <CheckSetting
                             value={shortcut.enabled}
                             label={shortcut.label}
