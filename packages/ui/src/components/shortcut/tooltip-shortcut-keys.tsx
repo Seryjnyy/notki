@@ -1,4 +1,4 @@
-import { formatHotKeys } from "~/lib/utils";
+import { formatHotKeys } from "@repo/ui/lib/utils";
 import { Shortcut } from "@repo/lib/stores/shortcuts-store";
 
 export default function TooltipShortcutKeys({

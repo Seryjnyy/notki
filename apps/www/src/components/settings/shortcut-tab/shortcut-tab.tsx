@@ -1,4 +1,4 @@
-import { mapShortcutKey } from "~/lib/utils";
+import { mapShortcutKey } from "@repo/ui/lib/utils";
 import { useShortcutsStore } from "@repo/lib/stores/shortcuts-store";
 import CheckSetting from "../check-setting";
 import { Setting } from "../setting";

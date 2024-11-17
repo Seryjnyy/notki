@@ -14,7 +14,7 @@ import { useNoteList } from "~/providers/note-list-provider";
 import {
     AVAILABLE_SHORTCUTS,
     useShortcutsStore,
-} from "~/stores/shortcuts-store";
+} from "@repo/lib/stores/shortcuts-store";
 
 export default function NoteNav() {
     const { activeIndex, setActiveIndex, itemsRef, notes } = useNoteList();
@@ -139,12 +139,12 @@ export default function NoteNav() {
                                     {isPrevNoteShortcutEnabled && (
                                         <>
                                             <br />
-                                            <div className="flex items-center gap-2">
+                                            <span className="flex items-center gap-2">
                                                 {" "}
                                                 <ArrowUp className="size-3" />{" "}
                                                 or{" "}
                                                 <ArrowLeft className="size-3" />
-                                            </div>
+                                            </span>
                                             arrow key
                                         </>
                                     )}
@@ -171,12 +171,12 @@ export default function NoteNav() {
                                     {isNextNoteShortcutEnabled && (
                                         <>
                                             <br />
-                                            <div className="flex items-center gap-2">
+                                            <span className="flex items-center gap-2">
                                                 {" "}
                                                 <ArrowDown className="size-3" />{" "}
                                                 or{" "}
                                                 <ArrowRight className="size-3" />
-                                            </div>
+                                            </span>
                                             arrow key
                                         </>
                                     )}
