@@ -22,7 +22,12 @@ import { ArrowDownWideNarrow, ArrowUpNarrowWide, Filter } from "lucide-react";
 import { ReactNode } from "react";
 import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
 import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
-
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 const Order = () => {
     const sortOrder = useNoteFilterStore.use.sortOrder();
     const setSortOrder = useNoteFilterStore.use.setSortOrder();
@@ -94,6 +99,9 @@ const SortBy = () => {
 
 export default function FilterSortDialog() {
     const sortBy = useNoteFilterStore.use.sortBy();
+    const toggleFilterSortDialogShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_FILTER
+    );
 
     const isSortChanged = sortBy != "time";
 
@@ -102,17 +110,25 @@ export default function FilterSortDialog() {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
+                        <ShortcutAwareDialogTrigger
+                            asChild
+                            shortcut={toggleFilterSortDialogShortcut}
+                        >
                             <Button variant={"ghost"} className="relative">
                                 <Filter />
                                 {isSortChanged && (
                                     <div className="w-1 h-1 bg-primary rounded-full opacity-80 absolute top-1 right-1"></div>
                                 )}
                             </Button>
-                        </DialogTrigger>
+                        </ShortcutAwareDialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                        <p>Filter and sort</p>
+                        <p>
+                            Filter and sort{" "}
+                            <TooltipShortcutKeys
+                                shortcut={toggleFilterSortDialogShortcut}
+                            />
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
