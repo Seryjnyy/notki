@@ -14,9 +14,22 @@ import {
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
 import { Map, Minus, Plus, Search, Undo2 } from "lucide-react";
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    ReactNode,
+    memo,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
 import { useFilteredNotes } from "@repo/lib/stores/note-store";
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Slider } from "@repo/ui/components/ui/slider";
 import { useNotes } from "~/hooks/use-notes";
 import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
@@ -90,6 +103,9 @@ const NoteMap = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
+    const toggleNoteMapShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_NOTE_MAP
+    );
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
@@ -141,7 +157,10 @@ const NoteMap = () => {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
+                        <ShortcutAwareDialogTrigger
+                            asChild
+                            shortcut={toggleNoteMapShortcut}
+                        >
                             <Button
                                 size={"icon"}
                                 variant={"outline"}
@@ -149,10 +168,15 @@ const NoteMap = () => {
                             >
                                 <Map />
                             </Button>
-                        </DialogTrigger>
+                        </ShortcutAwareDialogTrigger>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>Note map</p>
+                        <p>
+                            Note map{" "}
+                            <TooltipShortcutKeys
+                                shortcut={toggleNoteMapShortcut}
+                            />
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
