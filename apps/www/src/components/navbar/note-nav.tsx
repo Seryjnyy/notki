@@ -1,3 +1,8 @@
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import {
@@ -6,15 +11,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useNavigationLock } from "~/hooks/use-navigation-lock";
 import { useNoteList } from "~/providers/note-list-provider";
-import {
-    AVAILABLE_SHORTCUTS,
-    useShortcutsStore,
-} from "@repo/lib/stores/shortcuts-store";
 
 export default function NoteNav() {
     const { activeIndex, setActiveIndex, itemsRef, notes } = useNoteList();
@@ -22,23 +23,9 @@ export default function NoteNav() {
         useState(activeIndex);
 
     const { isNavigationEnabled } = useNavigationLock();
-    const shortcuts = useShortcutsStore.use.shortcuts();
 
-    const isNextNoteShortcutEnabled = useMemo(() => {
-        return (
-            shortcuts.find(
-                (shortcut) => shortcut.id === AVAILABLE_SHORTCUTS.NEXT_NOTE
-            )?.enabled ?? false
-        );
-    }, [shortcuts]);
-
-    const isPrevNoteShortcutEnabled = useMemo(() => {
-        return (
-            shortcuts.find(
-                (shortcut) => shortcut.id === AVAILABLE_SHORTCUTS.PREVIOUS_NOTE
-            )?.enabled ?? false
-        );
-    }, [shortcuts]);
+    const nextNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.NEXT_NOTE);
+    const previousNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.PREVIOUS_NOTE);
 
     const scrollToItem = (index: number) => {
         const ref = itemsRef.current?.get(notes[index].id);
@@ -47,13 +34,14 @@ export default function NoteNav() {
     };
 
     useHotkeys(
-        "up, left",
+        previousNoteShortcut?.hotkeys.join(",") ?? "",
         (e) => {
             e.preventDefault();
             moveBackward();
         },
         {
-            enabled: isNavigationEnabled && isPrevNoteShortcutEnabled,
+            enabled:
+                isNavigationEnabled && (previousNoteShortcut?.enabled ?? false),
         }
     );
     const moveBackward = () => {
@@ -71,13 +59,14 @@ export default function NoteNav() {
     };
 
     useHotkeys(
-        "down, right",
+        nextNoteShortcut?.hotkeys.join(",") ?? "",
         (e) => {
             e.preventDefault();
             moveForward();
         },
         {
-            enabled: isNavigationEnabled && isNextNoteShortcutEnabled,
+            enabled:
+                isNavigationEnabled && (nextNoteShortcut?.enabled ?? false),
         }
     );
 
@@ -136,18 +125,9 @@ export default function NoteNav() {
                             <TooltipContent>
                                 <p>
                                     Previous.
-                                    {isPrevNoteShortcutEnabled && (
-                                        <>
-                                            <br />
-                                            <span className="flex items-center gap-2">
-                                                {" "}
-                                                <ArrowUp className="size-3" />{" "}
-                                                or{" "}
-                                                <ArrowLeft className="size-3" />
-                                            </span>
-                                            arrow key
-                                        </>
-                                    )}
+                                    <TooltipShortcutKeys
+                                        shortcut={previousNoteShortcut}
+                                    />
                                 </p>
                             </TooltipContent>
                         </Tooltip>
@@ -168,18 +148,9 @@ export default function NoteNav() {
                             <TooltipContent>
                                 <p>
                                     Next.
-                                    {isNextNoteShortcutEnabled && (
-                                        <>
-                                            <br />
-                                            <span className="flex items-center gap-2">
-                                                {" "}
-                                                <ArrowDown className="size-3" />{" "}
-                                                or{" "}
-                                                <ArrowRight className="size-3" />
-                                            </span>
-                                            arrow key
-                                        </>
-                                    )}
+                                    <TooltipShortcutKeys
+                                        shortcut={nextNoteShortcut}
+                                    />
                                 </p>
                             </TooltipContent>
                         </Tooltip>
