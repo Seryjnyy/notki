@@ -14,7 +14,7 @@ export async function copyToClipboard(value: string, event?: Event) {
 }
 
 export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
-    ({ value, className, src, variant = "ghost", ...props }, ref) => {
+    ({ value, className, onClick, src, variant = "ghost", ...props }, ref) => {
         const [hasCopied, setHasCopied] = React.useState(false);
 
         React.useEffect(() => {
@@ -29,9 +29,10 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
                 size="icon"
                 variant={variant}
                 className={cn("relative z-10", className)}
-                onClick={() => {
+                onClick={(e) => {
                     copyToClipboard(value);
                     setHasCopied(true);
+                    onClick?.(e);
                 }}
                 {...props}
             >
