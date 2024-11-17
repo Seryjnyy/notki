@@ -7,10 +7,14 @@ import {
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useNavigationLock } from "~/hooks/use-navigation-lock";
 import { useNoteList } from "~/providers/note-list-provider";
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcutsStore,
+} from "~/stores/shortcuts-store";
 
 export default function NoteNav() {
     const { activeIndex, setActiveIndex, itemsRef, notes } = useNoteList();
@@ -18,6 +22,23 @@ export default function NoteNav() {
         useState(activeIndex);
 
     const { isNavigationEnabled } = useNavigationLock();
+    const shortcuts = useShortcutsStore.use.shortcuts();
+
+    const isNextNoteShortcutEnabled = useMemo(() => {
+        return (
+            shortcuts.find(
+                (shortcut) => shortcut.id === AVAILABLE_SHORTCUTS.NEXT_NOTE
+            )?.enabled ?? false
+        );
+    }, [shortcuts]);
+
+    const isPrevNoteShortcutEnabled = useMemo(() => {
+        return (
+            shortcuts.find(
+                (shortcut) => shortcut.id === AVAILABLE_SHORTCUTS.PREVIOUS_NOTE
+            )?.enabled ?? false
+        );
+    }, [shortcuts]);
 
     const scrollToItem = (index: number) => {
         const ref = itemsRef.current?.get(notes[index].id);
@@ -32,7 +53,7 @@ export default function NoteNav() {
             moveBackward();
         },
         {
-            enabled: isNavigationEnabled,
+            enabled: isNavigationEnabled && isPrevNoteShortcutEnabled,
         }
     );
     const moveBackward = () => {
@@ -56,7 +77,7 @@ export default function NoteNav() {
             moveForward();
         },
         {
-            enabled: isNavigationEnabled,
+            enabled: isNavigationEnabled && isNextNoteShortcutEnabled,
         }
     );
 
@@ -115,13 +136,18 @@ export default function NoteNav() {
                             <TooltipContent>
                                 <p>
                                     Previous.
-                                    <br />
-                                    <div className="flex items-center gap-2">
-                                        {" "}
-                                        <ArrowUp className="size-3" /> or{" "}
-                                        <ArrowLeft className="size-3" />
-                                    </div>
-                                    arrow key
+                                    {isPrevNoteShortcutEnabled && (
+                                        <>
+                                            <br />
+                                            <div className="flex items-center gap-2">
+                                                {" "}
+                                                <ArrowUp className="size-3" />{" "}
+                                                or{" "}
+                                                <ArrowLeft className="size-3" />
+                                            </div>
+                                            arrow key
+                                        </>
+                                    )}
                                 </p>
                             </TooltipContent>
                         </Tooltip>
@@ -142,13 +168,18 @@ export default function NoteNav() {
                             <TooltipContent>
                                 <p>
                                     Next.
-                                    <br />
-                                    <div className="flex items-center gap-2">
-                                        {" "}
-                                        <ArrowDown className="size-3" /> or{" "}
-                                        <ArrowRight className="size-3" />
-                                    </div>
-                                    arrow key
+                                    {isNextNoteShortcutEnabled && (
+                                        <>
+                                            <br />
+                                            <div className="flex items-center gap-2">
+                                                {" "}
+                                                <ArrowDown className="size-3" />{" "}
+                                                or{" "}
+                                                <ArrowRight className="size-3" />
+                                            </div>
+                                            arrow key
+                                        </>
+                                    )}
                                 </p>
                             </TooltipContent>
                         </Tooltip>
