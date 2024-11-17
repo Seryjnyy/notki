@@ -98,7 +98,7 @@ const defaults: State = {
 };
 
 interface Actions {
-    toggleShortcut: (id: string) => void;
+    toggleShortcut: (id: string, enabled?: boolean) => void;
     reset: () => void;
 }
 
@@ -106,7 +106,7 @@ const useShortcutsStoreBase = create<State & Actions>()(
     persist(
         (set) => ({
             ...defaults,
-            toggleShortcut: (id) => {
+            toggleShortcut: (id, enabled) => {
                 set((state) => {
                     const actionIndex = state.shortcuts.findIndex(
                         (a) => a.id === id
@@ -114,10 +114,17 @@ const useShortcutsStoreBase = create<State & Actions>()(
                     if (actionIndex === -1) return state;
 
                     const newActions = [...state.shortcuts];
-                    newActions[actionIndex] = {
-                        ...newActions[actionIndex],
-                        enabled: !newActions[actionIndex].enabled,
-                    };
+                    if (enabled !== undefined) {
+                        newActions[actionIndex] = {
+                            ...newActions[actionIndex],
+                            enabled: enabled,
+                        };
+                    } else {
+                        newActions[actionIndex] = {
+                            ...newActions[actionIndex],
+                            enabled: !newActions[actionIndex].enabled,
+                        };
+                    }
 
                     return { shortcuts: newActions };
                 });
