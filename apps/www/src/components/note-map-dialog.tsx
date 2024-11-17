@@ -4,7 +4,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 
 import {
@@ -14,14 +13,7 @@ import {
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
 import { Map, Minus, Plus, Search, Undo2 } from "lucide-react";
-import React, {
-    ReactNode,
-    memo,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 
 import { useFilteredNotes } from "@repo/lib/stores/note-store";
 import {
@@ -32,9 +24,10 @@ import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aw
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Slider } from "@repo/ui/components/ui/slider";
 import { useNotes } from "~/hooks/use-notes";
-import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
-import NoteCard from "./compound-ui/note-card";
+import { NavigationAwareDialog } from "./navigation-aware-components";
+import NoteCard from "./display-notes/note-card";
 import Toolbar from "./navbar/toolbar";
+import UserStyledList from "./display-notes/user-styled-list";
 
 const Notes = memo(() => {
     const { removeNote } = useNotes();
@@ -49,7 +42,7 @@ const Notes = memo(() => {
         ));
     }, [filteredSortedNotes, removeNote]);
 
-    return <ul>{memoedNotes}</ul>;
+    return <> {memoedNotes}</>;
 });
 
 const Controls = ({
@@ -189,8 +182,11 @@ const NoteMap = () => {
                         zoom in and out of.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="fixed  z-50 bottom-0 left-0 w-full px-3 backdrop-blur-md p-2 flex gap-4 border-t border-x justify-between rounded-t-[var(--radius)] flex-wrap ">
-                    <div className="w-fit mx-auto">
+                <div
+                    className="fixed  z-50 bottom-0 left-0 w-full px-3 backdrop-blur-md p-2 flex gap-4 border-t border-x justify-between rounded-t-[var(--radius)] flex-wrap "
+                    tabIndex={0}
+                >
+                    <div className="w-fit mx-auto ">
                         <Toolbar exclude={{ noteMap: true }} />
                     </div>
                     <div className="flex justify-between items-center gap-2 mx-auto">
@@ -238,7 +234,9 @@ const NoteMap = () => {
                             }}
                         >
                             <div className="w-[300vw] flex flex-wrap gap-4">
-                                <Notes />
+                                <UserStyledList>
+                                    <Notes />
+                                </UserStyledList>
                             </div>
                         </div>
                     </div>
