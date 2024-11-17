@@ -1,5 +1,5 @@
 import { HTMLProps, ReactNode } from "react";
-import { ResetButton } from "~/components/compound-ui/reset-button";
+import { ResetButton } from "~/components/settings/reset-button";
 
 export type SettingProps = HTMLProps<HTMLDivElement> & {
     title?: ReactNode;

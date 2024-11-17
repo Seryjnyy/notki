@@ -24,9 +24,9 @@ import {
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
 import { Search } from "lucide-react";
-import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
+import { NavigationAwareDialog } from "~/components/navigation-aware-components";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
-import { Input } from "~/components/ui/input";
+import { InputWithIcons } from "~/components/ui/input-with-icons";
 import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
 
 type SearchIn = "title" | "content" | "both";
@@ -104,7 +104,7 @@ export default function SearchDialog() {
                         Search for notes by title, content or both.
                     </DialogDescription>
                     <div className="pt-2 flex flex-col gap-6">
-                        <Input
+                        <InputWithIcons
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             startIcon={<MagnifyingGlassIcon />}

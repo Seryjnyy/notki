@@ -24,7 +24,7 @@ import {
 import { Upload } from "lucide-react";
 import { useState } from "react";
 import { useNavigationLock } from "~/hooks/use-navigation-lock";
-import { NavigationAwareDialog } from "./compound-ui/navigation-aware-components";
+import { NavigationAwareDialog } from "./navigation-aware-components";
 
 export default function FileUploadDialog() {
     const [open, setOpen] = useState(false);

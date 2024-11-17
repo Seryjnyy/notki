@@ -5,7 +5,7 @@ import {
     TabsList,
     TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
-import NoteCard from "~/components/compound-ui/note-card";
+import NoteCard from "~/components/display-notes/note-card";
 import useNoteContentSettings from "~/hooks/note-settings/use-note-content-settings";
 import useNoteFooterSettings from "~/hooks/note-settings/use-note-footer-settings";
 import useNoteHeaderSettings from "~/hooks/note-settings/use-note-header-settings";

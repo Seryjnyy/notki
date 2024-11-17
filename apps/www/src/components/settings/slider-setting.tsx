@@ -1,7 +1,7 @@
 import { Label } from "@repo/ui/components/ui/label";
 import { Slider } from "@repo/ui/components/ui/slider";
 import { cn } from "@repo/ui/lib/utils";
-import { ResetButton } from "~/components/compound-ui/reset-button";
+import { ResetButton } from "~/components/settings/reset-button";
 
 const SliderSetting = ({
     label,

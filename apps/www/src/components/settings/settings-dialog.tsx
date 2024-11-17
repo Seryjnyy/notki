@@ -30,10 +30,10 @@ import {
     XIcon,
 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { TabButton } from "~/components/compound-ui/tab-button";
+import { TabButton } from "~/components/settings/tab-button";
 import { cn } from "~/lib/utils";
 import { useStyleStore } from "~/stores/style-store";
-import { NavigationAwareDialog } from "../compound-ui/navigation-aware-components";
+import { NavigationAwareDialog } from "../navigation-aware-components";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { DisplayTab } from "./display-tab/display-tab";
@@ -41,7 +41,6 @@ import { FontSelect } from "./font-tab/font-tab";
 import ShortcutTab from "./shortcut-tab/shortcut-tab";
 
 export const SettingsDialog = () => {
-    const dialogTriggerRef = useRef<HTMLButtonElement>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const borderRadius = useStyleStore.use.borderRadius();
@@ -101,7 +100,6 @@ export const SettingsDialog = () => {
                         >
                             <Button
                                 size={"icon"}
-                                ref={dialogTriggerRef}
                                 variant="secondary"
                                 className="group gap-2 p-2"
                             >

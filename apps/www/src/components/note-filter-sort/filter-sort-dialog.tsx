@@ -20,7 +20,7 @@ import {
 } from "@repo/ui/components/ui/tooltip";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, Filter } from "lucide-react";
 import { ReactNode } from "react";
-import { NavigationAwareDialog } from "~/components/compound-ui/navigation-aware-components";
+import { NavigationAwareDialog } from "~/components/navigation-aware-components";
 import { RadioCard, RadioCardTitle } from "~/components/ui/radio-card";
 import {
     AVAILABLE_SHORTCUTS,

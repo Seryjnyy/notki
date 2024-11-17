@@ -14,7 +14,7 @@ import { Check, Palette, Search } from "lucide-react";
 import styleList from "~/lib/styles/theme-list.json";
 import { applyTheme } from "~/lib/utils";
 import { useStyleStore } from "~/stores/style-store";
-import { Input } from "./ui/input";
+import { InputWithIcons } from "./ui/input-with-icons";
 
 export const ThemeSwitcherList = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
@@ -125,7 +125,7 @@ export const ThemeSwitcherList = () => {
                         You can also search for a theme by name or the index.
                     </DialogDescription>
                 </DialogHeader>
-                <Input
+                <InputWithIcons
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     startIcon={<Search className="h-4 w-4" />}

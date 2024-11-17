@@ -1,7 +1,7 @@
 import NotesView from "./notes-view";
-import CopyAllContent from "./tool-bar/CopyAllContent";
+import CopyAllContent from "./tool-bar/copy-all-content";
 import FilterAndSort from "./tool-bar/FilterAndSort";
-import ResetNotes from "./tool-bar/ResetNotes";
+import ResetNotes from "./tool-bar/reset-notes";
 import Search from "./tool-bar/Search";
 import Settings from "./tool-bar/Settings";
 
