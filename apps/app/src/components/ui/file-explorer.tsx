@@ -33,7 +33,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "~/components/ui/collapsible";
+} from "@repo/ui/components/ui/collapsible";
 import { getAllFilesFoldersWithMetadata } from "~/lib/file-services/directory-service";
 import {
     FileEntryWithMetadata,
