@@ -6,9 +6,12 @@
   ],
   "private": true,
   "exports":{
+    "./main.css": "./src/main.css",
     "./components/*":"./src/components/*.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./config/*": "./src/config/*.ts",
+    "./providers/*": "./src/providers/*.tsx",
+    "./styles/*": "./src/styles/*",
     "./hooks/*": [
       "./src/hooks/*.ts",
       "./src/hooks/*.tsx"

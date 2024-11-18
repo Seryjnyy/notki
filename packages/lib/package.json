@@ -11,7 +11,8 @@
     "./utils/*": "./src/utils/*.ts",
     "./stores/*": "./src/stores/*.ts",
     "./services/*": "./src/services/*.ts",
-    "./types/*": "./src/types/*.ts"
+    "./types/*": "./src/types/*.ts",
+    "./config/*": "./src/styles/*.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

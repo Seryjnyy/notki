@@ -7,11 +7,18 @@ interface NotesState {
     notes: Note[];
     setNotes: (newNotes: Note[]) => void;
 }
-
-const useNoteStoreBase = create<NotesState>()((set) => ({
-    notes: [],
-    setNotes: (newNotes) => set(() => ({ notes: newNotes })),
-}));
+const useNoteStoreBase = create<NotesState>()(
+    (set) => ({
+        notes: [],
+        setNotes: (newNotes) => set(() => ({ notes: newNotes })),
+    })
+    // persist(
+    //     {
+    //         name: "notes-storage",
+    //         storage: createJSONStorage(() => sessionStorage),
+    //     }
+    // )
+);
 
 export type SortOrder = "asc" | "desc";
 export type SortBy = "time" | "title" | "size" | "characterCount";
@@ -38,6 +45,7 @@ const noteFilterDefaults: NoteFilterState = {
     sortOrder: "asc",
 };
 
+// TODO : should this store be persisted? maybe in session storage.
 const useNoteFilterStoreBase = create<NoteFilterState & NoteFilterActions>()(
     (set) => ({
         ...noteFilterDefaults,
@@ -48,6 +56,7 @@ const useNoteFilterStoreBase = create<NoteFilterState & NoteFilterActions>()(
     })
 );
 
+// TODO : Idk if this is considered best practice, its a normal hook but is okay?
 const useFilteredNotes = () => {
     const notes = useNoteStore((state) => state.notes);
     const filter = useNoteFilterStore((state) => state.filter);
