@@ -123,7 +123,7 @@ const NoteMap = () => {
 
     const scaleLimits = { min: 0.1, max: 4 };
 
-    const handleWheel = (e: React.WheelEvent) => {
+    const handleWheel = (e: WheelEvent) => {
         e.preventDefault();
         const delta = e.deltaY * -0.001;
         const newScale = Math.min(
@@ -137,11 +137,11 @@ const NoteMap = () => {
         const container = containerRef.current;
         if (!container) return;
 
-        container.addEventListener("wheel", handleWheel as any, {
+        container.addEventListener("wheel", handleWheel, {
             passive: false,
         });
         return () => {
-            container.removeEventListener("wheel", handleWheel as any);
+            container.removeEventListener("wheel", handleWheel);
         };
     }, [scale]);
 

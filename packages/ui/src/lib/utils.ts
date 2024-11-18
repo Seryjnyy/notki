@@ -1,8 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Theme } from "../styles/themes/theme.type";
-import { theme_8008 } from "../styles/themes/theme_8008";
-
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }

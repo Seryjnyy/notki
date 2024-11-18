@@ -1,10 +1,10 @@
+import { produce } from "immer";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "../../tooltip";
-import { produce } from "immer";
 
 import {
     Sheet,
@@ -15,15 +15,6 @@ import {
 } from "../../sheet";
 
 import { GearIcon, ReloadIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { ReactNode } from "react";
-import { Button, buttonVariants } from "../../button";
-import { Checkbox } from "../../checkbox";
-import { Input } from "../../input";
-import { Label } from "../../label";
-import { RadioGroup, RadioGroupItem } from "../../radio-group";
-import { ScrollArea, ScrollBar } from "../../scroll-area";
-import { usePreferenceStore } from "@repo/lib/stores/preference-store";
-import { NoteView } from "@repo/lib/types/types";
 import {
     getDefaultColumns,
     getDefaultFontSize,
@@ -34,8 +25,16 @@ import {
     getDefaultPaddingX,
     getDefaultPreferences,
 } from "@repo/lib/services/preferences-service";
-import ModeToggle from "../../../mode-toggle";
+import { usePreferenceStore } from "@repo/lib/stores/preference-store";
+import { NoteView } from "@repo/lib/types/types";
 import { cn } from "@repo/ui/lib/utils";
+import { ReactNode } from "react";
+import { Button, buttonVariants } from "../../button";
+import { Checkbox } from "../../checkbox";
+import { Input } from "../../input";
+import { Label } from "../../label";
+import { RadioGroup, RadioGroupItem } from "../../radio-group";
+import { ScrollArea } from "../../scroll-area";
 
 interface NumericalSettingProps {
     title: string;

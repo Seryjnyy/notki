@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Note } from "../types/types";
 import { createSelectors } from "../utils/create-zustand-selectors";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 interface NotesState {
     notes: Note[];
@@ -49,20 +48,20 @@ const noteFilterDefaults: NoteFilterState = {
 const useNoteFilterStoreBase = create<NoteFilterState & NoteFilterActions>()(
     (set) => ({
         ...noteFilterDefaults,
-        setFilter: (filter) => set((state) => ({ filter: filter })),
-        setSortBy: (sortBy) => set((state) => ({ sortBy: sortBy })),
-        setSortOrder: (order) => set((state) => ({ sortOrder: order })),
-        setSearchIn: (searchIn) => set((state) => ({ searchIn: searchIn })),
+        setFilter: (filter) => set(() => ({ filter: filter })),
+        setSortBy: (sortBy) => set(() => ({ sortBy: sortBy })),
+        setSortOrder: (order) => set(() => ({ sortOrder: order })),
+        setSearchIn: (searchIn) => set(() => ({ searchIn: searchIn })),
     })
 );
 
 // TODO : Idk if this is considered best practice, its a normal hook but is okay?
 const useFilteredNotes = () => {
-    const notes = useNoteStore((state) => state.notes);
-    const filter = useNoteFilterStore((state) => state.filter);
-    const sortBy = useNoteFilterStore((state) => state.sortBy);
-    const sortOrder = useNoteFilterStore((state) => state.sortOrder);
-    const searchIn = useNoteFilterStore((state) => state.searchIn);
+    const notes = useNoteStore.use.notes();
+    const filter = useNoteFilterStore.use.filter();
+    const sortBy = useNoteFilterStore.use.sortBy();
+    const sortOrder = useNoteFilterStore.use.sortOrder();
+    const searchIn = useNoteFilterStore.use.searchIn();
 
     return notes
         .filter((note) => {
@@ -102,4 +101,4 @@ const useFilteredNotes = () => {
 const useNoteFilterStore = createSelectors(useNoteFilterStoreBase);
 const useNoteStore = createSelectors(useNoteStoreBase);
 
-export { useNoteStore, useNoteFilterStore, useFilteredNotes };
+export { useFilteredNotes, useNoteFilterStore, useNoteStore };

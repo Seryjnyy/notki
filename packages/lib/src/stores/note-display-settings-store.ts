@@ -59,7 +59,7 @@ const useNoteDisplaySettingsBase = create<Display & Actions>()(
                     fields.forEach((field) => {
                         // TODO : ignoring a ts-error here, functionality seems good but it shows and error about types, need to investigate cause 1 reset func instead
                         // of 5 is better imo, and if more properties are added then yh
-                        // @ts-ignore
+                        // @ts-expect-error it thinks its trying to assign to unknown field when there wont be any unknown fields
                         updates[field] = defaults[field];
                     });
                     return { ...state, ...updates };

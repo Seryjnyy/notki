@@ -3,6 +3,8 @@ import {
     AVAILABLE_SHORTCUTS,
     useShortcut,
 } from "@repo/lib/stores/shortcuts-store";
+import { useStyleStore } from "@repo/lib/stores/style-store";
+import { TabButton } from "@repo/ui/components/settings/tab-button";
 import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
@@ -20,6 +22,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { cn } from "@repo/ui/lib/utils";
 import {
     LayoutPanelLeft,
     MenuIcon,
@@ -29,10 +32,7 @@ import {
     SettingsIcon,
     XIcon,
 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
-import { TabButton } from "@repo/ui/components/settings/tab-button";
-import { cn } from "@repo/ui/lib/utils";
-import { useStyleStore } from "@repo/lib/stores/style-store";
+import { useMemo, useState } from "react";
 import { NavigationAwareDialog } from "../navigation-aware-components";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";

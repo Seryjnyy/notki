@@ -1,9 +1,9 @@
+import { RadioGroup, RadioGroupItem } from "../../radio-group";
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
-    SheetOverlay,
     SheetTitle,
     SheetTrigger,
 } from "../../sheet";
@@ -13,15 +13,14 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "../../tooltip";
-import { RadioGroup, RadioGroupItem } from "../../radio-group";
 
 import { MagnifyingGlassIcon, UpdateIcon } from "@radix-ui/react-icons";
-import { Button, buttonVariants } from "../../button";
-import { Input } from "../../input";
-import { Label } from "../../label";
 import { useSearch } from "@repo/lib/stores/search-store";
 import { SearchTarget } from "@repo/lib/types/types";
 import { cn } from "../../../../lib/utils";
+import { Button, buttonVariants } from "../../button";
+import { Input } from "../../input";
+import { Label } from "../../label";
 
 export default function Search() {
     const searchTerm = useSearch((state) => state.searchTerm);

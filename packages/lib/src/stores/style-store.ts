@@ -54,7 +54,7 @@ const useStyleStoreBase = create<State & Actions>()(
                     const resetState: Partial<State> = {};
                     fields.forEach((field) => {
                         // TODO : ignoring a ts-error here, same issue as note-display-settings-store.ts, works fine but shows an error
-                        // @ts-ignore
+                        // @ts-expect-error it thinks its trying to assign to unknown field when there wont be any unknown fields
                         resetState[field] = defaults[field];
                     });
 

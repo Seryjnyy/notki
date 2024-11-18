@@ -6,15 +6,14 @@ import { cn } from "../lib/utils";
 
 interface CopyButtonProps extends ButtonProps {
     value: string;
-    src?: string;
 }
 
-export async function copyToClipboard(value: string, event?: Event) {
+export async function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
 }
 
 export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
-    ({ value, className, onClick, src, variant = "ghost", ...props }, ref) => {
+    ({ value, className, onClick, variant = "ghost", ...props }, ref) => {
         const [hasCopied, setHasCopied] = React.useState(false);
 
         React.useEffect(() => {

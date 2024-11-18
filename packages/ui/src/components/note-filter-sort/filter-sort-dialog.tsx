@@ -3,15 +3,22 @@ import {
     SortOrder,
     useNoteFilterStore,
 } from "@repo/lib/stores/note-store";
+import {
+    AVAILABLE_SHORTCUTS,
+    useShortcut,
+} from "@repo/lib/stores/shortcuts-store";
+import { NavigationAwareDialog } from "@repo/ui/components/navigation-aware-components";
+import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
+import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import {
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { Label } from "@repo/ui/components/ui/label";
+import { RadioCard, RadioCardTitle } from "@repo/ui/components/ui/radio-card";
 import {
     Tooltip,
     TooltipContent,
@@ -20,14 +27,6 @@ import {
 } from "@repo/ui/components/ui/tooltip";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, Filter } from "lucide-react";
 import { ReactNode } from "react";
-import { NavigationAwareDialog } from "@repo/ui/components/navigation-aware-components";
-import { RadioCard, RadioCardTitle } from "@repo/ui/components/ui/radio-card";
-import {
-    AVAILABLE_SHORTCUTS,
-    useShortcut,
-} from "@repo/lib/stores/shortcuts-store";
-import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
-import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 const Order = () => {
     const sortOrder = useNoteFilterStore.use.sortOrder();
     const setSortOrder = useNoteFilterStore.use.setSortOrder();
