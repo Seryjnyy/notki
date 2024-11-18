@@ -1,5 +1,6 @@
 import { readDir, readTextFile } from "@tauri-apps/api/fs";
-import { getMetadataForFileEntry } from "./file-service";
+import { FileEntryWithMetadata, getMetadataForFileEntry } from "./file-service";
+import { Metadata } from "tauri-plugin-fs-extra-api";
 
 export const getAllFilesFolders = async (
     folderPath: string,
@@ -26,30 +27,33 @@ export const getAllFilesFoldersWithMetadata = async (
     return temp;
 };
 
+// new
 export const getTxtFilesWithAllDetail = async (
     folderpath: string,
     recursive: boolean
 ) => {
-    let validFiles = await getAllFilesFoldersWithMetadata(
-        folderpath,
-        recursive
-    );
+    let validFiles: FileEntryWithMetadata[] =
+        await getAllFilesFoldersWithMetadata(folderpath, recursive);
 
-    // Remove folders
-    validFiles = validFiles.filter((file) => file.children == undefined);
+    const txtFiles: (FileEntryWithMetadata & { content: string })[] = [];
 
-    // Remove files that don't fit the extension type
-    validFiles = validFiles.filter(
-        (file) => file.name!.substring(file.name!.lastIndexOf(".") + 1) == "txt"
-    );
+    const processEntries = async (entries: FileEntryWithMetadata[]) => {
+        for (const entry of entries) {
+            if (
+                entry.metadata.isFile &&
+                entry.name &&
+                entry.name.endsWith(".txt")
+            ) {
+                const content = await readTextFile(entry.path);
+                txtFiles.push({ ...entry, content });
+            }
+            if (entry.metadata.isDir && recursive && entry.children) {
+                await processEntries(entry.children);
+            }
+        }
+    };
 
-    const res = [];
+    await processEntries(validFiles);
 
-    // Fetch text for each file
-    for (const file of validFiles) {
-        const content = await readTextFile(file.path);
-        res.push({ ...file, content: content });
-    }
-
-    return res;
+    return txtFiles;
 };
