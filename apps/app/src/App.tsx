@@ -21,6 +21,10 @@ import FileSearchBox from "./components/ui/file-search-box";
 import { useUiState } from "./lib/ui-store";
 import { useWorkspaceConfig } from "./lib/workspace-store";
 
+import { StyleProvider } from "@repo/ui/providers/style-provider";
+import { Button } from "@repo/ui/components/ui/button";
+import MainPage from "./components/main-page-pc";
+
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
     const uiState = useUiState.use.uiState();
@@ -79,7 +83,10 @@ function App() {
     }, [workspace]);
 
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        // <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <div>
+            <StyleProvider />
+
             <div className={` w-full h-screen flex flex-col  pt-7 `}>
                 <Titlebar />
                 {/* <MinimalTitlebar /> */}
@@ -93,7 +100,7 @@ function App() {
                             direction="horizontal"
                             className="w-full     "
                         >
-                            {uiState.sideSection != "none" && (
+                            {/* {uiState.sideSection != "none" && (
                                 <ResizablePanel
                                     minSize={28}
                                     id="file-explorer"
@@ -103,8 +110,8 @@ function App() {
                                         <FileExplorer />
                                     )}
                                 </ResizablePanel>
-                            )}
-                            <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
+                            )} */}
+                            {/* <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " /> */}
 
                             <ResizablePanel
                                 className="bg-background border-l border-secondary"
@@ -118,8 +125,8 @@ function App() {
                                 )}
                                 {uiState.section == "note-viewer" && (
                                     <div className="w-full ">
-                                        {/* <MainPage /> */}
-                                        <NoteViewer />
+                                        <MainPage />
+                                        {/* <NoteViewer /> */}
                                     </div>
                                 )}
                             </ResizablePanel>
@@ -128,12 +135,14 @@ function App() {
                         <MainDialog />
                     </div>
                 )}
+
                 <Toaster />
 
                 <CommandBox />
                 <FileSearchBox />
             </div>
-        </ThemeProvider>
+        </div>
+        // </ThemeProvider>
     );
 }
 

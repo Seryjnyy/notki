@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createSelectors } from "@repo/lib/create-zustand-selectors";
+import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 import { Vault } from "./backend-types";
 
 // export type WorkspaceConfig = {

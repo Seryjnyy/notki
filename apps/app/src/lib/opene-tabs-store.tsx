@@ -1,4 +1,4 @@
-import { createSelectors } from "@repo/lib/create-zustand-selectors";
+import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";

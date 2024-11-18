@@ -4,6 +4,7 @@ import { applyTheme, generateFontCss } from "@repo/ui/lib/utils";
 import { useAllFonts, useStyleStore } from "@repo/lib/stores/style-store";
 
 // TODO : not sure how efficient this is, but it works for now
+// TODO : should be default export no?
 export const StyleProvider = () => {
     const root = document.documentElement;
     const reset = useStyleStore.use.reset();

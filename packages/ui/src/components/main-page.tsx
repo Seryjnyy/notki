@@ -25,6 +25,7 @@ export default function MainPage() {
                     <h2 className="text-muted-foreground text-center text-sm">
                         ADD TXT FILES
                     </h2>
+                    {/* TODO : no need for the variable height anymore, since it doesn't display it if no notes */}
                     <div
                         className={cn(
                             " py-2",

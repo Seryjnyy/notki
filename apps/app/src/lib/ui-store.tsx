@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { UiState } from "./types";
-import { createSelectors } from "@repo/lib/create-zustand-selectors";
+import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 
 // TODO : save ui state, and get saved ui state
 const defaults: UiState = {

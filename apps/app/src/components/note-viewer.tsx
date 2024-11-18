@@ -1,18 +1,6 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import { useNoteStore } from "@repo/lib/stores/note-store";
-import { Button, buttonVariants } from "@repo/ui/components/ui/button";
-import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/CopyAllContent";
-import FilterAndSort from "@repo/ui/components/ui/sections/tool-bar/FilterAndSort";
-import NotesView from "@repo/ui/components/ui/sections/notes-view";
-import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/ResetNotes";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import Search from "@repo/ui/components/ui/sections/tool-bar/Search";
-import Settings from "@repo/ui/components/ui/sections/tool-bar/Settings";
-import { useEffect, useMemo, useState } from "react";
-import {
-    getAllFilesFolders,
-    getTxtFilesWithAllDetail,
-} from "~/lib/file-services/directory-service";
-import { useWorkspaceConfig } from "~/lib/workspace-store";
+import { Button } from "@repo/ui/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -21,19 +9,25 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
-import { cn } from "~/lib/utils";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import DropZone from "@repo/ui/components/ui/sections/drop-zone";
+import NotesView from "@repo/ui/components/ui/sections/notes-view";
+import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/copy-all-content";
+import FilterAndSort from "@repo/ui/components/ui/sections/tool-bar/FilterAndSort";
+import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/reset-notes";
+import Search from "@repo/ui/components/ui/sections/tool-bar/Search";
+import Settings from "@repo/ui/components/ui/sections/tool-bar/Settings";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
-import DropZone from "@repo/ui/components/ui/sections/drop-zone";
-import { Tree } from "./ui/tree";
 import { FileEntry } from "@tauri-apps/api/fs";
-import { Metadata } from "tauri-plugin-fs-extra-api";
-import { FileEntryWithMetadata } from "~/lib/file-services/file-service";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { useEffect, useMemo, useState } from "react";
+import { getAllFilesFolders } from "~/lib/file-services/directory-service";
+import { useWorkspaceConfig } from "~/lib/workspace-store";
+import { Tree } from "./ui/tree";
 
 type Item = {
     id: number;

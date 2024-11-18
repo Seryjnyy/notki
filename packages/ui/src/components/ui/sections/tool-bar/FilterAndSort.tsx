@@ -17,8 +17,8 @@ import { produce } from "immer";
 import { buttonVariants } from "../../button";
 import { Label } from "../../label";
 import { RadioGroup, RadioGroupItem } from "../../radio-group";
-import { usePreferenceStore } from "@repo/lib/preference-store";
-import { Order, SortBy } from "@repo/lib/types";
+import { usePreferenceStore } from "@repo/lib/stores/preference-store";
+import { Order, SortBy } from "@repo/lib/types/types";
 import { cn } from "../../../../lib/utils";
 
 export default function FilterAndSort() {
