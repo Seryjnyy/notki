@@ -48,6 +48,7 @@ export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
 
     return (
         <>
+            {/* TODO : update the roundness to var radius */}
             <div
                 {...getRootProps()}
                 className="border-dashed border-2 p-8 flex justify-center items-center w-full hover:ring ring-primary cursor-pointer rounded-lg h-full"

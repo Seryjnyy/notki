@@ -2,11 +2,9 @@
 module.exports = {
     darkMode: ["class"],
     content: [
-        "./pages/**/*.{ts,tsx}",
         "./components/**/*.{ts,tsx}",
-        "./app/**/*.{ts,tsx}",
         "./src/**/*.{ts,tsx}",
-        "../../packages/ui/src/**/*.{ts,tsx}",
+        "../../packages/ui/src/components/**/*.{ts,tsx}",
     ],
     prefix: "",
     theme: {
@@ -17,40 +15,54 @@ module.exports = {
                 "2xl": "1400px",
             },
         },
+
         extend: {
+            fontFamily: {
+                robotoMono: "Roboto Mono",
+                jetbrains: "JetBrains Mono",
+                plexMono: "IBM Plex Mono",
+                reddit: "Reddit Sans",
+                poppins: "Poppins",
+            },
             colors: {
-                border: "hsl(var(--border))",
-                input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
-                background: "hsl(var(--background))",
-                foreground: "hsl(var(--foreground))",
+                background: "hsl(var(--sub-alt-color))",
+                main: "hsl(var(--main-color))",
+                sub: "hsl(var(--sub-color))",
+                subAlt: "hsl(var(--sub-alt-color))",
+                text: "hsl(var(--text-color))",
+                error: "hsl(var(--error-color))",
+
+                border: "hsl(var(--sub-color)/0.4)",
+                input: "hsl(var(--sub-alt-color))",
+                ring: "hsl(var(--text-color))",
+                foreground: "hsl(var(--text-color))",
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
-                    foreground: "hsl(var(--primary-foreground))",
+                    DEFAULT: "hsl(var(--main-color))",
+                    foreground: "hsl(var(--bg-color))",
                 },
                 secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
+                    DEFAULT: "hsl(var(--sub-color) /0.2)",
                     foreground: "hsl(var(--secondary-foreground))",
                 },
                 destructive: {
-                    DEFAULT: "hsl(var(--destructive))",
-                    foreground: "hsl(var(--destructive-foreground))",
+                    DEFAULT: "hsl(var(--error-color))",
+                    foreground: "hsl(var(--bg-color))",
                 },
                 muted: {
-                    DEFAULT: "hsl(var(--muted))",
-                    foreground: "hsl(var(--muted-foreground))",
+                    DEFAULT: "hsl(var(--bg-color))",
+                    foreground: "hsl(var(--text-color)/0.6)",
                 },
                 accent: {
-                    DEFAULT: "hsl(var(--accent))",
-                    foreground: "hsl(var(--accent-foreground))",
+                    DEFAULT: "hsl(var(--bg-color))",
+                    foreground: "hsl(var(--text-color))",
                 },
                 popover: {
-                    DEFAULT: "hsl(var(--popover))",
-                    foreground: "hsl(var(--popover-foreground))",
+                    DEFAULT: "hsl(var(--sub-alt-color))",
+                    foreground: "hsl(var(--text-color))",
                 },
                 card: {
-                    DEFAULT: "hsl(var(--card))",
-                    foreground: "hsl(var(--card-foreground))",
+                    DEFAULT: "hsl(var(--sub-alt-color))",
+                    foreground: "hsl(var(--text-color))",
                 },
             },
             borderRadius: {
@@ -71,6 +83,7 @@ module.exports = {
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                spinOnce: "spin 0.5s ease-out",
             },
         },
     },

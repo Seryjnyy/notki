@@ -6,6 +6,7 @@
   ],
   "private": true,
   "exports":{
+    "./tailwind.config": "./tailwind.config.js",
     "./main.css": "./src/main.css",
     "./components/*":"./src/components/*.tsx",
     "./lib/*": "./src/lib/*.ts",
