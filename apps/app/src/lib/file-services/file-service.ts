@@ -1,4 +1,4 @@
-import { guidGenerator } from "@repo/lib/metadata-utils";
+import { guidGenerator } from "@repo/lib/utils/metadata-utils";
 import {
     FileEntry,
     createDir,
