@@ -1,6 +1,6 @@
+import { invoke } from "@tauri-apps/api";
 import { readDir, readTextFile } from "@tauri-apps/api/fs";
 import { FileEntryWithMetadata, getMetadataForFileEntry } from "./file-service";
-import { Metadata } from "tauri-plugin-fs-extra-api";
 
 export const getAllFilesFolders = async (
     folderPath: string,
@@ -56,4 +56,8 @@ export const getTxtFilesWithAllDetail = async (
     await processEntries(validFiles);
 
     return txtFiles;
+};
+
+export const showInFileExplorer = (path: string) => {
+    invoke("show_in_explorer", { path });
 };
