@@ -6,5 +6,3 @@ export type UiState = {
     section: "note-manager" | "note-viewer" | "vault-manager";
     settings: boolean;
 };
-
-export type Vault = { id: string; path: string; name: string };

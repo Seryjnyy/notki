@@ -19,7 +19,7 @@ export const ResetButton = (props: ResetButtonProps) => {
                         <ResetIcon className="h-4 w-4 text-muted-foreground" />
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom">
                     <p>Reset</p>
                 </TooltipContent>
             </Tooltip>
