@@ -24,6 +24,7 @@ import { useWorkspaceConfig } from "./lib/workspace-store";
 import { StyleProvider } from "@repo/ui/providers/style-provider";
 import { Button } from "@repo/ui/components/ui/button";
 import MainPage from "./components/main-page-pc";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -87,11 +88,11 @@ function App() {
         <div>
             <StyleProvider />
 
-            <div className={` w-full h-screen flex flex-col  pt-7 `}>
+            <div className={` w-full  flex flex-col  pt-7 `}>
                 <Titlebar />
                 {/* <MinimalTitlebar /> */}
-                {uiState.section == "vault-manager" && <NewVault />}
-                {(uiState.section == "note-viewer" ||
+                {/* {uiState.section == "vault-manager" && <NewVault />} */}
+                {/* {(uiState.section == "note-viewer" ||
                     uiState.section == "note-manager") && (
                     <div className="h-screen overflow-hidden flex  ">
                         {uiState.sidebar && <Sidebar />}
@@ -100,7 +101,7 @@ function App() {
                             direction="horizontal"
                             className="w-full     "
                         >
-                            {/* {uiState.sideSection != "none" && (
+                            {uiState.sideSection != "none" && (
                                 <ResizablePanel
                                     minSize={28}
                                     id="file-explorer"
@@ -110,8 +111,8 @@ function App() {
                                         <FileExplorer />
                                     )}
                                 </ResizablePanel>
-                            )} */}
-                            {/* <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " /> */}
+                            )}
+                            <ResizableHandle className="hover:bg-primary transition-all border-none bg-transparent " />
 
                             <ResizablePanel
                                 className="bg-background border-l border-secondary"
@@ -125,17 +126,19 @@ function App() {
                                 )}
                                 {uiState.section == "note-viewer" && (
                                     <div className="w-full ">
-                                        <MainPage />
-                                        {/* <NoteViewer /> */}
+                                    <NoteViewer />
                                     </div>
-                                )}
-                            </ResizablePanel>
-                        </ResizablePanelGroup>
+                                    )}
+                                    </ResizablePanel>
+                                    </ResizablePanelGroup>
+                                    
+                                    <MainDialog />
+                                    </div>
+                                    )} */}
 
-                        <MainDialog />
-                    </div>
-                )}
-
+                <ScrollArea className="h-[calc(100vh-30px)]">
+                    <MainPage />
+                </ScrollArea>
                 <Toaster />
 
                 <CommandBox />
