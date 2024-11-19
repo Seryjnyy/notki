@@ -9,13 +9,12 @@ module.exports = {
     prefix: "",
     theme: {
         container: {
-            center: true,
+            center: "true",
             padding: "2rem",
             screens: {
                 "2xl": "1400px",
             },
         },
-
         extend: {
             fontFamily: {
                 robotoMono: "Roboto Mono",
@@ -31,7 +30,6 @@ module.exports = {
                 subAlt: "hsl(var(--sub-alt-color))",
                 text: "hsl(var(--text-color))",
                 error: "hsl(var(--error-color))",
-
                 border: "hsl(var(--sub-color)/0.4)",
                 input: "hsl(var(--sub-alt-color))",
                 ring: "hsl(var(--text-color))",
@@ -64,6 +62,28 @@ module.exports = {
                     DEFAULT: "hsl(var(--sub-alt-color))",
                     foreground: "hsl(var(--text-color))",
                 },
+
+                // sidebar: {
+                // 	DEFAULT: 'hsl(var(--sidebar-background))',
+                // 	foreground: 'hsl(var(--sidebar-foreground))',
+                // 	primary: 'hsl(var(--sidebar-primary))',
+                // 	'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+                // 	accent: 'hsl(var(--sidebar-accent))',
+                // 	'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+                // 	border: 'hsl(var(--sidebar-border))',
+                // 	ring: 'hsl(var(--sidebar-ring))'
+                // }
+
+                sidebar: {
+                    DEFAULT: "hsl(var(--sub-alt-color))",
+                    foreground: "hsl(var(--text-color))",
+                    primary: "hsl(var(--main-color))",
+                    "primary-foreground": "hsl(var(--bg-color))",
+                    accent: "hsl(var(--bg-color))",
+                    "accent-foreground": "hsl(var(--text-color))",
+                    border: "hsl(var(--sub-color)/0.4)",
+                    ring: "hsl(var(--text-color))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",
@@ -72,12 +92,20 @@ module.exports = {
             },
             keyframes: {
                 "accordion-down": {
-                    from: { height: "0" },
-                    to: { height: "var(--radix-accordion-content-height)" },
+                    from: {
+                        height: "0",
+                    },
+                    to: {
+                        height: "var(--radix-accordion-content-height)",
+                    },
                 },
                 "accordion-up": {
-                    from: { height: "var(--radix-accordion-content-height)" },
-                    to: { height: "0" },
+                    from: {
+                        height: "var(--radix-accordion-content-height)",
+                    },
+                    to: {
+                        height: "0",
+                    },
                 },
             },
             animation: {
