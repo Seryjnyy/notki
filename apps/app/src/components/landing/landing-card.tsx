@@ -8,7 +8,7 @@ const LandingCard = ({ children }: { children: ReactNode }) => {
     );
 };
 
-LandingCard.Title = ({
+const Title = ({
     children,
     secondary,
 }: {
@@ -23,12 +23,16 @@ LandingCard.Title = ({
     );
 };
 
-LandingCard.Content = ({ children }: { children: ReactNode }) => {
+const Content = ({ children }: { children: ReactNode }) => {
     return <div>{children}</div>;
 };
 
-LandingCard.Footer = ({ children }: { children: ReactNode }) => {
+const Footer = ({ children }: { children: ReactNode }) => {
     return <div>{children}</div>;
 };
+
+LandingCard.Title = Title;
+LandingCard.Content = Content;
+LandingCard.Footer = Footer;
 
 export default LandingCard;
