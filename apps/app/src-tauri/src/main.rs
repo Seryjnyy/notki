@@ -53,6 +53,59 @@ lazy_static! {
 //     Ok(())
 // }
 
+// TODO : currently opens the parent folder, idk if it should open inside it
+// TODO : unused Results, can be an error that is not handled, (other functions have ? at the end, unsure how to handle)
+// TODO : untested on other platforms
+// But works for now
+#[tauri::command]
+async fn show_in_explorer(path: String) {
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("explorer")
+            .args(["/select,", &path])
+            .spawn()
+            .map_err(|e| e.to_string());
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        Command::new("open")
+            .args(["-R", &path])
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        if let Ok(output) = Command::new("xdg-mime")
+            .args(["query", "default", "inode/directory"])
+            .output()
+        {
+            let desktop_file = String::from_utf8_lossy(&output.stdout);
+
+            if desktop_file.contains("nautilus") {
+                Command::new("nautilus")
+                    .args(["--select", &path])
+                    .spawn()
+                    .map_err(|e| e.to_string())?;
+            } else if desktop_file.contains("dolphin") {
+                Command::new("dolphin")
+                    .args(["--select", &path])
+                    .spawn()
+                    .map_err(|e| e.to_string())?;
+            } else {
+                // Fallback to just opening the containing folder
+                if let Some(parent) = std::path::Path::new(&path).parent() {
+                    Command::new("xdg-open")
+                        .arg(parent)
+                        .spawn()
+                        .map_err(|e| e.to_string())?;
+                }
+            }
+        }
+    }
+}
+
 use std::fs;
 
 use directories::ProjectDirs;
@@ -341,7 +394,8 @@ fn main() {
             set_current_workspace,
             get_config,
             add_vault,
-            test_write_file
+            test_write_file,
+            show_in_explorer
         ])
         .plugin(tauri_plugin_persisted_scope::init())
         .plugin(tauri_plugin_fs_extra::init())
