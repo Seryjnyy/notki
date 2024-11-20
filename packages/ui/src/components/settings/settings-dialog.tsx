@@ -1,3 +1,4 @@
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { FontFamilyIcon } from "@radix-ui/react-icons";
 import {
     AVAILABLE_SHORTCUTS,
@@ -5,7 +6,6 @@ import {
 } from "@repo/lib/stores/shortcuts-store";
 import { useStyleStore } from "@repo/lib/stores/style-store";
 import { TabButton } from "@repo/ui/components/settings/tab-button";
-import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -22,7 +22,9 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { useNavigationLock } from "@repo/ui/hooks/use-navigation-lock";
 import { cn } from "@repo/ui/lib/utils";
+import { atom, useAtom } from "jotai";
 import {
     LayoutPanelLeft,
     MenuIcon,
@@ -33,23 +35,42 @@ import {
     XIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { NavigationAwareDialog } from "../navigation-aware-components";
+import { useHotkeys } from "react-hotkeys-hook";
+import {
+    Dialog,
+    DialogDescription,
+    DialogHeader,
+} from "../ui/dialog-controlled";
 import { AppearanceTab } from "./appearance-tab/appearance-tab";
 import { CardTab } from "./card-tab/card-tab";
 import { DisplayTab } from "./display-tab/display-tab";
 import { FontSelect } from "./font-tab/font-tab";
 import ShortcutTab from "./shortcut-tab/shortcut-tab";
-import { DialogDescription, DialogHeader } from "../ui/dialog-controlled";
-import { DialogTitle } from "@radix-ui/react-dialog";
+
+const settingsDialogOpenAtom = atom(false);
+const useSettingsDialogOpen = () => {
+    const [open, setOpen] = useAtom(settingsDialogOpenAtom);
+    const { disableNavigation, enableNavigation } = useNavigationLock();
+
+    return [
+        open,
+        (newOpen: boolean) => {
+            if (newOpen) {
+                disableNavigation();
+            } else {
+                enableNavigation();
+            }
+            setOpen(newOpen);
+        },
+    ] as const;
+};
 
 export const SettingsDialog = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
 
     const borderRadius = useStyleStore.use.borderRadius();
     const setBorderRadius = useStyleStore.use.setBorderRadius();
-    const toggleSettingsShortcut = useShortcut(
-        AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
-    );
 
     const SETTINGS_TABS = useMemo(
         () => [
@@ -92,33 +113,7 @@ export const SettingsDialog = () => {
     const [currentTab, setCurrentTab] = useState(SETTINGS_TABS[0]!.label);
 
     return (
-        <NavigationAwareDialog>
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <ShortcutAwareDialogTrigger
-                            asChild
-                            shortcut={toggleSettingsShortcut}
-                        >
-                            <Button
-                                size={"icon"}
-                                variant="secondary"
-                                className="group gap-2 p-2"
-                            >
-                                <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
-                            </Button>
-                        </ShortcutAwareDialogTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                        <p>
-                            Settings
-                            <TooltipShortcutKeys
-                                shortcut={toggleSettingsShortcut}
-                            />
-                        </p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+        <Dialog open={settingsDialogOpen} onOpenChange={setSettingsDialogOpen}>
             <DialogContent className="flex h-[90vh] sm:h-3/4 flex-col sm:flex-row w-full max-w-5xl overflow-hidden">
                 <DialogHeader className="sr-only">
                     <DialogTitle>Settings</DialogTitle>
@@ -208,6 +203,56 @@ export const SettingsDialog = () => {
                     </ScrollArea>
                 </div>
             </DialogContent>
-        </NavigationAwareDialog>
+        </Dialog>
+    );
+};
+
+export const SettingsDialogHotkeyTrigger = () => {
+    const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
+    const toggleSettingsShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
+    );
+
+    useHotkeys(
+        toggleSettingsShortcut?.hotkeys.join(",") ?? "",
+        (e) => {
+            setSettingsDialogOpen(!settingsDialogOpen);
+        },
+        { enabled: toggleSettingsShortcut?.enabled ?? false }
+    );
+    return null;
+};
+
+export const SettingsDialogButtonTrigger = () => {
+    const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
+    const toggleSettingsShortcut = useShortcut(
+        AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
+    );
+
+    return (
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        size={"icon"}
+                        variant="secondary"
+                        className="group gap-2 p-2"
+                        onClick={() => {
+                            setSettingsDialogOpen(!settingsDialogOpen);
+                        }}
+                    >
+                        <SettingsIcon className="text-muted-foreground/60 transition-all group-hover:animate-spinOnce group-hover:text-accent-foreground" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                    <p>
+                        Settings
+                        <TooltipShortcutKeys
+                            shortcut={toggleSettingsShortcut}
+                        />
+                    </p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };

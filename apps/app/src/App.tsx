@@ -9,6 +9,10 @@ import FileSearchBox from "./components/ui/file-search-box";
 import { useUiState } from "./lib/ui-store";
 import { useWorkspaceConfig } from "./lib/workspace-store";
 
+import {
+    SettingsDialog,
+    SettingsDialogHotkeyTrigger,
+} from "@repo/ui/components/settings/settings-dialog";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import {
     SidebarInset,
@@ -138,6 +142,9 @@ function App() {
                             <MainPage />
                         </ScrollArea>
                     </SidebarInset>
+
+                    <SettingsDialog />
+                    <SettingsDialogHotkeyTrigger />
                 </SidebarProvider>
 
                 <Toaster />

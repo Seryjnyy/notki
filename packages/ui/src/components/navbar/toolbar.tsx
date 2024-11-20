@@ -1,6 +1,6 @@
+import { SettingsDialogButtonTrigger } from "@repo/ui/components/settings/settings-dialog";
 import CopyAllContent from "@repo/ui/components/ui/sections/tool-bar/copy-all-content";
 import ResetNotes from "@repo/ui/components/ui/sections/tool-bar/reset-notes";
-import { SettingsDialog } from "@repo/ui/components/settings/settings-dialog";
 
 import FileUploadDialog from "@repo/ui/components/file-upload-dialog";
 import FilterSortDialog from "@repo/ui/components/note-filter-sort/filter-sort-dialog";
@@ -32,7 +32,7 @@ export default function Toolbar({
                 </div>
 
                 <div className="ml-2">
-                    <SettingsDialog />
+                    <SettingsDialogButtonTrigger />
                 </div>
             </div>
         </div>
