@@ -1,8 +1,6 @@
 import React from "react";
 import { cn } from "~/lib/utils";
 
-interface FolderListItemProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 const Desc = ({
     children,
     className,
@@ -21,6 +19,8 @@ const Desc = ({
     );
 };
 
+Desc.displayName = "Desc";
+
 const Action = ({
     children,
     className,
@@ -36,20 +36,27 @@ const Action = ({
     );
 };
 
+Action.displayName = "Action";
+
 const Header = ({
     children,
     className,
     ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+}: React.HTMLAttributes<HTMLSpanElement>) => {
     return (
-        <div
-            className={cn("flex flex-col items-start col-span-5", className)}
+        <span
+            className={cn(
+                "text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1",
+                className
+            )}
             {...props}
         >
             {children}
-        </div>
+        </span>
     );
 };
+
+Header.displayName = "Header";
 
 const Title = ({
     children,
@@ -69,13 +76,22 @@ const Title = ({
     );
 };
 
-export default function FolderListItem({
-    children,
-    className,
-    ...props
-}: FolderListItemProps) {
+Title.displayName = "Title";
+
+interface FolderListItemComposition {
+    Header: typeof Header;
+    Title: typeof Title;
+    Desc: typeof Desc;
+    Action: typeof Action;
+}
+
+const FolderListItem = React.forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement>
+>(({ children, className, ...props }, ref) => {
     return (
         <div
+            ref={ref}
             className={cn(
                 "bg-secondary px-4 py-2 w-full rounded-[var(--radius)] grid grid-cols-6 cursor-pointer hover:brightness-150",
                 className
@@ -85,9 +101,16 @@ export default function FolderListItem({
             {children}
         </div>
     );
-}
+}) as React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>
+> &
+    FolderListItemComposition;
+
+FolderListItem.displayName = "FolderListItem";
 
 FolderListItem.Header = Header;
 FolderListItem.Title = Title;
 FolderListItem.Desc = Desc;
 FolderListItem.Action = Action;
+
+export default FolderListItem;
