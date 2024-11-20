@@ -4,16 +4,15 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { cn } from "@repo/ui/lib/utils";
 import { TOOLTIP_DELAY_DURATION } from "@repo/ui/config/tooltip.config";
 
-// TODO : Doesn't need to forward ref, provider doesn't take ref
-const TooltipProvider = React.forwardRef<
-    React.ElementRef<typeof TooltipPrimitive.Provider>,
-    React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>
->(({ delayDuration, ...props }) => (
+const TooltipProvider = ({
+    delayDuration,
+    ...props
+}: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>) => (
     <TooltipPrimitive.Provider
         {...props}
         delayDuration={delayDuration ?? TOOLTIP_DELAY_DURATION}
     />
-));
+);
 
 const Tooltip = TooltipPrimitive.Root;
 
