@@ -18,6 +18,8 @@ import { Vault as VaultType } from "~/lib/backend-types";
 import { getVaults } from "~/lib/vaults";
 import { Recent, useGetSortedRecents } from "~/stores/recents-store";
 // import { useSidebarViewStore } from "~/stores/sidebar-view-store";
+import { SearchCurrentViewForm } from "./search-form";
+import { CurrentViewSwitcher } from "./view-switcher";
 
 const RecentsList = ({ recents }: { recents: Recent[] }) => {
     return recents.map((item) => (
@@ -193,6 +195,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarCurrentViewProvider>
             <Sidebar {...props}>
                 <SidebarHeader>
+                    <CurrentViewSwitcher />
+                    <SearchCurrentViewForm />
                 </SidebarHeader>
 
                 <SidebarContent>
