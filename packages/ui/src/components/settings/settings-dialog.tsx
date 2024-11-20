@@ -39,6 +39,8 @@ import { CardTab } from "./card-tab/card-tab";
 import { DisplayTab } from "./display-tab/display-tab";
 import { FontSelect } from "./font-tab/font-tab";
 import ShortcutTab from "./shortcut-tab/shortcut-tab";
+import { DialogDescription, DialogHeader } from "../ui/dialog-controlled";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 export const SettingsDialog = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -118,6 +120,13 @@ export const SettingsDialog = () => {
                 </Tooltip>
             </TooltipProvider>
             <DialogContent className="flex h-[90vh] sm:h-3/4 flex-col sm:flex-row w-full max-w-5xl overflow-hidden">
+                <DialogHeader className="sr-only">
+                    <DialogTitle>Settings</DialogTitle>
+                    <DialogDescription>
+                        This is where you can change various aspects of the app.
+                    </DialogDescription>
+                </DialogHeader>
+
                 <div className="max-h-full w-fit hidden sm:block">
                     <h2 className="mb-4 text-2xl font-bold">Settings</h2>
                     <div className="flex w-[12rem] flex-col gap-2">
