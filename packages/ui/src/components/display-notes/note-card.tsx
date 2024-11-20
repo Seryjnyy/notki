@@ -159,8 +159,9 @@ export default function NoteCard({
     note: Note;
     onDelete?: (id: string) => void;
 }) {
+    // TODO : how bad is drop shadow for performance? with lots of notes open it could tank it
     return (
-        <Card className="p-0 rounded-[var(--radius)]">
+        <Card className="p-0 rounded-[var(--radius)] drop-shadow-xl">
             <Header note={note} onRemove={(note) => onDelete?.(note.id)} />
             <Content note={note} />
             <Footer note={note} />

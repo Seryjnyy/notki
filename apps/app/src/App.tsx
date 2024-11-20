@@ -1,37 +1,23 @@
-import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import { Toaster } from "@repo/ui/components/ui/toaster";
 import { useEffect } from "react";
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "~/components/ui/resizable";
-import MainDialog from "./components/main-dialog";
 
-import FileExplorer from "./components/ui/file-explorer";
-import Sidebar from "./components/ui/sidebar";
-import TabbedView from "./components/ui/tabbed-view";
 import Titlebar from "./components/ui/titlebar";
-import NewVault from "./components/ui/vault-manager";
 
 import { produce } from "immer";
-import NoteViewer from "./components/note-viewer";
 import CommandBox from "./components/ui/command-box";
 import FileSearchBox from "./components/ui/file-search-box";
 import { useUiState } from "./lib/ui-store";
 import { useWorkspaceConfig } from "./lib/workspace-store";
 
-import { StyleProvider } from "@repo/ui/providers/style-provider";
-import { Button } from "@repo/ui/components/ui/button";
-import MainPage from "./components/main-page-pc";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { AppSidebar } from "./components/sidebar/app-sidebar";
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
 } from "@repo/ui/components/ui/sidebar";
-import { Separator } from "@repo/ui/components/ui/separator";
+import { StyleProvider } from "@repo/ui/providers/style-provider";
+import MainPage from "./components/main-page-pc";
+import { AppSidebar } from "./components/sidebar/app-sidebar";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember

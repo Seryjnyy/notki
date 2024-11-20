@@ -102,14 +102,23 @@ export default function Titlebar() {
     return (
         <div
             data-tauri-drag-region
-            className="select-none h-[30px] flex justify-between fixed top-0 left-0 right-0 bg-secondary z-10 "
+            className="select-none h-[30px] grid grid-cols-3   w-full z-50 brightness-125"
         >
-            <div className="flex ">
-                <SidebarButton />
-                <AppSectionButtons />
+            <div className="flex mr-auto">
+                {/* <SidebarButton /> */}
+                {/* <AppSectionButtons /> */}
             </div>
 
             <div>
+                <div className="flex items-center justify-center flex-col text-primary  h-full text-xs">
+                    <span>Workspace</span>
+                    {/* <span>
+                        C:/Users/Documents/example/path/thenSome/thenThere/Thenhere
+                    </span> */}
+                </div>
+            </div>
+
+            <div className="ml-auto">
                 <WindowActionButton action={() => appWindow.minimize()}>
                     <MinusIcon className="" />
                 </WindowActionButton>
