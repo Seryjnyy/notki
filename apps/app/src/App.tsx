@@ -25,6 +25,13 @@ import { StyleProvider } from "@repo/ui/providers/style-provider";
 import { Button } from "@repo/ui/components/ui/button";
 import MainPage from "./components/main-page-pc";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { AppSidebar } from "./components/sidebar/app-sidebar";
+import {
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+} from "@repo/ui/components/ui/sidebar";
+import { Separator } from "@repo/ui/components/ui/separator";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -84,12 +91,10 @@ function App() {
     }, [workspace]);
 
     return (
-        // <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <div>
             <StyleProvider />
 
-            <div className={` w-full  flex flex-col  pt-7 `}>
-                <Titlebar />
+            <div className={` w-full  flex flex-col  `}>
                 {/* <MinimalTitlebar /> */}
                 {/* {uiState.section == "vault-manager" && <NewVault />} */}
                 {/* {(uiState.section == "note-viewer" ||
@@ -136,16 +141,25 @@ function App() {
                                     </div>
                                     )} */}
 
-                <ScrollArea className="h-[calc(100vh-30px)]">
-                    <MainPage />
-                </ScrollArea>
+                <SidebarProvider>
+                    <AppSidebar />
+                    <SidebarInset>
+                        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b   pl-4">
+                            <SidebarTrigger className="-ml-1" />
+                            <Titlebar />
+                        </header>
+                        <ScrollArea className="h-[calc(100vh-31px)]">
+                            <MainPage />
+                        </ScrollArea>
+                    </SidebarInset>
+                </SidebarProvider>
+
                 <Toaster />
 
                 <CommandBox />
                 <FileSearchBox />
             </div>
         </div>
-        // </ThemeProvider>
     );
 }
 
