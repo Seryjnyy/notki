@@ -28,7 +28,7 @@ const Action = ({
 }: React.HTMLAttributes<HTMLDivElement>) => {
     return (
         <div
-            className={cn("flex justify-end items-center ", className)}
+            className={cn("flex justify-end items-center py-2", className)}
             {...props}
         >
             {children}
@@ -44,15 +44,15 @@ const Header = ({
     ...props
 }: React.HTMLAttributes<HTMLSpanElement>) => {
     return (
-        <span
+        <button
             className={cn(
-                "text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1",
+                " col-span-5 text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] rounded-l-[var(--radius)] items-start gap-1 flex flex-col  pl-2 py-2",
                 className
             )}
             {...props}
         >
             {children}
-        </span>
+        </button>
     );
 };
 
@@ -66,7 +66,7 @@ const Title = ({
     return (
         <span
             className={cn(
-                "text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1",
+                "text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1  ",
                 className
             )}
             {...props}
@@ -93,7 +93,7 @@ const FolderListItem = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "bg-secondary px-4 py-2 w-full rounded-[var(--radius)] grid grid-cols-6 cursor-pointer hover:brightness-150",
+                "bg-secondary    w-full rounded-[var(--radius)] grid grid-cols-6 cursor-pointer hover:brightness-150 pr-2",
                 className
             )}
             {...props}
