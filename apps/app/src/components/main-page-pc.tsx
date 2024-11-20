@@ -5,13 +5,13 @@ import { cn } from "@repo/ui/lib/utils";
 import { ErrorBoundary } from "react-error-boundary";
 
 import NoteViewSwitch from "@repo/ui/components/display-notes/note-view-switch";
-import FixedBottomNavBar from "@repo/ui/components/navbar/fixed-bottom-bar";
 import SkipToNavLink from "@repo/ui/components/skip-to-nav-link";
 import SomethingWentWrong from "@repo/ui/components/something-went-wrong";
 import { useSidebar } from "@repo/ui/components/ui/sidebar";
 import { NoteListProvider } from "@repo/ui/providers/note-list-provider";
 import Recents from "./landing/recents";
 import Vaults from "./landing/vaults";
+import AbsoluteBottomNavBar from "./navbar/absolute-bottom-bar";
 
 export default function MainPage() {
     const { notes } = useNotes();
@@ -61,7 +61,7 @@ export default function MainPage() {
                             <div className="mb-40 sm:mb-16 ">
                                 <NoteViewSwitch />
                             </div>
-                            <FixedBottomNavBar />
+                            <AbsoluteBottomNavBar />
                         </NoteListProvider>
                     </ErrorBoundary>
                 </section>
