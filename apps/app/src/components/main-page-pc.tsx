@@ -8,6 +8,7 @@ import NoteViewSwitch from "@repo/ui/components/display-notes/note-view-switch";
 import FixedBottomNavBar from "@repo/ui/components/navbar/fixed-bottom-bar";
 import SkipToNavLink from "@repo/ui/components/skip-to-nav-link";
 import SomethingWentWrong from "@repo/ui/components/something-went-wrong";
+import { useSidebar } from "@repo/ui/components/ui/sidebar";
 import { NoteListProvider } from "@repo/ui/providers/note-list-provider";
 import Recents from "./landing/recents";
 import Vaults from "./landing/vaults";
@@ -15,6 +16,7 @@ import Vaults from "./landing/vaults";
 export default function MainPage() {
     const { notes } = useNotes();
     const hasNotes = notes.length > 0;
+    const { open: isSidebarOpen } = useSidebar();
 
     return (
         <main className="bg-background h-full overflow-hidden ">
@@ -45,7 +47,12 @@ export default function MainPage() {
 
             {hasNotes && (
                 <section className="w-full h-fit  pt-4 mt-4 ">
-                    <SkipToNavLink />
+                    <SkipToNavLink
+                        className={cn(
+                            "focus:top-12",
+                            isSidebarOpen && "focus:left-[18rem]"
+                        )}
+                    />
                     <h2 className="text-muted-foreground text-center text-sm">
                         YOUR NOTES
                     </h2>
