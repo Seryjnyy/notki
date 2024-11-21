@@ -9,9 +9,11 @@ export const useUploadNotesFromDirs = () => {
     return async ({
         dirs,
         recursive = false,
+        replace = false,
     }: {
         dirs: string[] | string;
         recursive?: boolean;
+        replace?: boolean;
     }) => {
         const paths = Array.isArray(dirs) ? dirs : [dirs];
 
@@ -28,7 +30,7 @@ export const useUploadNotesFromDirs = () => {
             characterCount: file.content.length,
         }));
 
-        uploadNotes(readInNotes);
+        uploadNotes(readInNotes, replace);
         return paths;
     };
 };

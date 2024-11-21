@@ -74,7 +74,7 @@ export default function FileUploadDialog() {
                         replace the existing notes.
                     </DialogDescription>
                 </DialogHeader>
-                <DropZone onSuccess={onUpload} />
+                <DropZone onSuccess={onUpload} replace={replace} />
                 <RadioGroup
                     value={replace ? "replace" : "add"}
                     onValueChange={(val) => {

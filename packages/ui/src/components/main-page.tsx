@@ -32,7 +32,7 @@ export default function MainPage() {
                             !hasNotes ? "h-[80vh]" : "h-[10rem]"
                         )}
                     >
-                        <DropZone />
+                        <DropZone replace />
                     </div>
 
                     <ThemeSwitcherList />

@@ -6,7 +6,13 @@ import { toast } from "@repo/ui/hooks/use-toast";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
+export default function DropZone({
+    onSuccess,
+    replace,
+}: {
+    onSuccess?: () => void;
+    replace?: boolean;
+}) {
     const uploadNotes = useUploadNotes();
 
     const onDrop = useCallback(
@@ -36,7 +42,7 @@ export default function DropZone({ onSuccess }: { onSuccess?: () => void }) {
                 });
             }
 
-            uploadNotes(readInNotes);
+            uploadNotes(readInNotes, replace);
             onSuccess?.();
         },
         [uploadNotes]

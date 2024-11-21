@@ -36,7 +36,7 @@ export default function MainPage() {
                     >
                         <Vaults />
 
-                        <DropZone />
+                        <DropZone replace />
 
                         <Recents />
                     </div>

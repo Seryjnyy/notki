@@ -1,19 +1,22 @@
 import { useCallback } from "react";
 import { useNoteStore } from "../stores/note-store";
-import { useUploadSettingsStore } from "../stores/upload-file-settings-store";
 import { Note } from "../types/types";
 
 export default function useUploadNotes() {
-    const replace = useUploadSettingsStore.use.replace();
     const setNotes = useNoteStore.use.setNotes();
     const notes = useNoteStore.use.notes();
 
+    // Replace comes now as a parameter instead of using the store, this way its more transparent on whats going to happen when this
+    // function is called
     return useCallback(
-        (newNotes: Note[]) => {
-            if (replace) {
+        (newNotes: Note[], replace?: boolean) => {
+            if (replace === true) {
                 setNotes([...newNotes]);
             } else {
-                // don't allow duplicate content
+                // TODO : currently this doesn't allow duplicate content
+                // Maybe it would be better to not allow the same filepath, might be faster too
+                // But currently filepath is not stored
+                // If less notes than expected were added it will be because their content was the same
                 const newNotesFiltered = newNotes.filter((note) => {
                     return !notes.some((n) => n.content === note.content);
                 });
@@ -23,6 +26,6 @@ export default function useUploadNotes() {
                 setNotes([...newNotesFiltered, ...notes]);
             }
         },
-        [replace, setNotes, notes]
+        [setNotes, notes]
     );
 }
