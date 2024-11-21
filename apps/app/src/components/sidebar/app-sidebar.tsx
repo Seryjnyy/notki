@@ -15,11 +15,11 @@ import {
 import { Clock, EllipsisVertical, Vault } from "lucide-react";
 import * as React from "react";
 import { Vault as VaultType } from "~/lib/backend-types";
-import { getVaults } from "~/lib/vaults";
 import { Recent, useGetSortedRecents } from "~/stores/recents-store";
 // import { useSidebarViewStore } from "~/stores/sidebar-view-store";
 import { SearchCurrentViewForm } from "./search-form";
 import { CurrentViewSwitcher } from "./view-switcher";
+import useVaults from "~/hooks/use-vaults";
 
 const RecentsList = ({ recents }: { recents: Recent[] }) => {
     return recents.map((item) => (
@@ -156,14 +156,7 @@ const SidebarGroupRecents = () => {
 
 const SidebarGroupVaults = () => {
     const { search } = useSidebarCurrentView();
-    const [vaults, setVaults] = React.useState<VaultType[]>([]);
-
-    React.useEffect(() => {
-        const setUp = async () => {
-            setVaults(await getVaults());
-        };
-        setUp();
-    }, []);
+    const { vaults } = useVaults();
 
     const filteredVaults = React.useMemo(() => {
         return vaults.filter((item) => {

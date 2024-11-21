@@ -6,19 +6,18 @@ import {
     DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { ArchiveIcon, EllipsisVertical, PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Vault } from "~/lib/backend-types";
-import { showInFileExplorer } from "~/lib/file-services/directory-service";
-import { getVaults } from "~/lib/vaults";
-import LandingCard from "./landing-card";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { ArchiveIcon, EllipsisVertical, PlusIcon } from "lucide-react";
+import { useState } from "react";
+import useVaults from "~/hooks/use-vaults";
+import { showInFileExplorer } from "~/lib/file-services/directory-service";
 import FolderListItem from "./folder-list-item";
+import LandingCard from "./landing-card";
 
 export default function Vaults() {
     return (
@@ -49,18 +48,11 @@ export default function Vaults() {
 }
 
 const ExistingVaultsList = () => {
-    const [vaults, setVaults] = useState<Vault[]>([]);
+    const { vaults } = useVaults();
     // TODO : slightly annoying tooltip :/
     // After using dropdown menu and closing it the tooltip stays open
     // showTooltip is used to stop it from showing when dropdown is open, but doesn't fix the above problem
     const [showTooltip, setShowTooltip] = useState(true);
-
-    useEffect(() => {
-        const setUp = async () => {
-            setVaults(await getVaults());
-        };
-        setUp();
-    }, []);
 
     const onOpenInFileExplorer = async (path: string) => {
         showInFileExplorer(path);
