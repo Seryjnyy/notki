@@ -1,13 +1,11 @@
 import { ResetButton } from "@repo/ui/components/settings/reset-button";
 import { Button } from "@repo/ui/components/ui/button";
-import { Checkbox } from "@repo/ui/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
-import { Label } from "@repo/ui/components/ui/label";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import {
     Tooltip,
@@ -15,25 +13,18 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { open } from "@tauri-apps/api/dialog";
-import {
-    ArchiveIcon,
-    DoorOpen,
-    EllipsisVertical,
-    Infinity,
-    Trash2,
-} from "lucide-react";
+import { ArchiveIcon, EllipsisVertical, Infinity, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs";
 import { showInFileExplorer } from "~/lib/file-services/directory-service";
-import { useOpenFolderSettingsStore } from "~/stores/open-folder-settings-store";
 import {
     Recent,
     useGetSortedRecents,
     useRecentsStore,
 } from "~/stores/recents-store";
-import LandingCard from "./landing-card";
 import FolderListItem from "./folder-list-item";
+import LandingCard from "./landing-card";
+import { OpenFolderButton, OpenFolderSettings } from "./open-folder";
 
 export default function Recents() {
     const clearRecents = useRecentsStore.use.clearRecents();
@@ -53,80 +44,19 @@ export default function Recents() {
                 </ScrollArea>
             </LandingCard.Content>
             <LandingCard.Footer>
-                <OpenFolder />
+                <div className="flex  flex-col">
+                    <div className="w-[10rem]">
+                        <OpenFolderButton />
+                    </div>
+
+                    <div className="flex pt-2">
+                        <OpenFolderSettings />
+                    </div>
+                </div>
             </LandingCard.Footer>
         </LandingCard>
     );
 }
-
-const OpenFolder = () => {
-    const { addRecent } = useRecentsStore();
-    const recursive = useOpenFolderSettingsStore.use.recursive();
-    const setRecursive = useOpenFolderSettingsStore.use.setRecursive();
-
-    const multiple = useOpenFolderSettingsStore.use.multiple();
-    const setMultiple = useOpenFolderSettingsStore.use.setMultiple();
-
-    const uploadNotesFromDirs = useUploadNotesFromDirs();
-
-    const onBrowse = async () => {
-        const selected = await open({
-            directory: true,
-            multiple: multiple,
-            recursive: recursive,
-        });
-
-        if (selected === null) {
-            console.error("Nothing selected.");
-            return;
-        }
-
-        const paths = Array.isArray(selected) ? selected : [selected];
-
-        await uploadNotesFromDirs({
-            dirs: paths,
-            recursive,
-        });
-
-        paths.forEach((path) => addRecent(path, recursive));
-    };
-
-    // TODO : needs loader, spinner maybe
-    return (
-        <div className="flex  flex-col">
-            <div className="w-[10rem]">
-                <Button onClick={() => onBrowse()}>
-                    <DoorOpen /> Open folder{multiple ? "s" : ""}
-                </Button>
-            </div>
-
-            <div className="flex pt-2">
-                <div className="flex items-center gap-2 px-2 ">
-                    <Checkbox
-                        checked={recursive}
-                        onCheckedChange={(val) => {
-                            if (typeof val == "boolean") setRecursive(val);
-                        }}
-                    />
-                    <Label className="text-muted-foreground text-xs">
-                        Recursive
-                    </Label>
-                </div>
-                <div className="flex items-center gap-2 px-2">
-                    <Checkbox
-                        checked={multiple}
-                        onCheckedChange={(val) => {
-                            if (typeof val == "boolean") setMultiple(val);
-                        }}
-                    />
-                    <Label className="text-muted-foreground text-xs">
-                        Multiple
-                    </Label>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 // TODO : not sure about permissions here ibh, this might only work during a session, then will need to allow again
 // unless reads are find, but i doubt it. Last resort can be the tauri persisted permission thingy
