@@ -45,7 +45,7 @@ export default function DropZone({
             uploadNotes(readInNotes, replace);
             onSuccess?.();
         },
-        [uploadNotes]
+        [uploadNotes, replace]
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
