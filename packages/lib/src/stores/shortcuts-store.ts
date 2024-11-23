@@ -2,6 +2,11 @@ import { createSelectors } from "@repo/lib/utils/create-zustand-selectors";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { formatLocalStorageKey } from "../utils/local-storage";
+import { useMemo } from "react";
+
+// TODO : this is not an ideal approach ibr, www will get pc related shortcuts
+export const PC_APP_EXCLUSIVE_SHORTCUTS = {
+};
 
 export const AVAILABLE_SHORTCUTS = {
     NEXT_NOTE: "next-note",
@@ -13,6 +18,7 @@ export const AVAILABLE_SHORTCUTS = {
     TOGGLE_NOTE_MAP: "toggle-note-map",
     COPY_ALL_CONTENT: "copy-all-content",
     TOGGLE_SETTINGS: "toggle-settings",
+    ...PC_APP_EXCLUSIVE_SHORTCUTS,
 } as const;
 
 type AvailableShortcut =
@@ -27,11 +33,13 @@ export type Shortcut = {
 };
 
 type State = {
-    shortcuts: Shortcut[];
+    sharedShortcuts: Shortcut[];
+    pcExclusiveShortcuts: Shortcut[];
 };
 
+// TODO : naming needs to be uniform
 const defaults: State = {
-    shortcuts: [
+    sharedShortcuts: [
         {
             hotkeys: ["down", "right"],
             defaultHotkeys: ["down", "right"],
@@ -96,6 +104,8 @@ const defaults: State = {
             enabled: true,
         },
     ],
+    pcExclusiveShortcuts: [
+    ],
 };
 
 interface Actions {
@@ -103,31 +113,61 @@ interface Actions {
     reset: () => void;
 }
 
+const toggleShortcutEnabledHelper = (
+    shortcuts: Shortcut[],
+    index: number,
+    enabled?: boolean
+): Shortcut[] => {
+    const newShortcuts = [...shortcuts];
+    const shortcut = newShortcuts[index];
+    if (!shortcut) return shortcuts;
+
+    newShortcuts[index] = {
+        ...shortcut,
+        enabled: enabled ?? !shortcut.enabled,
+    };
+    return newShortcuts;
+};
+
 const useShortcutsStoreBase = create<State & Actions>()(
     persist(
         (set) => ({
             ...defaults,
             toggleShortcut: (id, enabled) => {
                 set((state) => {
-                    const actionIndex = state.shortcuts.findIndex(
+                    const actionIndex = state.sharedShortcuts.findIndex(
                         (a) => a.id === id
                     );
-                    if (actionIndex === -1) return state;
 
-                    const newActions = [...state.shortcuts];
-                    if (enabled !== undefined) {
-                        newActions[actionIndex] = {
-                            ...newActions[actionIndex],
-                            enabled: enabled,
-                        };
+                    // This first looks in standard shortcuts, if not found, it looks in pc exclusive shortcuts
+                    // If not found in pc exclusive shortcuts, it returns the state as is
+                    // but if found in either it creates the updated array for either shortcut list and then updates it
+                    if (actionIndex === -1) {
+                        const pcActionIndex =
+                            state.pcExclusiveShortcuts.findIndex(
+                                (a) => a.id === id
+                            );
+
+                        if (pcActionIndex === -1) {
+                            return state;
+                        }
+
+                        const newActions = toggleShortcutEnabledHelper(
+                            state.pcExclusiveShortcuts,
+                            pcActionIndex,
+                            enabled
+                        );
+
+                        return { pcExclusiveShortcuts: newActions };
                     } else {
-                        newActions[actionIndex] = {
-                            ...newActions[actionIndex],
-                            enabled: !newActions[actionIndex].enabled,
-                        };
-                    }
+                        const newActions = toggleShortcutEnabledHelper(
+                            state.sharedShortcuts,
+                            actionIndex,
+                            enabled
+                        );
 
-                    return { shortcuts: newActions };
+                        return { sharedShortcuts: newActions };
+                    }
                 });
             },
             reset: () => set(defaults),
@@ -141,7 +181,13 @@ const useShortcutsStoreBase = create<State & Actions>()(
 
 // TODO : could maybe be more efficient, but its okay for now
 export const useShortcut = (id: AvailableShortcut) => {
-    return useShortcutsStore.use.shortcuts().find((a) => a.id === id);
+    const shared = useShortcutsStore.use.sharedShortcuts();
+    const pcExclusive = useShortcutsStore.use.pcExclusiveShortcuts();
+    const all = useMemo(
+        () => [...shared, ...pcExclusive],
+        [shared, pcExclusive]
+    );
+    return all.find((a) => a.id === id);
 };
 
 const useShortcutsStore = createSelectors(useShortcutsStoreBase);
