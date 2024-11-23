@@ -27,8 +27,15 @@ export default function NoteNav() {
     const nextNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.NEXT_NOTE);
     const previousNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.PREVIOUS_NOTE);
 
+    useEffect(() => {
+        // Sync with notes, in case length changes and activeIndex is out of bounds
+        if (notes.length <= activeIndex) {
+            setActiveIndex(notes.length - 1);
+        }
+    }, [notes]);
+
     const scrollToItem = (index: number) => {
-        const ref = itemsRef.current?.get(notes[index].id);
+        const ref = itemsRef.current?.get(notes[index]?.id ?? "");
 
         ref?.current?.scrollIntoView({ block: "center" });
     };
@@ -83,7 +90,7 @@ export default function NoteNav() {
         setActiveIndex(index);
     };
 
-    // Bit hacky, but useEffect is for syncing right???
+    // Bit hacky, but useEffect is for syncing right??? (with external state, but this is internal, so idk anymore)
     useEffect(() => {
         setIntermediateActiveIndex(activeIndex);
     }, [activeIndex]);
