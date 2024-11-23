@@ -6,13 +6,14 @@ import {
     SettingsDialog,
     SettingsDialogHotkeyTrigger,
 } from "@repo/ui/components/settings/settings-dialog";
+import { SETTINGS_TABS } from "@repo/ui/components/settings/setting-tabs";
 
 function App() {
     return (
         <>
             <StyleProvider />
             <MainPage />
-            <SettingsDialog />
+            <SettingsDialog settingTabs={SETTINGS_TABS} />
             <SettingsDialogHotkeyTrigger />
             <Toaster />
         </>

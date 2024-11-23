@@ -65,52 +65,19 @@ const useSettingsDialogOpen = () => {
     ] as const;
 };
 
-export const SettingsDialog = () => {
+export const SettingsDialog = ({
+    settingTabs,
+}: {
+    settingTabs: {
+        label: string;
+        icon: JSX.Element;
+        comp: JSX.Element;
+    }[];
+}) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
-
-    const borderRadius = useStyleStore.use.borderRadius();
-    const setBorderRadius = useStyleStore.use.setBorderRadius();
-
-    const SETTINGS_TABS = useMemo(
-        () => [
-            {
-                label: "Font",
-                icon: (
-                    <FontFamilyIcon className="rounded-sm border border-foreground/10" />
-                ),
-                comp: <FontSelect />,
-            },
-
-            {
-                label: "Appearance",
-                icon: <PaintbrushIcon className="h-4 w-4" />,
-                comp: (
-                    <AppearanceTab
-                        setBorderRadius={setBorderRadius}
-                        borderRadius={borderRadius}
-                    />
-                ),
-            },
-            {
-                label: "Card",
-                icon: <NotebookText className="h-4 w-4" />,
-                comp: <CardTab />,
-            },
-            {
-                label: "Display",
-                icon: <LayoutPanelLeft className="h-4 w-4" />,
-                comp: <DisplayTab />,
-            },
-            {
-                label: "Shortcuts",
-                icon: <Scissors className="h-4 w-4" />,
-                comp: <ShortcutTab />,
-            },
-        ],
-        [borderRadius, setBorderRadius]
-    );
-    const [currentTab, setCurrentTab] = useState(SETTINGS_TABS[0]!.label);
+    // Problem when 0 tabs, but shouldn't happen
+    const [currentTab, setCurrentTab] = useState(settingTabs[0]!.label);
 
     return (
         <Dialog open={settingsDialogOpen} onOpenChange={setSettingsDialogOpen}>
@@ -125,7 +92,7 @@ export const SettingsDialog = () => {
                 <div className="max-h-full w-fit hidden sm:block">
                     <h2 className="mb-4 text-2xl font-bold">Settings</h2>
                     <div className="flex w-[12rem] flex-col gap-2">
-                        {SETTINGS_TABS.map((tab) => (
+                        {settingTabs.map((tab) => (
                             <TabButton
                                 key={tab.label}
                                 label={tab.label}
@@ -169,7 +136,7 @@ export const SettingsDialog = () => {
                     </TooltipProvider>
                     <CollapsibleContent className="pb-2">
                         <div className="flex flex-wrap gap-1">
-                            {SETTINGS_TABS.map((tab) => (
+                            {settingTabs.map((tab) => (
                                 <TabButton
                                     key={tab.label}
                                     label={tab.label}
@@ -192,7 +159,7 @@ export const SettingsDialog = () => {
                             orientation="vertical"
                             defaultValue="font"
                         >
-                            {SETTINGS_TABS.map(({ label, comp }) => {
+                            {settingTabs.map(({ label, comp }) => {
                                 return (
                                     <TabsContent key={label} value={label}>
                                         {comp}
