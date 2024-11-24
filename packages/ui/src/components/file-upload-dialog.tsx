@@ -13,7 +13,6 @@ import {
     DialogTitle,
 } from "@repo/ui/components/ui/dialog";
 import { Label } from "@repo/ui/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
 import DropZone from "@repo/ui/components/ui/sections/drop-zone";
 import {
     Tooltip,
@@ -21,16 +20,22 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
-import { Upload } from "lucide-react";
-import { useState } from "react";
 import { useNavigationLock } from "@repo/ui/hooks/use-navigation-lock";
+import { Upload } from "lucide-react";
+import { useMemo, useState } from "react";
 import { NavigationAwareDialog } from "./navigation-aware-components";
+import { RadioCard, RadioCardTitle } from "./ui/radio-card";
 
 export default function FileUploadDialog() {
     const [open, setOpen] = useState(false);
     const { enableNavigation } = useNavigationLock();
+
     const setReplace = useUploadSettingsStore.use.setReplace();
     const replace = useUploadSettingsStore.use.replace();
+
+    const addByOptions = ["add", "replace"] as const;
+    const addBy = useMemo(() => (replace ? "replace" : "add"), [replace]);
+
     const toggleFileUploadDialogShortcut = useShortcut(
         AVAILABLE_SHORTCUTS.TOGGLE_UPLOAD
     );
@@ -75,22 +80,29 @@ export default function FileUploadDialog() {
                     </DialogDescription>
                 </DialogHeader>
                 <DropZone onSuccess={onUpload} replace={replace} />
-                <RadioGroup
-                    value={replace ? "replace" : "add"}
-                    onValueChange={(val) => {
-                        setReplace(val === "replace");
-                    }}
-                    className="flex"
-                >
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="add" id="option-add" />
-                        <Label>Add</Label>
+                <div className="space-y-2">
+                    <Label>Add notes by</Label>
+
+                    <div className="grid grid-cols-2 gap-2">
+                        {addByOptions.map((option) => (
+                            <RadioCard
+                                isActive={addBy == option}
+                                onClick={() => {
+                                    if (option === "replace") {
+                                        setReplace(true);
+                                    } else {
+                                        setReplace(false);
+                                    }
+                                }}
+                                key={option}
+                            >
+                                <RadioCardTitle className="capitalize">
+                                    {option}
+                                </RadioCardTitle>
+                            </RadioCard>
+                        ))}
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="replace" id="option-replace" />
-                        <Label>Replace</Label>
-                    </div>
-                </RadioGroup>
+                </div>
             </DialogContent>
         </NavigationAwareDialog>
     );
