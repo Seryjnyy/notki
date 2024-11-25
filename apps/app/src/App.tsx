@@ -18,6 +18,9 @@ import { StyleProvider } from "@repo/ui/providers/style-provider";
 import MainPage from "./components/main-page-pc";
 import { AppSidebar } from "./components/sidebar/app-sidebar";
 import AppSidebarTrigger from "./components/sidebar/app-sidebar-trigger";
+import ManageVaultsDialog, {
+    ManageVaultsDialogShortcut,
+} from "./components/vault-manager/manage-vaults-dialog";
 import OpenFolderDialog, {
     OpenFolderDialogShortcut,
 } from "./components/sidebar/open-folder-dialog";
@@ -163,6 +166,8 @@ function App() {
 
                     <SettingsDialog settingTabs={interceptedSettingTabs} />
                     <SettingsDialogHotkeyTrigger />
+                    <ManageVaultsDialog />
+                    <ManageVaultsDialogShortcut />
                     <OpenFolderDialog />
                     <OpenFolderDialogShortcut />
                 </SidebarProvider>

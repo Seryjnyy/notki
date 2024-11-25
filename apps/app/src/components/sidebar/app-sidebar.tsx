@@ -19,6 +19,7 @@ import { Recent, useGetSortedRecents } from "~/stores/recents-store";
 // import { useSidebarViewStore } from "~/stores/sidebar-view-store";
 import { SearchCurrentViewForm } from "./search-form";
 import { CurrentViewSwitcher } from "./view-switcher";
+import { ManageVaultsDialogTrigger } from "../vault-manager/manage-vaults-dialog";
 import AppSidebarShortcut from "./app-sidebar-shortcut";
 import { OpenFolderDialogTrigger } from "./open-folder-dialog";
 
@@ -145,7 +146,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarContent>
 
                 <SidebarFooter>
-                    <Button>Open folder</Button>
+                    <OpenFolderDialogTrigger />
+                    <ManageVaultsDialogTrigger />
                 </SidebarFooter>
                 <SidebarRail />
             </Sidebar>
