@@ -1,6 +1,6 @@
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
 import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
@@ -36,7 +36,7 @@ export default function FileUploadDialog() {
     const addByOptions = ["add", "replace"] as const;
     const addBy = useMemo(() => (replace ? "replace" : "add"), [replace]);
 
-    const toggleFileUploadDialogShortcut = useShortcut(
+    const toggleFileUploadDialogShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_UPLOAD
     );
 

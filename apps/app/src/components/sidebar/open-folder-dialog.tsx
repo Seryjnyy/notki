@@ -1,6 +1,6 @@
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
 import { NavigationAwareDialog } from "@repo/ui/components/navigation-aware-components";
@@ -33,7 +33,7 @@ export default function OpenFolderDialog() {
     const replace = useUploadSettingsStore.use.replace();
     // const [addBy, setAddBy] = useState<AddBy>("replace");
 
-    const toggleOpenFolderShortcut = useShortcut(
+    const toggleOpenFolderShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_OPEN_FOLDER
     );
 

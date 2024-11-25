@@ -189,7 +189,7 @@ const useShortcutsStoreBase = create<State & Actions>()(
 
 // TODO : could maybe be more efficient, but its okay for now
 // TODO : should things be separate, have a hook for standard shortcuts and pc exclusive shortcuts?
-export const useShortcut = (id: AvailableShortcut) => {
+export const useShortcutInfo = (id: AvailableShortcut) => {
     const shared = useShortcutsStore.use.sharedShortcuts();
     const pcExclusive = useShortcutsStore.use.pcExclusiveShortcuts();
     const all = useMemo(

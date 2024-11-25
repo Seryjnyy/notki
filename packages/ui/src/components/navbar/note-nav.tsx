@@ -1,6 +1,6 @@
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
@@ -24,8 +24,10 @@ export default function NoteNav() {
 
     const { isNavigationEnabled } = useNavigationLock();
 
-    const nextNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.NEXT_NOTE);
-    const previousNoteShortcut = useShortcut(AVAILABLE_SHORTCUTS.PREVIOUS_NOTE);
+    const nextNoteShortcut = useShortcutInfo(AVAILABLE_SHORTCUTS.NEXT_NOTE);
+    const previousNoteShortcut = useShortcutInfo(
+        AVAILABLE_SHORTCUTS.PREVIOUS_NOTE
+    );
 
     useEffect(() => {
         // Sync with notes, in case length changes and activeIndex is out of bounds

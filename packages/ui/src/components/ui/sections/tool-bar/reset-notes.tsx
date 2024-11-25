@@ -1,6 +1,6 @@
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { Button } from "../../button";
 import {
@@ -18,7 +18,7 @@ import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-k
 export default function ResetNotes() {
     const setNotes = useNoteStore((state) => state.setNotes);
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const resetNotesShortcut = useShortcut(AVAILABLE_SHORTCUTS.RESTART);
+    const resetNotesShortcut = useShortcutInfo(AVAILABLE_SHORTCUTS.RESTART);
 
     useHotkeys(
         resetNotesShortcut?.hotkeys.join(",") ?? "",

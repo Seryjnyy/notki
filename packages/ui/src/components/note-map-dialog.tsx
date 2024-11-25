@@ -18,7 +18,7 @@ import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useFilteredNotes } from "@repo/lib/stores/note-store";
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
@@ -96,7 +96,7 @@ const NoteMap = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
-    const toggleNoteMapShortcut = useShortcut(
+    const toggleNoteMapShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_NOTE_MAP
     );
 

@@ -10,7 +10,7 @@ import { CopyButton } from "@repo/ui/components/copy-button";
 import { useMemo, useRef } from "react";
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useHotkeys } from "react-hotkeys-hook";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
@@ -18,7 +18,7 @@ import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-k
 export default function CopyAllContent() {
     const notes = useNoteStore.use.notes();
     const copyButtonRef = useRef<HTMLButtonElement>(null);
-    const copyAllContentShortcut = useShortcut(
+    const copyAllContentShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.COPY_ALL_CONTENT
     );
 

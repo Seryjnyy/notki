@@ -1,6 +1,6 @@
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useSidebar } from "@repo/ui/components/ui/sidebar";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -11,7 +11,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 // registered only once. This could lead to multiple event listeners being registered for the same shortcut.
 export default function AppSidebarShortcut() {
     const { toggleSidebar } = useSidebar();
-    const toggleSidebarShortcut = useShortcut(
+    const toggleSidebarShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_SIDEBAR
     );
 

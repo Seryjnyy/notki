@@ -5,7 +5,7 @@ import {
 } from "@repo/lib/stores/note-store";
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import { Button } from "@repo/ui/components/ui/button";
@@ -66,7 +66,7 @@ export default function SearchDialog() {
     const filter = useNoteFilterStore.use.filter();
     const setFilter = useNoteFilterStore.use.setFilter();
     const filteredNotes = useFilteredNotes();
-    const toggleSearchDialogShortcut = useShortcut(
+    const toggleSearchDialogShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_SEARCH
     );
 

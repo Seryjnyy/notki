@@ -2,7 +2,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { FontFamilyIcon } from "@radix-ui/react-icons";
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useStyleStore } from "@repo/lib/stores/style-store";
 import { TabButton } from "@repo/ui/components/settings/tab-button";
@@ -176,7 +176,7 @@ export const SettingsDialog = ({
 
 export const SettingsDialogHotkeyTrigger = () => {
     const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
-    const toggleSettingsShortcut = useShortcut(
+    const toggleSettingsShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
     );
 
@@ -192,7 +192,7 @@ export const SettingsDialogHotkeyTrigger = () => {
 
 export const SettingsDialogButtonTrigger = () => {
     const [settingsDialogOpen, setSettingsDialogOpen] = useSettingsDialogOpen();
-    const toggleSettingsShortcut = useShortcut(
+    const toggleSettingsShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_SETTINGS
     );
 

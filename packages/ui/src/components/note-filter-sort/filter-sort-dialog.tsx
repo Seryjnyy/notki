@@ -5,7 +5,7 @@ import {
 } from "@repo/lib/stores/note-store";
 import {
     AVAILABLE_SHORTCUTS,
-    useShortcut,
+    useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { NavigationAwareDialog } from "@repo/ui/components/navigation-aware-components";
 import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
@@ -98,7 +98,7 @@ const SortBy = () => {
 
 export default function FilterSortDialog() {
     const sortBy = useNoteFilterStore.use.sortBy();
-    const toggleFilterSortDialogShortcut = useShortcut(
+    const toggleFilterSortDialogShortcut = useShortcutInfo(
         AVAILABLE_SHORTCUTS.TOGGLE_FILTER
     );
 
