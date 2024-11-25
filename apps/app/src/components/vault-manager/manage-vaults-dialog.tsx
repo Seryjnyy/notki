@@ -54,6 +54,7 @@ import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import useVaults from "~/hooks/use-vaults";
 import { Vault } from "~/lib/backend-types";
+import { CreateVaultForm } from "./create-vault-form";
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false);
@@ -230,7 +231,9 @@ export default function ManageVaultsDialog() {
                                     <div className="w-full justify-center flex pt-12">
                                         <VaultIcon className="size-20" />
                                     </div>
-                                    <div className="px-10"></div>
+                                    <div className="px-10">
+                                        <CreateVaultForm />
+                                    </div>
                                 </div>
                             ) : (
                                 <VaultTab
