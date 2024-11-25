@@ -5,15 +5,10 @@ import { Config, Vault } from "./backend-types";
 // TODO : Fetching entire config then getting vaults, not great
 export const getVaults = async (): Promise<Vault[]> => {
     try {
-        // const res = (await invoke("get_existing_vaults")) as {
-        //     vaults: Vault[];
-        // };
-        // TODO : Should validate JSON here
-        // TODO : Could get types from rust with things like io-ts
+        // TODO : Should maybe validate JSON here
         const res = (await invoke("get_config")) as Config;
         const vaults = res.vaults;
-        console.log(vaults);
-        // invoke("see_allowed");
+
         return vaults;
     } catch (err) {
         console.error("Failed to read get vaults", err);
@@ -24,8 +19,15 @@ export const getVaults = async (): Promise<Vault[]> => {
 export const addVault = async (
     name: string,
     filepath: string
-): Promise<boolean> => {
+): Promise<{ error: string | null }> => {
     // TODO : add_vault in rust should return true/false if succeeded
+    const vaults = await getVaults();
+
+    if (vaults.some((vault) => vault.filepath === filepath)) {
+        console.error("Vault already exists at this location, ", filepath);
+        return { error: "Vault already exists" };
+    }
+
     await invoke("add_vault", { name: name, filepath: filepath });
-    return true;
+    return { error: null };
 };
