@@ -98,6 +98,8 @@ export const ThemeSwitcherList = () => {
         return () => clearTimeout(timeout);
     }, [focusedStyle]);
 
+    // TODO :  This hijacks the arrow keys so note navigation is not triggered by arrow key navigation of notes
+    // So not sure if this needs NavigationAwareDialog
     return (
         <Dialog
             onOpenChange={(open) => {

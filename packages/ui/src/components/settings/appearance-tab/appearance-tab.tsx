@@ -7,13 +7,9 @@ import {
 import { Setting } from "../setting";
 import { ThemeSwitcher } from "./theme-switcher";
 
-export const AppearanceTab = ({
-    setBorderRadius,
-    borderRadius,
-}: {
-    setBorderRadius: (radius: number) => void;
-    borderRadius: number;
-}) => {
+export const AppearanceTab = () => {
+    const borderRadius = useStyleStore.use.borderRadius();
+    const setBorderRadius = useStyleStore.use.setBorderRadius();
     const reset = useStyleStore.use.reset();
 
     return (

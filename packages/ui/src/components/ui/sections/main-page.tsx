@@ -6,6 +6,7 @@ import { Button } from "../button";
 import DropZone from "./drop-zone";
 import Notes from "./notes";
 
+// TODO : Deprecated, remove
 export default function MainPage() {
     const onResetPreferences = () => {
         removePreferences();

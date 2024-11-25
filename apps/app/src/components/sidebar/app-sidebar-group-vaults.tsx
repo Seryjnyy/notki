@@ -178,7 +178,11 @@ const VaultItem = ({ item }: { item: VaultType }) => {
                                                     className="flex items-center gap-2"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
+                                                        console.error(
+                                                            "Not implemented"
+                                                        );
                                                     }}
+                                                    disabled
                                                 >
                                                     <FolderCog2 className="size-4" />
                                                     <span>Manage vault</span>
