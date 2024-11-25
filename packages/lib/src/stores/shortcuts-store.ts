@@ -7,6 +7,8 @@ import { useMemo } from "react";
 // TODO : this is not an ideal approach ibr, www will get pc related shortcuts
 export const PC_APP_EXCLUSIVE_SHORTCUTS = {
     TOGGLE_SIDEBAR: "toggle-sidebar",
+    TOGGLE_OPEN_FOLDER: "toggle-open-folder",
+    TOGGLE_OPEN_MANAGE_VAULTS: "toggle-open-manage-vaults",
 };
 
 export const AVAILABLE_SHORTCUTS = {
@@ -111,6 +113,20 @@ const defaults: State = {
             defaultHotkeys: ["t"],
             id: AVAILABLE_SHORTCUTS.TOGGLE_SIDEBAR,
             label: "Toggle sidebar",
+            enabled: true,
+        },
+        {
+            hotkeys: ["o"],
+            defaultHotkeys: ["o"],
+            id: AVAILABLE_SHORTCUTS.TOGGLE_OPEN_FOLDER,
+            label: "Toggle open folder",
+            enabled: true,
+        },
+        {
+            hotkeys: ["v"],
+            defaultHotkeys: ["v"],
+            id: AVAILABLE_SHORTCUTS.TOGGLE_OPEN_MANAGE_VAULTS,
+            label: "Toggle open manage vaults",
             enabled: true,
         },
     ],
