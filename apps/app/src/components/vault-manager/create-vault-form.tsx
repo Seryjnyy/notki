@@ -122,6 +122,9 @@ export const CreateVaultForm = () => {
                                         )}
                                     </FormDescription>
                                 </div>
+                      <span className="text-sm text-primary max-w-[15rem] overflow-x-auto">
+                        {form.getValues("location")}
+                      </span>
 
                                 <FormControl>
                                     <Button
