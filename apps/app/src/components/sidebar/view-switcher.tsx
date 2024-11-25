@@ -12,6 +12,7 @@ import {
     SidebarMenuItem,
 } from "@repo/ui/components/ui/sidebar";
 import { useSidebarCurrentView } from "./app-sidebar";
+import { NavigationAwareDropdownMenu } from "@repo/ui/components/navigation-aware-components";
 
 export function CurrentViewSwitcher() {
     const { currentView, setCurrentView, availableViews } =
@@ -20,7 +21,7 @@ export function CurrentViewSwitcher() {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <DropdownMenu>
+                <NavigationAwareDropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
@@ -58,7 +59,7 @@ export function CurrentViewSwitcher() {
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuContent>
-                </DropdownMenu>
+                </NavigationAwareDropdownMenu>
             </SidebarMenuItem>
         </SidebarMenu>
     );
