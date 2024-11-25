@@ -22,19 +22,11 @@ import LandingCard from "./landing-card";
 export default function Vaults() {
     return (
         <LandingCard>
-            <LandingCard.Title
-                secondary={
-                    <Button size={"icon"} variant={"ghost"}>
-                        <EllipsisVertical className="size-4" />
-                    </Button>
-                }
-            >
-                Existing txt files
-            </LandingCard.Title>
+            <LandingCard.Title>Vaults</LandingCard.Title>
             <LandingCard.Content>
                 <ScrollArea className="h-[calc(100vh-18rem)] pr-3 ">
                     <ul className="pt-4 flex flex-col gap-2">
-                        <ExistingVaultsList />
+                        <VaultsList />
                     </ul>
                 </ScrollArea>
             </LandingCard.Content>
@@ -47,7 +39,7 @@ export default function Vaults() {
     );
 }
 
-const ExistingVaultsList = () => {
+const VaultsList = () => {
     const { vaults } = useVaults();
     // TODO : slightly annoying tooltip :/
     // After using dropdown menu and closing it the tooltip stays open
@@ -70,7 +62,6 @@ const ExistingVaultsList = () => {
                                 </FolderListItem.Title>
                                 <FolderListItem.Desc>
                                     {vault.filepath}
-                                    oub
                                 </FolderListItem.Desc>
                             </FolderListItem.Header>
 

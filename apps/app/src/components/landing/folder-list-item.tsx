@@ -46,7 +46,7 @@ const Header = ({
     return (
         <button
             className={cn(
-                " col-span-5 text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] rounded-l-[var(--radius)] items-start gap-1 flex flex-col  pl-2 py-2",
+                " col-span-5 text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] rounded-l-[var(--radius)] items-start gap-1 flex flex-col  pl-3 py-2",
                 className
             )}
             {...props}

@@ -91,10 +91,10 @@ const RecentsList = () => {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <FolderListItem
-                            onClick={() => handleOpenRecent(recent)}
-                        >
-                            <FolderListItem.Header>
+                        <FolderListItem>
+                            <FolderListItem.Header
+                                onClick={() => handleOpenRecent(recent)}
+                            >
                                 <FolderListItem.Title>
                                     {recent.recursive && (
                                         <span className="border-r pr-1">
