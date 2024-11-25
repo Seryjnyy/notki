@@ -6,6 +6,7 @@ import { useMemo } from "react";
 
 // TODO : this is not an ideal approach ibr, www will get pc related shortcuts
 export const PC_APP_EXCLUSIVE_SHORTCUTS = {
+    TOGGLE_SIDEBAR: "toggle-sidebar",
 };
 
 export const AVAILABLE_SHORTCUTS = {
@@ -105,6 +106,13 @@ const defaults: State = {
         },
     ],
     pcExclusiveShortcuts: [
+        {
+            hotkeys: ["t"],
+            defaultHotkeys: ["t"],
+            id: AVAILABLE_SHORTCUTS.TOGGLE_SIDEBAR,
+            label: "Toggle sidebar",
+            enabled: true,
+        },
     ],
 };
 
@@ -180,6 +188,7 @@ const useShortcutsStoreBase = create<State & Actions>()(
 );
 
 // TODO : could maybe be more efficient, but its okay for now
+// TODO : should things be separate, have a hook for standard shortcuts and pc exclusive shortcuts?
 export const useShortcut = (id: AvailableShortcut) => {
     const shared = useShortcutsStore.use.sharedShortcuts();
     const pcExclusive = useShortcutsStore.use.pcExclusiveShortcuts();

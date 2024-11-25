@@ -19,61 +19,7 @@ import { Recent, useGetSortedRecents } from "~/stores/recents-store";
 // import { useSidebarViewStore } from "~/stores/sidebar-view-store";
 import { SearchCurrentViewForm } from "./search-form";
 import { CurrentViewSwitcher } from "./view-switcher";
-import useVaults from "~/hooks/use-vaults";
-
-const RecentsList = ({ recents }: { recents: Recent[] }) => {
-    return recents.map((item) => (
-        <SidebarMenuItem key={item.path}>
-            <SidebarMenuButton
-                isActive={false}
-                className="grid grid-cols-6 px-4 py-2 h-[4rem]"
-            >
-                <div className="flex flex-col items-start col-span-5">
-                    <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1">
-                        {item.path.split("\\").pop()}
-                    </span>
-                    <span className="text-sm text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%]">
-                        {item.path}
-                    </span>
-                </div>
-                <div className="flex justify-end items-center ">
-                    <Button
-                        size={"icon"}
-                        variant={"ghost"}
-                        className="hover:brightness-125"
-                    >
-                        <EllipsisVertical />
-                    </Button>
-                </div>
-            </SidebarMenuButton>
-        </SidebarMenuItem>
-    ));
-};
-
-const VaultsList = ({ vaults }: { vaults: VaultType[] }) => {
-    return vaults.map((item) => (
-        <SidebarMenuItem key={item.filepath}>
-            <SidebarMenuButton
-                isActive={false}
-                className="grid grid-cols-6 px-4 py-2 h-[4rem]"
-            >
-                <div className="flex flex-col items-start col-span-5">
-                    <span className="text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%] flex items-center gap-1">
-                        {item.filepath.split("\\").pop()}
-                    </span>
-                    <span className="text-sm text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap max-w-[100%]">
-                        {item.filepath}
-                    </span>
-                </div>
-                <div className="flex justify-end items-center ">
-                    <Button size={"sm"} variant={"ghost"}>
-                        <EllipsisVertical />
-                    </Button>
-                </div>
-            </SidebarMenuButton>
-        </SidebarMenuItem>
-    ));
-};
+import AppSidebarShortcut from "./app-sidebar-shortcut";
 
 type ViewOption = { value: string; label: string; icon: JSX.Element };
 
@@ -202,6 +148,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarFooter>
                 <SidebarRail />
             </Sidebar>
+            <AppSidebarShortcut />
         </SidebarCurrentViewProvider>
     );
 }
