@@ -20,6 +20,7 @@ import {
 
 import { PlusIcon } from "lucide-react"
 import useVaults from "~/hooks/use-vaults"
+import { Vault } from "~/lib/backend-types.ts"
 
 const createVaultSchema = z.object({
   name: z
@@ -35,7 +36,11 @@ const createVaultSchema = z.object({
 
 type createVaultSchemaType = z.infer<typeof createVaultSchema>
 
-export const CreateVaultForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const CreateVaultForm = ({
+  onSuccess,
+}: {
+  onSuccess?: (vault: Vault | null) => void
+}) => {
   const { vaults } = useVaults()
 
   const form = useForm<createVaultSchemaType>({
@@ -57,9 +62,10 @@ export const CreateVaultForm = ({ onSuccess }: { onSuccess?: () => void }) => {
             (vaults.find((vault) => vault.filepath === values.location)?.name ??
               "")),
       })
+      return
     }
 
-    onSuccess?.()
+    onSuccess?.(result.data)
     form.reset()
   }
 

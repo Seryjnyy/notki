@@ -130,12 +130,7 @@ export default function ManageVaultsDialog() {
   const addNewVaultTab = { id: "add-new-vault", label: "Add new vault" }
   const { vaults, refetchVaults } = useVaults()
 
-  const onVaultCreated = () => {
-    refetchVaults()
-    //   TODO : move to tab of the created vault
-  }
-
-  const [currentVaultTab, setCurrentVaultTab] = useState<{
+  const [currentTab, setCurrentTab] = useState<{
     id: string
     label: string
   }>(
@@ -144,6 +139,17 @@ export default function ManageVaultsDialog() {
       : addNewVaultTab
   )
 
+  const onVaultCreated = async (createdVault: Vault | null) => {
+    const refetchedVaults = await refetchVaults()
+
+    // Check if created vault was returned, then just in case check if it is present in the vaults that we have currently
+    // to avoid setting a non-existing tab
+    if (
+      createdVault &&
+      refetchedVaults.some((vault) => vault.id === createdVault.id)
+    )
+      setCurrentTab({ id: createdVault.id, label: createdVault.name })
+  }
   // This skip thing is looking long, on skip it scrolls the entire content in dialog, it messes it up
   // const handleSkip = (e: React.MouseEvent | React.KeyboardEvent) => {
   //     e.preventDefault();
@@ -181,12 +187,12 @@ export default function ManageVaultsDialog() {
                       <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton
                           asChild
-                          isActive={item.id === currentVaultTab.id}
+                          isActive={item.id === currentTab.id}
                         >
                           <Button
                             variant={"ghost"}
                             onClick={() =>
-                              setCurrentVaultTab({
+                              setCurrentTab({
                                 id: item.id,
                                 label: item.name,
                               })
@@ -203,8 +209,8 @@ export default function ManageVaultsDialog() {
             </SidebarContent>
             <SidebarFooter>
               <Button
-                disabled={currentVaultTab.id === addNewVaultTab.id}
-                onClick={() => setCurrentVaultTab(addNewVaultTab)}
+                disabled={currentTab.id === addNewVaultTab.id}
+                onClick={() => setCurrentTab(addNewVaultTab)}
               >
                 <PlusIcon /> Add new vault
               </Button>
@@ -214,11 +220,11 @@ export default function ManageVaultsDialog() {
           <main className="flex h-full  md:max-h-[500px] md:max-w-[700px] lg:max-w-[800px] flex-1 flex-col overflow-hidden">
             <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
-                {currentVaultTab.label}
+                {currentTab.label}
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0 ">
-              {currentVaultTab.id === addNewVaultTab.id ? (
+              {currentTab.id === addNewVaultTab.id ? (
                 <div className="space-y-12">
                   <div className="w-full justify-center flex pt-12">
                     <VaultIcon className="size-20" />
@@ -229,9 +235,7 @@ export default function ManageVaultsDialog() {
                 </div>
               ) : (
                 <VaultTab
-                  vault={vaults.find(
-                    (vault) => vault.id === currentVaultTab.id
-                  )}
+                  vault={vaults.find((vault) => vault.id === currentTab.id)}
                 />
               )}
             </div>

@@ -11,7 +11,9 @@ export default function useVaults() {
   const [vaults, setVaults] = useVaultsAtom()
 
   const refetchVaults = async () => {
-    setVaults(await getVaults())
+    const fetchedVaults = await getVaults()
+    setVaults(fetchedVaults)
+    return fetchedVaults
   }
 
   useEffect(() => {
