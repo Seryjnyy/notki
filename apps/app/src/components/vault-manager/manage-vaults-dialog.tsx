@@ -128,7 +128,12 @@ export default function ManageVaultsDialog() {
   const [open, setOpen] = useManageVaultsDialogOpen()
 
   const addNewVaultTab = { id: "add-new-vault", label: "Add new vault" }
-  const { vaults } = useVaults()
+  const { vaults, refetchVaults } = useVaults()
+
+  const onVaultCreated = () => {
+    refetchVaults()
+    //   TODO : move to tab of the created vault
+  }
 
   const [currentVaultTab, setCurrentVaultTab] = useState<{
     id: string
@@ -219,7 +224,7 @@ export default function ManageVaultsDialog() {
                     <VaultIcon className="size-20" />
                   </div>
                   <div className="px-10">
-                    <CreateVaultForm />
+                    <CreateVaultForm onSuccess={onVaultCreated} />
                   </div>
                 </div>
               ) : (
