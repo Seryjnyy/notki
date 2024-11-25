@@ -25,6 +25,7 @@ import {
 import FolderListItem from "./folder-list-item";
 import LandingCard from "./landing-card";
 import { OpenFolderButton, OpenFolderSettings } from "./open-folder";
+import { getFolderNameFromFilepath } from "~/lib/utils";
 
 export default function Recents() {
     const clearRecents = useRecentsStore.use.clearRecents();
@@ -101,7 +102,7 @@ const RecentsList = () => {
                                         </span>
                                     )}
                                     {/* TODO : this might only work on windows no??? are filepaths read in the same way regardless of OS?*/}
-                                    {recent.path.split("\\").pop()}
+                                    {getFolderNameFromFilepath(recent.path)}
                                 </FolderListItem.Title>
                                 <FolderListItem.Desc>
                                     {recent.path}
