@@ -3,11 +3,8 @@ import { Toaster } from "@repo/ui/components/ui/toaster";
 import { useMemo } from "react";
 import Titlebar from "./components/ui/titlebar";
 
-import { produce } from "immer";
 import CommandBox from "./components/ui/command-box";
 import FileSearchBox from "./components/ui/file-search-box";
-import { useUiState } from "./lib/ui-store";
-import { useWorkspaceConfig } from "./lib/workspace-store";
 
 import { useShortcutsStore } from "@repo/lib/stores/shortcuts-store";
 import {
@@ -16,14 +13,11 @@ import {
 } from "@repo/ui/components/settings/settings-dialog";
 import ShortcutTab from "@repo/ui/components/settings/shortcut-tab/shortcut-tab";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import {
-    SidebarInset,
-    SidebarProvider,
-    SidebarTrigger,
-} from "@repo/ui/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@repo/ui/components/ui/sidebar";
 import { StyleProvider } from "@repo/ui/providers/style-provider";
 import MainPage from "./components/main-page-pc";
 import { AppSidebar } from "./components/sidebar/app-sidebar";
+import AppSidebarTrigger from "./components/sidebar/app-sidebar-trigger";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -155,8 +149,8 @@ function App() {
                 <SidebarProvider>
                     <AppSidebar />
                     <SidebarInset>
-                        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b   pl-4">
-                            <SidebarTrigger className="-ml-1" />
+                        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b   pl-4 z-50">
+                            <AppSidebarTrigger />
                             <Titlebar />
                         </header>
                         <ScrollArea className="h-[calc(100vh-31px)]">
