@@ -3,11 +3,10 @@ import {
     useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store";
 import { useUploadSettingsStore } from "@repo/lib/stores/upload-file-settings-store";
-import { NavigationAwareDialog } from "@repo/ui/components/navigation-aware-components";
-import ShortcutAwareDialogTrigger from "@repo/ui/components/shortcut/shortcut-aware-dialog-trigger";
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys";
 import { Button } from "@repo/ui/components/ui/button";
 import {
+    Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -21,49 +20,90 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip";
+import { useNavigationLock } from "@repo/ui/hooks/use-navigation-lock";
+import { atom, useAtom } from "jotai";
 import { DoorOpen } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { OpenFolderButton, OpenFolderSettings } from "../landing/open-folder";
 
+const openFolderDialogOpenAtom = atom(false);
+const useOpenFolderDialogOpen = () => {
+    const [open, setOpen] = useAtom(openFolderDialogOpenAtom);
+    const { disableNavigation, enableNavigation } = useNavigationLock();
+
+    return [
+        open,
+        (newOpen: boolean) => {
+            if (newOpen) {
+                disableNavigation();
+            } else {
+                enableNavigation();
+            }
+            setOpen(newOpen);
+        },
+    ] as const;
+};
+
+export const OpenFolderDialogTrigger = () => {
+    const [open, setOpen] = useOpenFolderDialogOpen();
+    const toggleOpenFolderShortcut = useShortcutInfo(
+        AVAILABLE_SHORTCUTS.TOGGLE_OPEN_FOLDER
+    );
+
+    return (
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        className="flex items-center gap-2"
+                        onClick={() => setOpen(!open)}
+                    >
+                        <DoorOpen /> Open folder
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>
+                        Add notes from folder{" "}
+                        <TooltipShortcutKeys
+                            shortcut={toggleOpenFolderShortcut}
+                        />
+                    </p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
+    );
+};
+
+export const OpenFolderDialogShortcut = () => {
+    const [open, setOpen] = useOpenFolderDialogOpen();
+    const shortcut = useShortcutInfo(AVAILABLE_SHORTCUTS.TOGGLE_OPEN_FOLDER);
+
+    useHotkeys(
+        shortcut?.hotkeys.join(",") ?? "",
+        () => {
+            setOpen(!open);
+        },
+        { enabled: shortcut?.enabled ?? false }
+    );
+
+    return null;
+};
+
 export default function OpenFolderDialog() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useOpenFolderDialogOpen();
 
     // Idk if to use uploadSettings for this or keep it separate
     const setReplace = useUploadSettingsStore.use.setReplace();
     const replace = useUploadSettingsStore.use.replace();
     // const [addBy, setAddBy] = useState<AddBy>("replace");
 
-    const toggleOpenFolderShortcut = useShortcutInfo(
-        AVAILABLE_SHORTCUTS.TOGGLE_OPEN_FOLDER
-    );
-
     const addByOptions = ["add", "replace"] as const;
     const addBy = useMemo(() => (replace ? "replace" : "add"), [replace]);
 
+    // Its a dialog instead of navigation aware dialog because it wasn't working properly with it, instead the hook to set the atom manages locking and unlocking note navigation
     return (
-        <NavigationAwareDialog open={open} onOpenChange={setOpen}>
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <ShortcutAwareDialogTrigger
-                            asChild
-                            shortcut={toggleOpenFolderShortcut}
-                        >
-                            <Button className="flex items-center gap-2">
-                                <DoorOpen /> Open folder
-                            </Button>
-                        </ShortcutAwareDialogTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>
-                            Add notes from folder{" "}
-                            <TooltipShortcutKeys
-                                shortcut={toggleOpenFolderShortcut}
-                            />
-                        </p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Open folder</DialogTitle>
@@ -113,6 +153,6 @@ export default function OpenFolderDialog() {
                     </div>
                 </div>
             </DialogContent>
-        </NavigationAwareDialog>
+        </Dialog>
     );
 }

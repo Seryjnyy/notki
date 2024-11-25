@@ -18,6 +18,9 @@ import { StyleProvider } from "@repo/ui/providers/style-provider";
 import MainPage from "./components/main-page-pc";
 import { AppSidebar } from "./components/sidebar/app-sidebar";
 import AppSidebarTrigger from "./components/sidebar/app-sidebar-trigger";
+import OpenFolderDialog, {
+    OpenFolderDialogShortcut,
+} from "./components/sidebar/open-folder-dialog";
 
 function App() {
     // TODO : Should probably in component to reduce rerendering everything, or does zustand prevent that, I can't remember
@@ -160,6 +163,8 @@ function App() {
 
                     <SettingsDialog settingTabs={interceptedSettingTabs} />
                     <SettingsDialogHotkeyTrigger />
+                    <OpenFolderDialog />
+                    <OpenFolderDialogShortcut />
                 </SidebarProvider>
 
                 <Toaster />

@@ -20,6 +20,7 @@ import { Recent, useGetSortedRecents } from "~/stores/recents-store";
 import { SearchCurrentViewForm } from "./search-form";
 import { CurrentViewSwitcher } from "./view-switcher";
 import AppSidebarShortcut from "./app-sidebar-shortcut";
+import { OpenFolderDialogTrigger } from "./open-folder-dialog";
 
 type ViewOption = { value: string; label: string; icon: JSX.Element };
 
