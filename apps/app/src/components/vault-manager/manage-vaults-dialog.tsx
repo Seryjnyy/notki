@@ -50,7 +50,7 @@ import {
   VaultIcon,
   XIcon,
 } from "lucide-react"
-import { ButtonHTMLAttributes, useState } from "react"
+import { ButtonHTMLAttributes, forwardRef, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import useVaults from "~/hooks/use-vaults"
 import { Vault } from "~/lib/backend-types"
@@ -129,7 +129,8 @@ export const ManageVaultsDialogShortcut = () => {
 
 export default function ManageVaultsDialog() {
   const [open, setOpen] = useManageVaultsDialogOpen()
-
+  const addNewVaultButtonRef = useRef<HTMLButtonElement>(null)
+  const vaultInputRef = useRef<HTMLInputElement>(null)
   const addNewVaultTab = { id: "add-new-vault", label: "Add new vault" }
   const { vaults, refetchVaults } = useVaults()
 
@@ -166,9 +167,19 @@ export default function ManageVaultsDialog() {
     setOpen(false)
   }
   // This skip thing is looking long, on skip it scrolls the entire content in dialog, it messes it up
-  // const handleSkip = (e: React.MouseEvent | React.KeyboardEvent) => {
-  //     e.preventDefault();
-  // };
+  const handleSkip = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault()
+    addNewVaultButtonRef.current?.focus({ preventScroll: true })
+  }
+
+  const handleChangeTab = (vault: Vault) => {
+    setCurrentTab({
+      id: vault.id,
+      label: vault.name,
+    })
+
+    vaultInputRef.current?.focus()
+  }
 
   // Its a dialog instead of navigation aware dialog because it wasn't working properly with it, instead the hook to set the atom manages locking and unlocking note navigation
   return (
@@ -187,17 +198,19 @@ export default function ManageVaultsDialog() {
               <h2 className="mb-4 text-2xl font-bold pl-4 pt-4">Vaults</h2>
             </SidebarHeader>
             <SidebarContent className="md:max-h-[360px] md:max-w-[550px] lg:max-w-[600px] ">
+              <Button
+                className={
+                  "sr-only focus:not-sr-only focus:absolute focus:top-[3.5rem] focus:left-2 z-50 "
+                }
+                size={"lg"}
+                variant={"outline"}
+                onClick={handleSkip}
+              >
+                Skip list
+              </Button>
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {/* <a
-                                            href="#add-new-vault"
-                                            className={
-                                                "sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:p-2 focus:bg-background focus:z-50 focus:border text-xs"
-                                            }
-                                        >
-                                            Skip list
-                                        </a> */}
                     {vaults.map((item) => (
                       <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton
@@ -206,12 +219,7 @@ export default function ManageVaultsDialog() {
                         >
                           <Button
                             variant={"ghost"}
-                            onClick={() =>
-                              setCurrentTab({
-                                id: item.id,
-                                label: item.name,
-                              })
-                            }
+                            onClick={() => handleChangeTab(item)}
                           >
                             <span className="w-full">{item.name}</span>
                           </Button>
@@ -226,6 +234,7 @@ export default function ManageVaultsDialog() {
               <Button
                 disabled={currentTab.id === addNewVaultTab.id}
                 onClick={() => setCurrentTab(addNewVaultTab)}
+                ref={addNewVaultButtonRef}
               >
                 <PlusIcon /> Add new vault
               </Button>
@@ -253,6 +262,7 @@ export default function ManageVaultsDialog() {
                   onOpenVault={onVaultOpened}
                   onRemoveVault={onVaultRemoved}
                   vault={vaults.find((vault) => vault.id === currentTab.id)}
+                  ref={vaultInputRef}
                 />
               )}
             </div>
@@ -263,130 +273,131 @@ export default function ManageVaultsDialog() {
   )
 }
 
-const VaultTab = ({
-  vault,
-  onRemoveVault,
-  onOpenVault,
-}: {
+interface VaultTabProps {
   vault: Vault | undefined
   onRemoveVault: (vault: Vault) => void
   onOpenVault: () => void
-}) => {
-  const uploadNoteFromDirs = useUploadNotesFromDirs()
+}
 
-  if (!vault) {
-    return null
-  }
+const VaultTab = forwardRef<HTMLInputElement, VaultTabProps>(
+  ({ vault, onRemoveVault, onOpenVault }, ref) => {
+    const uploadNoteFromDirs = useUploadNotesFromDirs()
 
-  const handleRemoveVault = async () => {
-    await removeVault(vault.id)
-    onRemoveVault(vault)
-  }
+    if (!vault) {
+      return null
+    }
 
-  // TODO : duplicate code with app-sidebar-vaults
-  const handleOpenByReplacing = () => {
-    uploadNoteFromDirs({
-      dirs: [vault.filepath],
-      recursive: true,
-      replace: true,
-    })
-    onOpenVault()
-  }
+    const handleRemoveVault = async () => {
+      await removeVault(vault.id)
+      onRemoveVault(vault)
+    }
 
-  const handleOpenByAdding = () => {
-    uploadNoteFromDirs({
-      dirs: [vault.filepath],
-      recursive: true,
-      replace: false,
-    })
-    onOpenVault()
-  }
+    // TODO : duplicate code with app-sidebar-vaults
+    const handleOpenByReplacing = () => {
+      uploadNoteFromDirs({
+        dirs: [vault.filepath],
+        recursive: true,
+        replace: true,
+      })
+      onOpenVault()
+    }
 
-  const handleRevealInFileExplorer = () => {
-    showInFileExplorer(vault.filepath)
-  }
-  return (
-    <div className="flex flex-col  h-full">
-      <div className="pt-2 space-y-8">
-        <div className="spacey-y-4">
-          <Label htmlFor="edit-vault-name">Vault name</Label>
-          <div className="flex flex-col gap-2 pt-2 ">
-            <InputWithIcons
-              id={"edit-vault-name"}
-              className="border border-secondary"
-              startIcon={<Pencil className="size-4" />}
-              value={vault.name}
-            />
-            <div className="grid grid-cols-2 gap-3">
-              <Button size={"sm"} variant={"secondary"}>
-                <XIcon className="size-3 mr-2" />
-                Cancel
-              </Button>
-              <Button size={"sm"}>
-                <Save className="size-3 mr-2" />
-                Save
-              </Button>
+    const handleOpenByAdding = () => {
+      uploadNoteFromDirs({
+        dirs: [vault.filepath],
+        recursive: true,
+        replace: false,
+      })
+      onOpenVault()
+    }
+
+    const handleRevealInFileExplorer = () => {
+      showInFileExplorer(vault.filepath)
+    }
+    return (
+      <div className="flex flex-col  h-full">
+        <div className="pt-2 space-y-8">
+          <div className="spacey-y-4">
+            <Label htmlFor="edit-vault-name">Vault name</Label>
+            <div className="flex flex-col gap-2 pt-2 ">
+              <InputWithIcons
+                id={"edit-vault-name"}
+                className="border border-secondary"
+                startIcon={<Pencil className="size-4" />}
+                value={vault.name}
+                ref={ref}
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <Button size={"sm"} variant={"secondary"}>
+                  <XIcon className="size-3 mr-2" />
+                  Cancel
+                </Button>
+                <Button size={"sm"}>
+                  <Save className="size-3 mr-2" />
+                  Save
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <Label>Filepath</Label>
-          <div className="pt-1">
-            <div className="text-sm text-muted-foreground">
-              {vault.filepath}
-            </div>
+          <div>
+            <Label>Filepath</Label>
             <div className="pt-1">
+              <div className="text-sm text-muted-foreground">
+                {vault.filepath}
+              </div>
+              <div className="pt-1">
+                <Button
+                  size={"sm"}
+                  className="w-full"
+                  variant={"outline"}
+                  onClick={handleRevealInFileExplorer}
+                >
+                  <ArchiveIcon className="size-4 mr-2" />
+                  <span>Reveal in file explorer</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <Collapsible>
+            <CollapsibleTrigger className=" w-fit text-destructive text-left flex items-center gap-2">
+              <Label className="text-destructive">Destructive</Label>
+              <ChevronDown className="size-3" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-2">
               <Button
+                variant={"destructive"}
                 size={"sm"}
                 className="w-full"
-                variant={"outline"}
-                onClick={handleRevealInFileExplorer}
+                onClick={handleRemoveVault}
               >
-                <ArchiveIcon className="size-4 mr-2" />
-                <span>Reveal in file explorer</span>
+                <Trash2 className="mr-2 size-4" /> Remove vault
               </Button>
-            </div>
+            </CollapsibleContent>
+          </Collapsible>
+        </div>
+        <div className="flex items-end h-full ">
+          <div className="flex items-center justify-between w-full">
+            <Button
+              variant={"secondary"}
+              className="group"
+              onClick={handleOpenByAdding}
+            >
+              Open by adding
+              <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
+            </Button>
+            <Button
+              variant={"secondary"}
+              className="group"
+              onClick={handleOpenByReplacing}
+            >
+              Open by replacing
+              <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
+            </Button>
           </div>
         </div>
-
-        <Collapsible>
-          <CollapsibleTrigger className=" w-fit text-destructive text-left flex items-center gap-2">
-            <Label className="text-destructive">Destructive</Label>
-            <ChevronDown className="size-3" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-2">
-            <Button
-              variant={"destructive"}
-              size={"sm"}
-              className="w-full"
-              onClick={handleRemoveVault}
-            >
-              <Trash2 className="mr-2 size-4" /> Remove vault
-            </Button>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
-      <div className="flex items-end h-full ">
-        <div className="flex items-center justify-between w-full">
-          <Button
-            variant={"secondary"}
-            className="group"
-            onClick={handleOpenByAdding}
-          >
-            Open by adding
-            <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
-          </Button>
-          <Button
-            variant={"secondary"}
-            className="group"
-            onClick={handleOpenByReplacing}
-          >
-            Open by replacing
-            <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
+    )
+  }
+)
