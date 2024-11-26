@@ -2,6 +2,8 @@ import { invoke } from "@tauri-apps/api"
 
 import { Config, Vault } from "./backend-types"
 
+// TODO : why is this in lib, why is it named vaults? This should be done better.
+
 // TODO : Fetching entire config then getting vaults, not great
 export const getVaults = async (): Promise<Vault[]> => {
   try {
@@ -41,4 +43,8 @@ export const addVault = async (
         (vault) => vault.name === name && vault.filepath === filepath
       ) ?? null,
   }
+}
+
+export const removeVault = async (id: string) => {
+  await invoke("remove_vault", { id: id })
 }

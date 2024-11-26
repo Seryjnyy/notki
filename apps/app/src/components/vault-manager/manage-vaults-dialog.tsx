@@ -56,6 +56,7 @@ import useVaults from "~/hooks/use-vaults"
 import { Vault } from "~/lib/backend-types"
 import { CreateVaultForm } from "./create-vault-form"
 import { cn } from "@repo/ui/lib/utils"
+import { removeVault } from "~/lib/vaults.ts"
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false)
@@ -150,6 +151,15 @@ export default function ManageVaultsDialog() {
     )
       setCurrentTab({ id: createdVault.id, label: createdVault.name })
   }
+
+  const onVaultRemoved = async (vault: Vault) => {
+    await refetchVaults()
+
+    console.log("Vault", vault.name, "at", vault.filepath, "was removed.")
+
+    setCurrentTab({ id: "", label: "" })
+  }
+
   // This skip thing is looking long, on skip it scrolls the entire content in dialog, it messes it up
   // const handleSkip = (e: React.MouseEvent | React.KeyboardEvent) => {
   //     e.preventDefault();
@@ -235,6 +245,7 @@ export default function ManageVaultsDialog() {
                 </div>
               ) : (
                 <VaultTab
+                  onRemoveVault={onVaultRemoved}
                   vault={vaults.find((vault) => vault.id === currentTab.id)}
                 />
               )}
@@ -247,8 +258,20 @@ export default function ManageVaultsDialog() {
 }
 
 const VaultTab = ({ vault }: { vault: Vault | undefined }) => {
+const VaultTab = ({
+  vault,
+  onRemoveVault,
+}: {
+  vault: Vault | undefined
+  onRemoveVault: (vault: Vault) => void
+}) => {
   if (!vault) {
     return null
+  }
+
+  const handleRemoveVault = async () => {
+    await removeVault(vault.id)
+    onRemoveVault(vault)
   }
 
   return (
@@ -292,15 +315,17 @@ const VaultTab = ({ vault }: { vault: Vault | undefined }) => {
         </div>
 
         <Collapsible>
-          <CollapsibleTrigger
-            className=" w-fit text-destructive text-left flex items-center gap-2"
-            onClick={() => console.log("col")}
-          >
+          <CollapsibleTrigger className=" w-fit text-destructive text-left flex items-center gap-2">
             <Label className="text-destructive">Destructive</Label>
             <ChevronDown className="size-3" />
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-2">
-            <Button variant={"destructive"} size={"sm"} className="w-full">
+            <Button
+              variant={"destructive"}
+              size={"sm"}
+              className="w-full"
+              onClick={handleRemoveVault}
+            >
               <Trash2 className="mr-2 size-4" /> Remove vault
             </Button>
           </CollapsibleContent>
