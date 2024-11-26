@@ -100,7 +100,7 @@ export const ManageVaultsDialogTrigger = ({
             <GalleryVerticalEnd /> Manage vaults
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side={"right"}>
           <p>
             Manage your vaults
             <TooltipShortcutKeys shortcut={toggleOpenManageVaultsShortcut} />

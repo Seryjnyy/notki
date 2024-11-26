@@ -66,7 +66,7 @@ export const OpenFolderDialogTrigger = ({
             <DoorOpen /> Open folder
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side={"right"}>
           <p>
             Add notes from folder{" "}
             <TooltipShortcutKeys shortcut={toggleOpenFolderShortcut} />
