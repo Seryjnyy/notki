@@ -1,11 +1,4 @@
 import { ResetButton } from "@repo/ui/components/settings/reset-button"
-import { Button } from "@repo/ui/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu"
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area"
 import {
   Tooltip,
@@ -13,10 +6,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip"
-import { ArchiveIcon, EllipsisVertical, Infinity, Trash2 } from "lucide-react"
+import { Infinity } from "lucide-react"
 import { useState } from "react"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
-import { showInFileExplorer } from "~/lib/file-services/directory-service"
+
 import {
   Recent,
   useGetSortedRecents,
@@ -27,6 +20,7 @@ import LandingCard from "./landing-card"
 
 import { getFolderNameFromFilepath } from "~/lib/utils"
 import { OpenFolderDialogTrigger } from "~/components/sidebar/open-folder-dialog.tsx"
+import RecentDropdown from "~/components/sidebar/recent-dropdown.tsx"
 
 export default function Recents() {
   const clearRecents = useRecentsStore.use.clearRecents()
@@ -56,15 +50,10 @@ const RecentsList = () => {
   const recents = useGetSortedRecents()
   const uploadNotesFromDirs = useUploadNotesFromDirs()
   const addRecent = useRecentsStore.use.addRecent()
-  const removeRecent = useRecentsStore.use.removeRecent()
   // TODO : slightly annoying tooltip :/
   // After using dropdown menu and closing it the tooltip stays open
   // showTooltip is used to stop it from showing when dropdown is open, but doesn't fix the above problem
   const [showTooltip, setShowTooltip] = useState(true)
-
-  const onOpenInFileExplorer = async (path: string) => {
-    showInFileExplorer(path)
-  }
 
   const handleOpenRecent = async (recent: Recent) => {
     // TODO : This part is repeated throughout the app, should be a single function
@@ -97,41 +86,10 @@ const RecentsList = () => {
               </FolderListItem.Header>
 
               <FolderListItem.Action>
-                <DropdownMenu onOpenChange={(val) => setShowTooltip(!val)}>
-                  <div className="flex justify-end items-center">
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        onClick={(e) => e.stopPropagation()}
-                        variant={"ghost"}
-                        size={"icon"}
-                      >
-                        <EllipsisVertical />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </div>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      className="flex items-center gap-2"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onOpenInFileExplorer(recent.path)
-                      }}
-                    >
-                      <ArchiveIcon className="size-4" />
-                      <span>Reveal in file explorer</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="flex items-center gap-2"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        removeRecent(recent.path)
-                      }}
-                    >
-                      <Trash2 className="size-4" />
-                      <span>Remove recent</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <RecentDropdown
+                  recent={recent}
+                  onOpenChange={(val) => setShowTooltip(!val)}
+                />
               </FolderListItem.Action>
             </FolderListItem>
           </TooltipTrigger>
