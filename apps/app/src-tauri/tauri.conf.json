@@ -94,10 +94,13 @@
       {
         "fullscreen": false,
         "height": 800,
+        "minWidth": 800,
+        "minHeight": 500,
         "resizable": true,
         "title": "txt-viewer",
         "width": 800,
         "decorations": false
+
       }
     ]
   }
