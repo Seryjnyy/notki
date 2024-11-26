@@ -58,6 +58,7 @@ import { CreateVaultForm } from "./create-vault-form"
 import { cn } from "@repo/ui/lib/utils"
 import { removeVault } from "~/lib/vaults.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
+import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false)
@@ -301,6 +302,9 @@ const VaultTab = ({
     onOpenVault()
   }
 
+  const handleRevealInFileExplorer = () => {
+    showInFileExplorer(vault.filepath)
+  }
   return (
     <div className="flex flex-col  h-full">
       <div className="pt-2 space-y-8">
@@ -333,7 +337,12 @@ const VaultTab = ({
               {vault.filepath}
             </div>
             <div className="pt-1">
-              <Button size={"sm"} className="w-full" variant={"outline"}>
+              <Button
+                size={"sm"}
+                className="w-full"
+                variant={"outline"}
+                onClick={handleRevealInFileExplorer}
+              >
                 <ArchiveIcon className="size-4 mr-2" />
                 <span>Reveal in file explorer</span>
               </Button>
