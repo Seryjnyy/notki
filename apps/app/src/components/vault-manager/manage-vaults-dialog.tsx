@@ -57,6 +57,7 @@ import { Vault } from "~/lib/backend-types"
 import { CreateVaultForm } from "./create-vault-form"
 import { cn } from "@repo/ui/lib/utils"
 import { removeVault } from "~/lib/vaults.ts"
+import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false)
@@ -160,6 +161,9 @@ export default function ManageVaultsDialog() {
     setCurrentTab({ id: "", label: "" })
   }
 
+  const onVaultOpened = () => {
+    setOpen(false)
+  }
   // This skip thing is looking long, on skip it scrolls the entire content in dialog, it messes it up
   // const handleSkip = (e: React.MouseEvent | React.KeyboardEvent) => {
   //     e.preventDefault();
@@ -245,6 +249,7 @@ export default function ManageVaultsDialog() {
                 </div>
               ) : (
                 <VaultTab
+                  onOpenVault={onVaultOpened}
                   onRemoveVault={onVaultRemoved}
                   vault={vaults.find((vault) => vault.id === currentTab.id)}
                 />
@@ -257,14 +262,17 @@ export default function ManageVaultsDialog() {
   )
 }
 
-const VaultTab = ({ vault }: { vault: Vault | undefined }) => {
 const VaultTab = ({
   vault,
   onRemoveVault,
+  onOpenVault,
 }: {
   vault: Vault | undefined
   onRemoveVault: (vault: Vault) => void
+  onOpenVault: () => void
 }) => {
+  const uploadNoteFromDirs = useUploadNotesFromDirs()
+
   if (!vault) {
     return null
   }
@@ -272,6 +280,25 @@ const VaultTab = ({
   const handleRemoveVault = async () => {
     await removeVault(vault.id)
     onRemoveVault(vault)
+  }
+
+  // TODO : duplicate code with app-sidebar-vaults
+  const handleOpenByReplacing = () => {
+    uploadNoteFromDirs({
+      dirs: [vault.filepath],
+      recursive: true,
+      replace: true,
+    })
+    onOpenVault()
+  }
+
+  const handleOpenByAdding = () => {
+    uploadNoteFromDirs({
+      dirs: [vault.filepath],
+      recursive: true,
+      replace: false,
+    })
+    onOpenVault()
   }
 
   return (
@@ -333,11 +360,19 @@ const VaultTab = ({
       </div>
       <div className="flex items-end h-full ">
         <div className="flex items-center justify-between w-full">
-          <Button variant={"secondary"} className="group">
+          <Button
+            variant={"secondary"}
+            className="group"
+            onClick={handleOpenByAdding}
+          >
             Open by adding
             <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
           </Button>
-          <Button variant={"secondary"} className="group">
+          <Button
+            variant={"secondary"}
+            className="group"
+            onClick={handleOpenByReplacing}
+          >
             Open by replacing
             <ArrowRight className="ml-2 group-hover:scale-100 group-focus:scale-100 group-focus:size-4 group-hover:size-4 scale-0 transition-all size-0" />
           </Button>
