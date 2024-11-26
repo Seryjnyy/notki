@@ -1,210 +1,95 @@
 import {
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from "@repo/ui/components/ui/sidebar";
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@repo/ui/components/ui/sidebar"
+import * as React from "react"
+import { Vault as VaultType } from "~/lib/backend-types"
 import {
-    EllipsisVertical,
-    FolderCog2,
-    FolderOpen,
-    Plus,
-    VaultIcon,
-} from "lucide-react";
-import * as React from "react";
-import { Vault as VaultType } from "~/lib/backend-types";
-import { Button } from "@repo/ui/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@repo/ui/components/ui/tooltip";
-import { ArchiveIcon } from "lucide-react";
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs";
-import useVaults from "~/hooks/use-vaults";
-import { showInFileExplorer } from "~/lib/file-services/directory-service";
-import FolderListItem from "../landing/folder-list-item";
-import { useSidebarCurrentView } from "./app-sidebar";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui/components/ui/tooltip"
+import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
+import useVaults from "~/hooks/use-vaults"
+import FolderListItem from "../landing/folder-list-item"
+import { useSidebarCurrentView } from "./app-sidebar"
+import VaultDropdown from "~/components/sidebar/vault-dropdown.tsx"
 
 export default function SidebarGroupVaults() {
-    const { search } = useSidebarCurrentView();
-    const { vaults } = useVaults();
+  const { search } = useSidebarCurrentView()
+  const { vaults } = useVaults()
 
-    const filteredVaults = React.useMemo(() => {
-        return vaults.filter((item) => {
-            return item.filepath.toLowerCase().includes(search.toLowerCase());
-        });
-    }, [vaults, search]);
+  const filteredVaults = React.useMemo(() => {
+    return vaults.filter((item) => {
+      return item.filepath.toLowerCase().includes(search.toLowerCase())
+    })
+  }, [vaults, search])
 
-    return (
-        <SidebarGroup>
-            <SidebarGroupLabel className="flex justify-between">
-                <span className={search != "" ? "text-primary" : ""}>
-                    Vaults
-                </span>
-                <span>{filteredVaults.length}</span>
-            </SidebarGroupLabel>
-            <SidebarGroupContent className="space-y-4">
-                <SidebarMenu>
-                    <VaultsList vaults={filteredVaults} />
-                </SidebarMenu>
-            </SidebarGroupContent>
-        </SidebarGroup>
-    );
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="flex justify-between">
+        <span className={search != "" ? "text-primary" : ""}>Vaults</span>
+        <span>{filteredVaults.length}</span>
+      </SidebarGroupLabel>
+      <SidebarGroupContent className="space-y-4">
+        <SidebarMenu>
+          <VaultsList vaults={filteredVaults} />
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  )
 }
 
-const VaultItem = ({ item }: { item: VaultType }) => {
-    const [showTooltip, setShowTooltip] = React.useState(true);
-    const uploadNoteFromDirs = useUploadNotesFromDirs();
+const VaultItem = ({ vault }: { vault: VaultType }) => {
+  const [showTooltip, setShowTooltip] = React.useState(true)
+  const uploadNoteFromDirs = useUploadNotesFromDirs()
 
-    const openVault = (vault: VaultType) => {
-        uploadNoteFromDirs({
-            dirs: [vault.filepath],
-            recursive: true,
-            replace: true,
-        });
-    };
+  // Vault dropdown also defines this function, duplicate code
+  const openVault = (vault: VaultType) => {
+    uploadNoteFromDirs({
+      dirs: [vault.filepath],
+      recursive: true,
+      replace: true,
+    })
+  }
 
-    const addNotesFromVault = (vault: VaultType) => {
-        uploadNoteFromDirs({
-            dirs: [vault.filepath],
-            recursive: true,
-            replace: false,
-        });
-    };
+  return (
+    <SidebarMenuItem key={vault.filepath}>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SidebarMenuButton isActive={false} asChild className="py-2 h-fit">
+              <div className="grid grid-cols-6">
+                <FolderListItem.Header onClick={() => openVault(vault)}>
+                  <FolderListItem.Title>{vault.name}</FolderListItem.Title>
+                  <FolderListItem.Desc>{vault.filepath}</FolderListItem.Desc>
+                </FolderListItem.Header>
 
-    const handleOpenInFileExplorer = (path: string) => {
-        showInFileExplorer(path);
-    };
-
-    return (
-        <SidebarMenuItem key={item.filepath}>
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <SidebarMenuButton
-                            isActive={false}
-                            asChild
-                            className="py-2 h-fit"
-                        >
-                            <div className="grid grid-cols-6">
-                                <FolderListItem.Header
-                                    onClick={() => openVault(item)}
-                                >
-                                    <FolderListItem.Title>
-                                        {item.name}
-                                    </FolderListItem.Title>
-                                    <FolderListItem.Desc>
-                                        {item.filepath}
-                                    </FolderListItem.Desc>
-                                </FolderListItem.Header>
-
-                                <FolderListItem.Action>
-                                    <DropdownMenu
-                                        onOpenChange={(val) =>
-                                            setShowTooltip(!val)
-                                        }
-                                    >
-                                        <div className="flex justify-end items-center">
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    onClick={(e) =>
-                                                        e.stopPropagation()
-                                                    }
-                                                    variant={"ghost"}
-                                                    size={"icon"}
-                                                >
-                                                    <EllipsisVertical />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                        </div>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuLabel className="flex items-center gap-2">
-                                                <VaultIcon className="size-3" />
-                                                <span>{item.name}</span>
-                                            </DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem
-                                                className="flex items-center gap-2"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    addNotesFromVault(item);
-                                                }}
-                                            >
-                                                <Plus className="size-4" />
-                                                <span>
-                                                    Add notes from vault
-                                                </span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                className="flex items-center gap-2"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openVault(item);
-                                                }}
-                                            >
-                                                <FolderOpen className="size-4" />
-                                                <span>Open vault</span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuGroup>
-                                                <DropdownMenuItem
-                                                    className="flex items-center gap-2"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleOpenInFileExplorer(
-                                                            item.filepath
-                                                        );
-                                                    }}
-                                                >
-                                                    <ArchiveIcon className="size-4" />
-                                                    <span>
-                                                        Reveal in file explorer
-                                                    </span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    className="flex items-center gap-2"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        console.error(
-                                                            "Not implemented"
-                                                        );
-                                                    }}
-                                                    disabled
-                                                >
-                                                    <FolderCog2 className="size-4" />
-                                                    <span>Manage vault</span>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuGroup>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </FolderListItem.Action>
-                            </div>
-                        </SidebarMenuButton>
-                    </TooltipTrigger>
-                    {showTooltip && (
-                        <TooltipContent side="bottom">
-                            <p>{item.filepath}</p>
-                        </TooltipContent>
-                    )}
-                </Tooltip>
-            </TooltipProvider>
-        </SidebarMenuItem>
-    );
-};
+                <FolderListItem.Action>
+                  <VaultDropdown
+                    onOpenChange={(val) => setShowTooltip(!val)}
+                    vault={vault}
+                  />
+                </FolderListItem.Action>
+              </div>
+            </SidebarMenuButton>
+          </TooltipTrigger>
+          {showTooltip && (
+            <TooltipContent side="bottom">
+              <p>{vault.filepath}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
+    </SidebarMenuItem>
+  )
+}
 
 const VaultsList = ({ vaults }: { vaults: VaultType[] }) => {
-    return vaults.map((item) => <VaultItem item={item} key={item.id} />);
-};
+  return vaults.map((item) => <VaultItem vault={item} key={item.id} />)
+}

@@ -1,10 +1,3 @@
-import { Button } from "@repo/ui/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu"
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area"
 import {
   Tooltip,
@@ -12,13 +5,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip"
-import { ArchiveIcon, EllipsisVertical } from "lucide-react"
 import { useState } from "react"
 import useVaults from "~/hooks/use-vaults"
-import { showInFileExplorer } from "~/lib/file-services/directory-service"
 import FolderListItem from "./folder-list-item"
 import LandingCard from "./landing-card"
 import { ManageVaultsDialogTrigger } from "~/components/vault-manager/manage-vaults-dialog.tsx"
+import VaultDropdown from "~/components/sidebar/vault-dropdown.tsx"
 
 export default function Vaults() {
   return (
@@ -45,10 +37,6 @@ const VaultsList = () => {
   // showTooltip is used to stop it from showing when dropdown is open, but doesn't fix the above problem
   const [showTooltip, setShowTooltip] = useState(true)
 
-  const onOpenInFileExplorer = (path: string) => {
-    showInFileExplorer(path)
-  }
-
   return vaults.map((vault) => (
     <li key={vault.id}>
       <TooltipProvider>
@@ -61,29 +49,10 @@ const VaultsList = () => {
               </FolderListItem.Header>
 
               <FolderListItem.Action>
-                <DropdownMenu onOpenChange={(val) => setShowTooltip(!val)}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      onClick={(e) => e.stopPropagation()}
-                      variant={"ghost"}
-                      size={"icon"}
-                    >
-                      <EllipsisVertical />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      className="flex items-center gap-2"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onOpenInFileExplorer(vault.filepath)
-                      }}
-                    >
-                      <ArchiveIcon className="size-4" />
-                      <span>Reveal in file explorer</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <VaultDropdown
+                  vault={vault}
+                  onOpenChange={(val) => setShowTooltip(!val)}
+                />
               </FolderListItem.Action>
             </FolderListItem>
           </TooltipTrigger>
