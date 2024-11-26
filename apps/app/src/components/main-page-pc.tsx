@@ -11,7 +11,7 @@ import { useSidebar } from "@repo/ui/components/ui/sidebar"
 import { NoteListProvider } from "@repo/ui/providers/note-list-provider"
 import Recents from "./landing/recents"
 import Vaults from "./landing/vaults"
-import AbsoluteBottomNavBar from "./navbar/absolute-bottom-bar"
+import BottomBar from "@repo/ui/components/navbar/bottom-bar"
 
 export default function MainPage() {
   const { notes } = useNotes()
@@ -65,7 +65,7 @@ export default function MainPage() {
               <div className="mb-40 sm:mb-16 ">
                 <NoteViewSwitch />
               </div>
-              <AbsoluteBottomNavBar />
+              <BottomBar variant={"absolute"} />
             </NoteListProvider>
           </ErrorBoundary>
         </section>
