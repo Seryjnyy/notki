@@ -17,8 +17,12 @@ export default function useVaults() {
   }
 
   useEffect(() => {
-    refetchVaults()
-  }, [refetchVaults])
+    const setUp = async () => {
+      setVaults(await getVaults())
+    }
+
+    setUp()
+  }, [setVaults])
 
   return {
     vaults,
