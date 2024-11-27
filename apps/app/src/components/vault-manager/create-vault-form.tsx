@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ArchiveIcon } from "@radix-ui/react-icons"
 import { Button } from "@repo/ui/components/ui/button"
 import { open } from "@tauri-apps/api/dialog"
-import { z } from "zod"
 
 import { Input } from "@repo/ui/components/ui/input"
 import { useForm } from "react-hook-form"
@@ -21,20 +20,10 @@ import {
 import { PlusIcon } from "lucide-react"
 import useVaults from "~/hooks/use-vaults"
 import { Vault } from "~/lib/backend-types.ts"
-
-const createVaultSchema = z.object({
-  name: z
-    .string()
-    .min(1, {
-      message: `Name must be at least ${1} characters.`,
-    })
-    .max(20, { message: `Name must be less that ${30} characters.` }),
-  location: z
-    .string()
-    .min(1, { message: "Location must be at least 1 character." }),
-})
-
-type createVaultSchemaType = z.infer<typeof createVaultSchema>
+import {
+  createVaultSchema,
+  createVaultSchemaType,
+} from "~/components/vault-manager/schemas.ts"
 
 export const CreateVaultForm = ({
   onSuccess,
