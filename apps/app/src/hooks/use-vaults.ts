@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { Vault } from "~/lib/backend-types"
-import { getVaults } from "~/lib/vaults"
+import { getVaults } from "~/lib/services/vault-service.ts"
 import { atom, useAtom } from "jotai"
 
 // Provides initial value for useVaults since this is shared between the instances of the hook

@@ -21,7 +21,7 @@ import { ComponentPropsWithoutRef } from "react"
 import * as React from "react"
 import { getFolderNameFromFilepath } from "~/lib/utils.ts"
 import { Recent, useRecentsStore } from "~/stores/recents-store.ts"
-import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
+import { showInFileExplorer } from "~/lib/services/directory-service.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 interface RecentDropdownProps
   extends ComponentPropsWithoutRef<typeof DropdownMenu> {

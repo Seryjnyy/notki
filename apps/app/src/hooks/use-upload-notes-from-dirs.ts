@@ -1,6 +1,6 @@
 import useUploadNotes from "@repo/lib/hooks/use-upload-notes"
 import { guidGenerator } from "@repo/lib/utils/metadata-utils"
-import { getTxtFilesWithAllDetail } from "~/lib/file-services/directory-service"
+import { getTxtFilesWithAllDetail } from "~/lib/services/directory-service.ts"
 import { Note } from "@repo/lib/types/types"
 
 // Returns the paths that were successfully uploaded

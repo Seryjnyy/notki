@@ -60,9 +60,9 @@ import useVaults from "~/hooks/use-vaults"
 import { Vault } from "~/lib/backend-types"
 import { CreateVaultForm } from "./create-vault-form"
 import { cn } from "@repo/ui/lib/utils"
-import { removeVault } from "~/lib/vaults.ts"
+import { removeVault } from "~/lib/services/vault-service.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
-import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
+import { showInFileExplorer } from "~/lib/services/directory-service.ts"
 import EditVaultForm from "~/components/vault-manager/edit-vault-form.tsx"
 
 const openInVaultManagerAtom = atom("")

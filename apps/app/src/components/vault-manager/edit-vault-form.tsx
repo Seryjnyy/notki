@@ -17,7 +17,7 @@ import {
 import { InputWithIcons } from "@repo/ui/components/ui/input-with-icons"
 import { Pencil, Save, XIcon } from "lucide-react"
 import { Button } from "@repo/ui/components/ui/button"
-import { editVaultName } from "~/lib/vaults.ts"
+import { editVaultName } from "~/lib/services/vault-service.ts"
 
 interface EditVaultFormProps {
   vault: Vault

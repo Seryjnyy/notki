@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 import { ComponentPropsWithoutRef, useState } from "react"
 import { Vault as VaultType, Vault } from "~/lib/backend-types.ts"
-import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
+import { showInFileExplorer } from "~/lib/services/directory-service.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { useOpenVaultInManager } from "~/components/vault-manager/manage-vaults-dialog.tsx"
 

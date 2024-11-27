@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api"
 
-import { Config, Vault } from "./backend-types"
+import { Config, Vault } from "../backend-types.ts"
 
 // TODO : why is this in lib, why is it named vaults? This should be done better.
 

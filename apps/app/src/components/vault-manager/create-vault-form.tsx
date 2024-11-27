@@ -6,7 +6,7 @@ import { open } from "@tauri-apps/api/dialog"
 import { Input } from "@repo/ui/components/ui/input"
 import { useForm } from "react-hook-form"
 
-import { addVault } from "~/lib/vaults"
+import { addVault } from "~/lib/services/vault-service.ts"
 import {
   Form,
   FormControl,

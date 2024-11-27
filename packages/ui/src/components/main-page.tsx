@@ -1,4 +1,4 @@
-import DropZone from "@repo/ui/components/ui/sections/drop-zone"
+import DropZone from "@repo/ui/components/drop-zone"
 import { ErrorBoundary } from "react-error-boundary"
 import { ThemeSwitcherList } from "@repo/ui/components/theme-switcher-list"
 import { useNotes } from "@repo/lib/hooks/use-notes"
