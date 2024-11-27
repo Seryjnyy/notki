@@ -128,6 +128,41 @@ fn add_vault(name: String, filepath: String) -> serde_json::Value {
     return config;
 }
 
+
+// TODO : lots of duplicate code with add_vault, remove_vault, edit_vault_name
+#[tauri::command]
+fn edit_vault_name(id: String, new_name: String) -> serde_json::Value {
+    // Get existing vaults from the config
+    let mut config = get_config();
+    let vaults = config
+        .get("vaults")
+        .expect("Could not find vaults inside config.");
+    let mut vaults_copy = vaults.clone();
+
+    // Add the new vault to the array
+    // TODO : Probably should have something to check against duplicate id
+    if let Some(vaults_arr) = vaults_copy.as_array_mut() {
+        // Find the vault by id and update its name
+        if let Some(vault) = vaults_arr.iter_mut().find(|v| v["id"] == id) {
+            vault["name"] = serde_json::Value::String(new_name);
+        } else {
+            println!("Vault with id {} not found", id);
+        }
+        // Save config with new values
+        config["vaults"] = Value::Array(vaults_arr.clone());
+
+        let contents_updated_json =
+            serde_json::to_string_pretty(&config).expect("Failed to serialise content.");
+
+        let path = CONFIG_PATH.lock().unwrap();
+        fs::write(&*path, contents_updated_json)
+            .expect("Failed to write updated opened_tabs config.");
+    }
+
+    println!("{:?}", vaults_copy);
+    return config;
+}
+
 #[tauri::command]
 fn remove_vault(id: String) -> serde_json::Value {
     // Get existing vaults from the config
@@ -229,6 +264,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             get_config,
             add_vault,
+            edit_vault_name,
             remove_vault,
             show_in_explorer,
             test_func_see_allowed_scopes
