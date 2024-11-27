@@ -16,10 +16,11 @@ import {
   Plus,
   VaultIcon,
 } from "lucide-react"
-import { ComponentPropsWithoutRef } from "react"
+import { ComponentPropsWithoutRef, useState } from "react"
 import { Vault as VaultType, Vault } from "~/lib/backend-types.ts"
 import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
+import { useOpenVaultInManager } from "~/components/vault-manager/manage-vaults-dialog.tsx"
 
 interface VaultDropdownProps
   extends ComponentPropsWithoutRef<typeof DropdownMenu> {
@@ -28,6 +29,8 @@ interface VaultDropdownProps
 
 export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
   const uploadNoteFromDirs = useUploadNotesFromDirs()
+  const openVaultInManager = useOpenVaultInManager(vault.id)
+  const [open, setOpen] = useState<boolean>(false)
 
   // Duplicate code with parent
   const openVault = (vault: VaultType) => {
@@ -51,7 +54,7 @@ export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
   }
 
   return (
-    <DropdownMenu {...props}>
+    <DropdownMenu {...props} open={open} onOpenChange={setOpen}>
       <div className="flex justify-end items-center">
         <DropdownMenuTrigger asChild>
           <Button
@@ -105,9 +108,10 @@ export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
             className="flex items-center gap-2"
             onClick={(e) => {
               e.stopPropagation()
-              console.error("Not implemented")
+              // Have to control this, or it creates a bug where nothing is clickable after the dialog is closed.
+              setOpen(false)
+              openVaultInManager()
             }}
-            disabled
           >
             <FolderCog2 className="size-4" />
             <span>Manage vault</span>

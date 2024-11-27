@@ -50,7 +50,14 @@ import {
   VaultIcon,
   XIcon,
 } from "lucide-react"
-import { ButtonHTMLAttributes, forwardRef, useRef, useState } from "react"
+import React, {
+  ButtonHTMLAttributes,
+  forwardRef,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import useVaults from "~/hooks/use-vaults"
 import { Vault } from "~/lib/backend-types"
@@ -59,6 +66,8 @@ import { cn } from "@repo/ui/lib/utils"
 import { removeVault } from "~/lib/vaults.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
+
+const openInVaultManagerAtom = atom("")
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false)
@@ -77,6 +86,16 @@ const useManageVaultsDialogOpen = () => {
       setOpen(newOpen)
     },
   ] as const
+}
+
+export const useOpenVaultInManager = (vaultID: string) => {
+  const [, setOpen] = useManageVaultsDialogOpen()
+  const [, setTarget] = useAtom(openInVaultManagerAtom)
+
+  return () => {
+    setOpen(true)
+    setTarget(vaultID)
+  }
 }
 
 export const ManageVaultsDialogTrigger = ({
@@ -130,18 +149,43 @@ export const ManageVaultsDialogShortcut = () => {
 export default function ManageVaultsDialog() {
   const [open, setOpen] = useManageVaultsDialogOpen()
   const addNewVaultButtonRef = useRef<HTMLButtonElement>(null)
-  const vaultInputRef = useRef<HTMLInputElement>(null)
-  const addNewVaultTab = { id: "add-new-vault", label: "Add new vault" }
+  const vaultTabRef = useRef<HTMLDivElement>(null)
+  const addNewVaultTab = useMemo(
+    () => ({ id: "add-new-vault", label: "Add new vault" }),
+    []
+  )
   const { vaults, refetchVaults } = useVaults()
+  const [target] = useAtom(openInVaultManagerAtom)
 
   const [currentTab, setCurrentTab] = useState<{
     id: string
     label: string
-  }>(
-    vaults.length > 0
-      ? { id: vaults[0].id, label: vaults[0].name }
-      : addNewVaultTab
-  )
+  }>({ id: "", label: "" })
+
+  useEffect(() => {
+    // If there is a target find it in vaults list
+    const targetVault = target
+      ? vaults.find((vault) => vault.id === target)
+      : undefined
+
+    // If it was found then make into a tab object
+    let potentialVaultTab = targetVault
+      ? { id: targetVault.id, label: targetVault.name }
+      : undefined
+
+    // If we didn't find anything for target then check if there are any vaults in vault list, if there is at least one
+    // then use that for the current tab.
+    // Otherwise, the user has no vaults, chose addNewVaultTab as the currentTab
+    if (!potentialVaultTab) {
+      if (vaults.length > 0) {
+        potentialVaultTab = { id: vaults[0].id, label: vaults[0].name }
+      } else {
+        potentialVaultTab = addNewVaultTab
+      }
+    }
+
+    setCurrentTab(potentialVaultTab)
+  }, [target, vaults, setCurrentTab, addNewVaultTab])
 
   const onVaultCreated = async (createdVault: Vault | null) => {
     const refetchedVaults = await refetchVaults()
@@ -173,12 +217,22 @@ export default function ManageVaultsDialog() {
   }
 
   const handleChangeTab = (vault: Vault) => {
-    setCurrentTab({
-      id: vault.id,
-      label: vault.name,
-    })
+    if (currentTab.id !== vault.id) {
+      setCurrentTab({
+        id: vault.id,
+        label: vault.name,
+      })
+    }
+
+    vaultTabRef.current?.focus()
+  }
 
     vaultInputRef.current?.focus()
+  const currentVault = useMemo(
+    () => vaults.find((vault) => vault.id === currentTab.id),
+    [currentTab, vaults]
+  )
+
   }
 
   // Its a dialog instead of navigation aware dialog because it wasn't working properly with it, instead the hook to set the atom manages locking and unlocking note navigation
@@ -200,7 +254,7 @@ export default function ManageVaultsDialog() {
             <SidebarContent className="md:max-h-[360px] md:max-w-[550px] lg:max-w-[600px] ">
               <Button
                 className={
-                  "sr-only focus:not-sr-only focus:absolute focus:top-[3.5rem] focus:left-2 z-50 "
+                  "sr-only focus:not-sr-only focus:absolute focus:top-[3.7rem] focus:left-4 z-50 text-muted-foreground text-xs"
                 }
                 size={"lg"}
                 variant={"outline"}
@@ -263,6 +317,9 @@ export default function ManageVaultsDialog() {
                   onRemoveVault={onVaultRemoved}
                   vault={vaults.find((vault) => vault.id === currentTab.id)}
                   ref={vaultInputRef}
+                  vault={currentVault}
+                  ref={vaultTabRef}
+                  key={currentVault?.id}
                 />
               )}
             </div>
