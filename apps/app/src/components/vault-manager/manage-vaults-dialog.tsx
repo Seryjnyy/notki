@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/ui/dialog"
-import { InputWithIcons } from "@repo/ui/components/ui/input-with-icons"
+
 import { Label } from "@repo/ui/components/ui/label"
 import {
   Sidebar,
@@ -43,12 +43,9 @@ import {
   ArrowRight,
   ChevronDown,
   GalleryVerticalEnd,
-  Pencil,
   PlusIcon,
-  Save,
   Trash2,
   VaultIcon,
-  XIcon,
 } from "lucide-react"
 import React, {
   ButtonHTMLAttributes,
@@ -66,6 +63,7 @@ import { cn } from "@repo/ui/lib/utils"
 import { removeVault } from "~/lib/vaults.ts"
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { showInFileExplorer } from "~/lib/file-services/directory-service.ts"
+import EditVaultForm from "~/components/vault-manager/edit-vault-form.tsx"
 
 const openInVaultManagerAtom = atom("")
 
@@ -227,12 +225,16 @@ export default function ManageVaultsDialog() {
     vaultTabRef.current?.focus()
   }
 
-    vaultInputRef.current?.focus()
   const currentVault = useMemo(
     () => vaults.find((vault) => vault.id === currentTab.id),
     [currentTab, vaults]
   )
 
+  // When vault name gets updated make sure to update the current tab label
+  const onVaultUpdated = (vault: Vault) => {
+    if (currentTab.id === vault.id) {
+      setCurrentTab({ id: vault.id, label: vault.name })
+    }
   }
 
   // Its a dialog instead of navigation aware dialog because it wasn't working properly with it, instead the hook to set the atom manages locking and unlocking note navigation
@@ -315,8 +317,7 @@ export default function ManageVaultsDialog() {
                 <VaultTab
                   onOpenVault={onVaultOpened}
                   onRemoveVault={onVaultRemoved}
-                  vault={vaults.find((vault) => vault.id === currentTab.id)}
-                  ref={vaultInputRef}
+                  onVaultUpdated={onVaultUpdated}
                   vault={currentVault}
                   ref={vaultTabRef}
                   key={currentVault?.id}
@@ -334,11 +335,19 @@ interface VaultTabProps {
   vault: Vault | undefined
   onRemoveVault: (vault: Vault) => void
   onOpenVault: () => void
+  onVaultUpdated: (vault: Vault) => void
 }
 
-const VaultTab = forwardRef<HTMLInputElement, VaultTabProps>(
-  ({ vault, onRemoveVault, onOpenVault }, ref) => {
+// TODO : when the tab is opened it should focus on the tab so that user can skip the navigation list
+// but it doesn't work properly currently, it worked before adding the edit vault form.
+const VaultTab = forwardRef<HTMLDivElement, VaultTabProps>(
+  ({ vault, onRemoveVault, onOpenVault, onVaultUpdated }, ref) => {
     const uploadNoteFromDirs = useUploadNotesFromDirs()
+    const divRef = useRef<HTMLDivElement>()
+
+    useEffect(() => {
+      divRef.current?.focus()
+    }, [divRef])
 
     if (!vault) {
       return null
@@ -372,29 +381,15 @@ const VaultTab = forwardRef<HTMLInputElement, VaultTabProps>(
       showInFileExplorer(vault.filepath)
     }
     return (
-      <div className="flex flex-col  h-full">
+      <div className="flex flex-col  h-full" ref={ref}>
         <div className="pt-2 space-y-8">
           <div className="spacey-y-4">
-            <Label htmlFor="edit-vault-name">Vault name</Label>
-            <div className="flex flex-col gap-2 pt-2 ">
-              <InputWithIcons
-                id={"edit-vault-name"}
-                className="border border-secondary"
-                startIcon={<Pencil className="size-4" />}
-                value={vault.name}
-                ref={ref}
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <Button size={"sm"} variant={"secondary"}>
-                  <XIcon className="size-3 mr-2" />
-                  Cancel
-                </Button>
-                <Button size={"sm"}>
-                  <Save className="size-3 mr-2" />
-                  Save
-                </Button>
-              </div>
-            </div>
+            <EditVaultForm
+              vault={vault}
+              onSuccess={(vault) => {
+                if (vault) onVaultUpdated?.(vault)
+              }}
+            />
           </div>
 
           <div>

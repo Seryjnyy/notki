@@ -5,13 +5,12 @@ import { Config, Vault } from "./backend-types"
 // TODO : why is this in lib, why is it named vaults? This should be done better.
 
 // TODO : Fetching entire config then getting vaults, not great
+// https://github.com/tauri-apps/tauri/issues/3434
 export const getVaults = async (): Promise<Vault[]> => {
   try {
     // TODO : Should maybe validate JSON here
     const res = (await invoke("get_config")) as Config
-    const vaults = res.vaults
-
-    return vaults
+    return res.vaults
   } catch (err) {
     console.error("Failed to read get vaults", err)
     return []
@@ -47,4 +46,8 @@ export const addVault = async (
 
 export const removeVault = async (id: string) => {
   await invoke("remove_vault", { id: id })
+}
+
+export const editVaultName = async (id: string, name: string) => {
+  return (await invoke("edit_vault_name", { id: id, newName: name })) as Config
 }
