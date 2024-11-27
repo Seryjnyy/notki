@@ -43,6 +43,7 @@ export default function DropZone({
           size: file.size,
           lastModified: file.lastModified,
           characterCount: txt.length,
+          filepath: "",
         })
       }
 
