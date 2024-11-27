@@ -11,6 +11,8 @@ import FolderListItem from "./folder-list-item"
 import LandingCard from "./landing-card"
 import { ManageVaultsDialogTrigger } from "~/components/vault-manager/manage-vaults-dialog.tsx"
 import VaultDropdown from "~/components/sidebar/vault-dropdown.tsx"
+import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
+import { Vault as VaultType } from "~/lib/backend-types.ts"
 
 export default function Vaults() {
   return (
@@ -36,14 +38,23 @@ const VaultsList = () => {
   // After using dropdown menu and closing it the tooltip stays open
   // showTooltip is used to stop it from showing when dropdown is open, but doesn't fix the above problem
   const [showTooltip, setShowTooltip] = useState(true)
+  const uploadNoteFromDirs = useUploadNotesFromDirs()
 
+  // Duplicate code with parent
+  const openVault = (vault: VaultType) => {
+    uploadNoteFromDirs({
+      dirs: [vault.filepath],
+      recursive: true,
+      replace: true,
+    })
+  }
   return vaults.map((vault) => (
     <li key={vault.id}>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <FolderListItem>
-              <FolderListItem.Header>
+              <FolderListItem.Header onClick={() => openVault(vault)}>
                 <FolderListItem.Title>{vault.name}</FolderListItem.Title>
                 <FolderListItem.Desc>{vault.filepath}</FolderListItem.Desc>
               </FolderListItem.Header>
