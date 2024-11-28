@@ -12,11 +12,13 @@ import { NoteListProvider } from "@repo/ui/providers/note-list-provider"
 import Recents from "./landing/recents"
 import Vaults from "./landing/vaults"
 import BottomBar from "@repo/ui/components/navbar/bottom-bar"
+import { useAppInfo } from "~/hooks/use-app-info.ts"
 
 export default function MainPage() {
   const { notes } = useNotes()
   const hasNotes = notes.length > 0
   const { open: isSidebarOpen } = useSidebar()
+  const appInfo = useAppInfo()
 
   return (
     <main className="bg-background h-full overflow-hidden ">
@@ -45,7 +47,15 @@ export default function MainPage() {
             <Recents />
           </div>
 
-          <ThemeSwitcherList />
+          <div className={"flex justify-between items-center"}>
+            <ThemeSwitcherList />
+            {appInfo && (
+              <div className="flex gap-2 text-xs text-muted-foreground">
+                <span>{appInfo.name}</span>
+                <span className={""}>{appInfo.version}</span>
+              </div>
+            )}
+          </div>
         </section>
       )}
 
