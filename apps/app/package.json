@@ -10,7 +10,8 @@
     "build": "tauri build",
     "tauri": "tauri",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen-backend-types": "cargo install typeshare-cli && typeshare ./src-tauri --lang=typescript --output-file=./src/lib/backend-types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.4.0",
