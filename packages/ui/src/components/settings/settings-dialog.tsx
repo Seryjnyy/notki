@@ -1,10 +1,8 @@
 import { DialogTitle } from "@radix-ui/react-dialog"
-import { FontFamilyIcon } from "@radix-ui/react-icons"
 import {
   AVAILABLE_SHORTCUTS,
   useShortcutInfo,
 } from "@repo/lib/stores/shortcuts-store"
-import { useStyleStore } from "@repo/lib/stores/style-store"
 import { TabButton } from "@repo/ui/components/settings/tab-button"
 import TooltipShortcutKeys from "@repo/ui/components/shortcut/tooltip-shortcut-keys"
 import { Button } from "@repo/ui/components/ui/button"
@@ -25,27 +23,14 @@ import {
 import { useNavigationLock } from "@repo/ui/hooks/use-navigation-lock"
 import { cn } from "@repo/ui/lib/utils"
 import { atom, useAtom } from "jotai"
-import {
-  LayoutPanelLeft,
-  MenuIcon,
-  NotebookText,
-  PaintbrushIcon,
-  Scissors,
-  SettingsIcon,
-  XIcon,
-} from "lucide-react"
-import { useMemo, useState } from "react"
+import { MenuIcon, SettingsIcon, XIcon } from "lucide-react"
+import { useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import {
   Dialog,
   DialogDescription,
   DialogHeader,
 } from "../ui/dialog-controlled"
-import { AppearanceTab } from "./appearance-tab/appearance-tab"
-import { CardTab } from "./card-tab/card-tab"
-import { DisplayTab } from "./display-tab/display-tab"
-import { FontSelect } from "./font-tab/font-tab"
-import ShortcutTab from "./shortcut-tab/shortcut-tab"
 
 const settingsDialogOpenAtom = atom(false)
 const useSettingsDialogOpen = () => {
@@ -173,7 +158,7 @@ export const SettingsDialogHotkeyTrigger = () => {
 
   useHotkeys(
     toggleSettingsShortcut?.hotkeys.join(",") ?? "",
-    (e) => {
+    () => {
       setSettingsDialogOpen(!settingsDialogOpen)
     },
     { enabled: toggleSettingsShortcut?.enabled ?? false }

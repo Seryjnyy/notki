@@ -26,9 +26,10 @@ lazy_static! {
 // But works for now
 #[tauri::command]
 async fn show_in_explorer(path: String) {
+    // TODO : No error handling whatsoever
     #[cfg(target_os = "windows")]
     {
-        std::process::Command::new("explorer")
+        let _ = std::process::Command::new("explorer")
             .args(["/select,", &path])
             .spawn()
             .map_err(|e| e.to_string());
@@ -127,7 +128,6 @@ fn add_vault(name: String, filepath: String) -> serde_json::Value {
     println!("{:?}", vaults_copy);
     return config;
 }
-
 
 // TODO : lots of duplicate code with add_vault, remove_vault, edit_vault_name
 #[tauri::command]
@@ -232,7 +232,7 @@ fn find_config_path() {
         // If file does not exist then create one first
         if !config_file_exists {
             // Create config folder
-            if let Err(err) = fs::create_dir_all(&config_dir) {
+            if let Err(_err) = fs::create_dir_all(&config_dir) {
                 // TODO : Probably not good to just throw this
                 panic!("Failed to create the config folder.")
             }

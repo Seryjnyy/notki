@@ -1,18 +1,17 @@
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react"
 
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu"
 import {
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from "@repo/ui/components/ui/sidebar";
-import { useSidebarCurrentView } from "./app-sidebar";
-import { NavigationAwareDropdownMenu } from "@repo/ui/components/navigation-aware-components";
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@repo/ui/components/ui/sidebar"
+import { useSidebarCurrentView } from "./app-sidebar"
+import { NavigationAwareDropdownMenu } from "@repo/ui/components/navigation-aware-components"
 
 export function CurrentViewSwitcher() {
     const { currentView, setCurrentView, availableViews } =
