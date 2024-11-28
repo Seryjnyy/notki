@@ -65,6 +65,8 @@ import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { showInFileExplorer } from "~/lib/services/directory-service.ts"
 import EditVaultForm from "~/components/vault-manager/edit-vault-form.tsx"
 
+// TODO : Fast refresh only works when a file only exports components. react-refresh/only-export-components
+
 const openInVaultManagerAtom = atom("")
 
 // Duplicate logic with settings and open folder dialog

@@ -20,9 +20,10 @@ import {
   useRecentsStore,
 } from "~/stores/recents-store"
 import FolderListItem from "../landing/folder-list-item"
-import { useSidebarCurrentView } from "./app-sidebar"
+
 import { getFolderNameFromFilepath } from "~/lib/utils"
 import RecentDropdown from "~/components/sidebar/recent-dropdown.tsx"
+import { useSidebarCurrentView } from "~/components/sidebar/app-sidebar-context.tsx"
 
 export default function SidebarGroupRecents() {
   const { search } = useSidebarCurrentView()

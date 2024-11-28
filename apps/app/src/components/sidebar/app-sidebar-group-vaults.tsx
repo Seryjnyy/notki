@@ -17,7 +17,7 @@ import {
 import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
 import useVaults from "~/hooks/use-vaults"
 import FolderListItem from "../landing/folder-list-item"
-import { useSidebarCurrentView } from "./app-sidebar"
+import { useSidebarCurrentView } from "~/components/sidebar/app-sidebar-context.tsx"
 import VaultDropdown from "~/components/sidebar/vault-dropdown.tsx"
 
 export default function SidebarGroupVaults() {
