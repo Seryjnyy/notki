@@ -15,6 +15,7 @@ const defaults: State = {
     replace: true,
 };
 
+// TODO : im not really sure this is needed, only useful for persisting the setting
 const useUploadSettingsStoreBase = create<State & Actions>()(
     persist(
         (set) => ({

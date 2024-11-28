@@ -1,11 +1,15 @@
 import { mapShortcutKey } from "@repo/ui/lib/utils";
-import { useShortcutsStore } from "@repo/lib/stores/shortcuts-store";
+import { Shortcut, useShortcutsStore } from "@repo/lib/stores/shortcuts-store";
 import CheckSetting from "../check-setting";
 import { Setting } from "../setting";
 import { Button } from "@repo/ui/components/ui/button";
 
-export default function ShortcutTab() {
-    const shortcuts = useShortcutsStore.use.shortcuts();
+export default function ShortcutTab({
+    extraShortcuts = [],
+}: {
+    extraShortcuts?: Shortcut[];
+}) {
+    const shortcuts = useShortcutsStore.use.sharedShortcuts();
     const toggleShortcut = useShortcutsStore.use.toggleShortcut();
     const reset = useShortcutsStore.use.reset();
 
@@ -36,7 +40,7 @@ export default function ShortcutTab() {
                         Turn off all shortcuts
                     </Button>
                 </div>
-                {shortcuts.map((shortcut) => (
+                {[...shortcuts, ...extraShortcuts].map((shortcut) => (
                     <li key={shortcut.id}>
                         <CheckSetting
                             value={shortcut.enabled}

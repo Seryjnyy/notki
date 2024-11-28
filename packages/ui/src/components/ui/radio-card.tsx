@@ -30,6 +30,8 @@ export const RadioCardContent = (props: RadioCardContentProps) => {
 export type RadioCardProps = HTMLAttributes<HTMLButtonElement> & {
     isActive: boolean;
 };
+// TODO : not really a radio, idk how accessible this is
+// TODO : can easily change it to radix radios instead, I saved the code in txt on laptop
 export const RadioCard = ({
     isActive,
     className,
@@ -38,7 +40,7 @@ export const RadioCard = ({
     return (
         <button
             className={cn(
-                "cursor-pointer rounded-md px-4 py-2 text-left outline outline-1 outline-foreground/20 transition-all hover:bg-foreground/5 hover:outline-foreground focus:outline-2 focus:outline-foreground",
+                "cursor-pointer rounded-[var(--radius)] px-4 py-2 text-left outline outline-1 outline-foreground/20 transition-all hover:bg-foreground/5 hover:outline-foreground focus:outline-2 focus:outline-foreground",
                 {
                     "focus:outline-initial bg-primary/10 outline-2 focus:outline-4 outline-primary":
                         isActive,
