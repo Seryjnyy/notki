@@ -259,6 +259,27 @@ fn find_config_path() {
     }
 }
 
+#[derive(Serialize)]
+#[typeshare]
+pub struct PackageInfoSerializable {
+    name: String,
+    version: String, // Convert version to string for JSON compatibility
+    authors: &'static str,
+    description: &'static str,
+}
+
+#[tauri::command]
+fn get_app_info(app_handle: tauri::AppHandle) -> PackageInfoSerializable {
+    let package_info = app_handle.package_info();
+
+    PackageInfoSerializable {
+        name: package_info.name.clone(),
+        version: package_info.version.to_string(), // Convert `Version` to `String`
+        authors: package_info.authors,
+        description: package_info.description,
+    }
+}
+
 fn main() {
     find_config_path();
 
@@ -271,6 +292,7 @@ fn main() {
             edit_vault_name,
             remove_vault,
             show_in_explorer,
+            get_app_info,
             test_func_see_allowed_scopes
         ])
         .plugin(tauri_plugin_persisted_scope::init())
