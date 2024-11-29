@@ -17,7 +17,7 @@ export default function MainPage() {
   return (
     <main className="bg-background ">
       <header className="pt-4">
-        <h1 className="sr-only">Txt viewer</h1>
+        <h1 className="sr-only">notki</h1>
       </header>
 
       {!hasNotes && (

@@ -5,16 +5,16 @@
 ![Logo](/Images/banner.svg)
 
   <p align="center">
-    🖥️ txt-viewer is a desktop app for viewing your notes in a better way.
+    🖥️ notki is a desktop app for viewing your notes in a better way.
     </br>
     </br>
-    <a href="https://txt-viewer.netlify.app/"><strong>Visit the web app</strong></a>
+    <a href="https://notki-app.netlify.app/"><strong>Visit the web app</strong></a>
     ·
-    <a href="https://github.com/Seryjnyy/txt-viewer/releases"><strong>Download the desktop app</strong></a>
+    <a href="https://github.com/Seryjnyy/notki/releases"><strong>Download the desktop app</strong></a>
     <br />
-    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    <a href="https://github.com/Seryjnyy/notki/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
     ·
-    <a href="https://github.com/Seryjnyy/txt-viewer/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+    <a href="https://github.com/Seryjnyy/notki/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
   </p>
 </div>
 
@@ -89,7 +89,7 @@ WIP
 1. Clone the entire repository:
 
     ```
-    git clone https://github.com/Seryjnyy/txt-viewer.git
+    git clone https://github.com/Seryjnyy/notki.git
     ```
 
 2. Install dependencies

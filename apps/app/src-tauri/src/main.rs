@@ -223,7 +223,7 @@ fn test_func_see_allowed_scopes(app_handle: tauri::AppHandle) {
 }
 
 fn find_config_path() {
-    if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.txt-viewer") {
+    if let Some(proj_dirs) = ProjectDirs::from("com", "", "app.notki") {
         // Check if file exists
         let config_dir = proj_dirs.config_local_dir();
         let config_file_exists = config_dir

@@ -8,7 +8,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "txt-viewer",
+    "productName": "notki",
     "version": "0.1.0"
   },
   "tauri": {
@@ -66,8 +66,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "app.txt-viewer",
-      "longDescription": "A better way to view Windows notes.",
+      "identifier": "app.notki",
+      "longDescription": "A better way to view notes.",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -97,7 +97,7 @@
         "minWidth": 800,
         "minHeight": 500,
         "resizable": true,
-        "title": "txt-viewer",
+        "title": "notki",
         "width": 800,
         "decorations": false
 

@@ -1,3 +1,3 @@
 export const formatLocalStorageKey = (name: string) => {
-    return `txt-viewer:${name}`;
-};
+  return `notki:${name}`
+}

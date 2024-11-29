@@ -1,5 +1,5 @@
 {
-  "name": "txt-viewer",
+  "name": "notki",
   "private": true,
   "scripts": {
     "build-site": "turbo build-site",
