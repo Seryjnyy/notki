@@ -2,7 +2,7 @@
 <br />
 <div align="center">
 
-![Logo](/Images/banner.svg)
+![Logo](/Images/banner2.svg)
 
   <p align="center">
    🕸️ notki is a web app for viewing your notes in a better way.
