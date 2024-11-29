@@ -53,7 +53,6 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
 import useVaults from "~/hooks/use-vaults"
@@ -67,7 +66,7 @@ import EditVaultForm from "~/components/vault-manager/edit-vault-form.tsx"
 
 // TODO : Fast refresh only works when a file only exports components. react-refresh/only-export-components
 
-const openInVaultManagerAtom = atom("")
+const openInVaultManagerAtom = atom({ id: "", label: "" })
 
 // Duplicate logic with settings and open folder dialog
 const manageVaultsDialogOpenAtom = atom(false)
@@ -88,13 +87,13 @@ const useManageVaultsDialogOpen = () => {
   ] as const
 }
 
-export const useOpenVaultInManager = (vaultID: string) => {
+export const useOpenVaultInManager = (vault: Vault) => {
   const [, setOpen] = useManageVaultsDialogOpen()
   const [, setTarget] = useAtom(openInVaultManagerAtom)
 
   return () => {
     setOpen(true)
-    setTarget(vaultID)
+    setTarget({ id: vault.id, label: vault.name })
   }
 }
 
@@ -150,42 +149,19 @@ export default function ManageVaultsDialog() {
   const [open, setOpen] = useManageVaultsDialogOpen()
   const addNewVaultButtonRef = useRef<HTMLButtonElement>(null)
   const vaultTabRef = useRef<HTMLDivElement>(null)
+
   const addNewVaultTab = useMemo(
     () => ({ id: "add-new-vault", label: "Add new vault" }),
     []
   )
   const { vaults, refetchVaults } = useVaults()
-  const [target] = useAtom(openInVaultManagerAtom)
-
-  const [currentTab, setCurrentTab] = useState<{
-    id: string
-    label: string
-  }>({ id: "", label: "" })
+  const [target, setTarget] = useAtom(openInVaultManagerAtom)
 
   useEffect(() => {
-    // If there is a target find it in vaults list
-    const targetVault = target
-      ? vaults.find((vault) => vault.id === target)
-      : undefined
-
-    // If it was found then make into a tab object
-    let potentialVaultTab = targetVault
-      ? { id: targetVault.id, label: targetVault.name }
-      : undefined
-
-    // If we didn't find anything for target then check if there are any vaults in vault list, if there is at least one
-    // then use that for the current tab.
-    // Otherwise, the user has no vaults, chose addNewVaultTab as the currentTab
-    if (!potentialVaultTab) {
-      if (vaults.length > 0) {
-        potentialVaultTab = { id: vaults[0].id, label: vaults[0].name }
-      } else {
-        potentialVaultTab = addNewVaultTab
-      }
+    if (target.id === "" && target.label == "") {
+      setTarget(addNewVaultTab)
     }
-
-    setCurrentTab(potentialVaultTab)
-  }, [target, vaults, setCurrentTab, addNewVaultTab])
+  }, [target, setTarget, addNewVaultTab])
 
   const onVaultCreated = async (createdVault: Vault | null) => {
     const refetchedVaults = await refetchVaults()
@@ -196,7 +172,7 @@ export default function ManageVaultsDialog() {
       createdVault &&
       refetchedVaults.some((vault) => vault.id === createdVault.id)
     )
-      setCurrentTab({ id: createdVault.id, label: createdVault.name })
+      setTarget({ id: createdVault.id, label: createdVault.name })
   }
 
   const onVaultRemoved = async (vault: Vault) => {
@@ -204,7 +180,7 @@ export default function ManageVaultsDialog() {
 
     console.log("Vault", vault.name, "at", vault.filepath, "was removed.")
 
-    setCurrentTab({ id: "", label: "" })
+    setTarget({ id: "", label: "" })
   }
 
   const onVaultOpened = () => {
@@ -217,8 +193,8 @@ export default function ManageVaultsDialog() {
   }
 
   const handleChangeTab = (vault: Vault) => {
-    if (currentTab.id !== vault.id) {
-      setCurrentTab({
+    if (target.id !== vault.id) {
+      setTarget({
         id: vault.id,
         label: vault.name,
       })
@@ -228,14 +204,14 @@ export default function ManageVaultsDialog() {
   }
 
   const currentVault = useMemo(
-    () => vaults.find((vault) => vault.id === currentTab.id),
-    [currentTab, vaults]
+    () => vaults.find((vault) => vault.id === target.id),
+    [target, vaults]
   )
 
   // When vault name gets updated make sure to update the current tab label
   const onVaultUpdated = (vault: Vault) => {
-    if (currentTab.id === vault.id) {
-      setCurrentTab({ id: vault.id, label: vault.name })
+    if (target.id === vault.id) {
+      setTarget({ id: vault.id, label: vault.name })
     }
   }
 
@@ -273,7 +249,7 @@ export default function ManageVaultsDialog() {
                       <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton
                           asChild
-                          isActive={item.id === currentTab.id}
+                          isActive={item.id === target.id}
                         >
                           <Button
                             variant={"ghost"}
@@ -290,8 +266,8 @@ export default function ManageVaultsDialog() {
             </SidebarContent>
             <SidebarFooter>
               <Button
-                disabled={currentTab.id === addNewVaultTab.id}
-                onClick={() => setCurrentTab(addNewVaultTab)}
+                disabled={target.id === addNewVaultTab.id}
+                onClick={() => setTarget(addNewVaultTab)}
                 ref={addNewVaultButtonRef}
               >
                 <PlusIcon /> Add new vault
@@ -301,12 +277,10 @@ export default function ManageVaultsDialog() {
 
           <main className="flex h-full  md:max-h-[500px] md:max-w-[700px] lg:max-w-[800px] flex-1 flex-col overflow-hidden">
             <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-              <div className="flex items-center gap-2 px-4">
-                {currentTab.label}
-              </div>
+              <div className="flex items-center gap-2 px-4">{target.label}</div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0 ">
-              {currentTab.id === addNewVaultTab.id ? (
+              {target.id === addNewVaultTab.id ? (
                 <div className="space-y-12">
                   <div className="w-full justify-center flex pt-12">
                     <VaultIcon className="size-20" />
@@ -356,8 +330,8 @@ const VaultTab = forwardRef<HTMLDivElement, VaultTabProps>(
     }
 
     const handleRemoveVault = async () => {
-      await removeVault(vault.id)
       onRemoveVault(vault)
+      await removeVault(vault.id)
     }
 
     // TODO : duplicate code with app-sidebar-vaults

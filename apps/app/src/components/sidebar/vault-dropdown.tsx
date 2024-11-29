@@ -29,7 +29,7 @@ interface VaultDropdownProps
 
 export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
   const uploadNoteFromDirs = useUploadNotesFromDirs()
-  const openVaultInManager = useOpenVaultInManager(vault.id)
+  const openVaultInManager = useOpenVaultInManager(vault)
   const [open, setOpen] = useState<boolean>(false)
 
   // Duplicate code with parent
