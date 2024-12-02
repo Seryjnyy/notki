@@ -2,7 +2,7 @@
 <br />
 <div align="center">
 
-![Logo](/Images/banner2.svg)
+![Logo](/Images/banner.svg)
 
   <p align="center">
     notki is a  tool for viewing your notes in a better way.

@@ -2,7 +2,7 @@
 <br />
 <div align="center">
 
-![Logo](/Images/banner2.svg)
+![Logo](/Images/banner.svg)
 
   <p align="center">
     🖥️ notki is a desktop app for viewing your notes in a better way.
@@ -52,11 +52,11 @@ WIP
 
 ## Built with
 
--   React
--   Tauri v1
--   Vite
--   shadcn/ui
--   TailwindCSS
+- React
+- Tauri v1
+- Vite
+- shadcn/ui
+- TailwindCSS
 
 ## Project structure
 
@@ -68,47 +68,47 @@ WIP
 
 ## Folder Details
 
--   `app/src`: Frontend source folder.
--   `app/src-tauri`: Tauri source folder.
+- `app/src`: Frontend source folder.
+- `app/src-tauri`: Tauri source folder.
 
 ## Getting started
 
 ### Prerequisites
 
--   Node.js (>= 16)
--   npm (preferred) or another package manager
--   Tauri 1.0
-    -   For desktop app development.
-    -   Installation depends on platform.
-        -   [Windows](https://v1.tauri.app/v1/guides/getting-started/prerequisites)
-        -   [macOS](https://v1.tauri.app/v1/guides/getting-started/prerequisites#setting-up-macos)
-        -   [Linux](https://v1.tauri.app/v1/guides/getting-started/prerequisites#setting-up-macos)
+- Node.js (>= 16)
+- npm (preferred) or another package manager
+- Tauri 1.0
+  - For desktop app development.
+  - Installation depends on platform.
+    - [Windows](https://v1.tauri.app/v1/guides/getting-started/prerequisites)
+    - [macOS](https://v1.tauri.app/v1/guides/getting-started/prerequisites#setting-up-macos)
+    - [Linux](https://v1.tauri.app/v1/guides/getting-started/prerequisites#setting-up-macos)
 
 ### Installation
 
 1. Clone the entire repository:
 
-    ```
-    git clone https://github.com/Seryjnyy/notki.git
-    ```
+   ```
+   git clone https://github.com/Seryjnyy/notki.git
+   ```
 
 2. Install dependencies
 
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
 
 ### Running the project
 
--   Start the desktop app
-    1. Navigate to app.
-    ```
-      cd apps/app
-    ```
-    2. Start the app in development mode
-    ```
-    npm run dev
-    ```
+- Start the desktop app
+  1. Navigate to app.
+  ```
+    cd apps/app
+  ```
+  2. Start the app in development mode
+  ```
+  npm run dev
+  ```
 
 ## Scripts
 
@@ -124,8 +124,8 @@ WIP
 
 1. Build the Tauri app:
 
-    ```
-    npm run build --workspace=app
-    ```
+   ```
+   npm run build --workspace=app
+   ```
 
 2. Two installers in `apps/app/???` WIP

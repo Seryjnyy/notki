@@ -2,7 +2,7 @@
 <br />
 <div align="center">
 
-![Logo](/Images/banner2.svg)
+![Logo](/Images/banner.svg)
 
   <p align="center">
    🕸️ notki is a web app for viewing your notes in a better way.
@@ -51,47 +51,47 @@ WIP
 
 ## Built with
 
--   React
--   Vite
--   shadcn/ui
--   TailwindCSS
+- React
+- Vite
+- shadcn/ui
+- TailwindCSS
 
 ## Getting started
 
 ### Prerequisites
 
--   Node.js (>= 16)
--   npm (preferred) or another package manager
+- Node.js (>= 16)
+- npm (preferred) or another package manager
 
 ### Installation
 
 1. Clone the entire repository:
 
-    ```
-    git clone https://github.com/Seryjnyy/notki.git
-    ```
+   ```
+   git clone https://github.com/Seryjnyy/notki.git
+   ```
 
 2. Install dependencies
 
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
 
 ### Running the project
 
--   Start the web app
+- Start the web app
 
 1. Navigate to www folder:
 
-    ```
-      cd apps/www
-    ```
+   ```
+     cd apps/www
+   ```
 
 2. Start in development mode:
 
-    ```
-    npm run dev
-    ```
+   ```
+   npm run dev
+   ```
 
 ## Scripts
 
@@ -107,8 +107,8 @@ WIP
 
 1. Build the React app:
 
-    ```
-    npm run build
-    ```
+   ```
+   npm run build
+   ```
 
 2. Deploy the `apps/www/dist` directory to your hosting provider (e.g Vercel, Netlify).
