@@ -20,9 +20,12 @@ import ManageVaultsDialog, {
 import OpenFolderDialog, {
   OpenFolderDialogShortcut,
 } from "./components/sidebar/open-folder-dialog"
+import useFullscreenShortcut from "~/hooks/use-fullscreen-shortcut";
+
 
 function App() {
   const pcExclusiveShortcuts = useShortcutsStore.use.pcExclusiveShortcuts()
+  useFullscreenShortcut()
 
   const interceptedSettingTabs = useMemo(() => {
     const shortcutsTab = SETTINGS_TABS.find((tab) => tab.id === "shortcuts")
@@ -64,6 +67,7 @@ function App() {
           <OpenFolderDialog />
           <OpenFolderDialogShortcut />
         </SidebarProvider>
+
 
         <Toaster />
       </div>

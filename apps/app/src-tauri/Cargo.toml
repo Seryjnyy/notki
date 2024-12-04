@@ -18,7 +18,7 @@ tauri-build = { version = "1.5.2", features = [] }
 tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.6.3", features = [ "shell-open", "path-all", "fs-exists", "fs-read-file", "fs-read-dir", "fs-create-dir", "dialog-all", "fs-write-file", "window-close", "window-minimize", "window-unmaximize", "window-unminimize", "window-show", "window-maximize", "window-hide", "window-start-dragging", "devtools"] }
+tauri = { version = "1.6.3", features = [ "window-set-fullscreen", "shell-open", "path-all", "fs-exists", "fs-read-file", "fs-read-dir", "fs-create-dir", "dialog-all", "fs-write-file", "window-close", "window-minimize", "window-unmaximize", "window-unminimize", "window-show", "window-maximize", "window-hide", "window-start-dragging", "devtools"] }
 tauri-plugin-fs-extra = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 directories = "5.0"
 lazy_static = "1.4.0"

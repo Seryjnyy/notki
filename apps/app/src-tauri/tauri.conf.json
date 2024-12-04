@@ -23,6 +23,7 @@
         "minimize": true,
         "unmaximize": true,
         "unminimize": true,
+        "setFullscreen": true,
         "startDragging": true
       },
       "path": {
