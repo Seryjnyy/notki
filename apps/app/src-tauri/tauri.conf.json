@@ -24,7 +24,8 @@
         "unmaximize": true,
         "unminimize": true,
         "setFullscreen": true,
-        "startDragging": true
+        "startDragging": true,
+        "setResizable": true
       },
       "path": {
         "all": true
