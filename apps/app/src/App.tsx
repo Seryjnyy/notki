@@ -20,8 +20,10 @@ import ManageVaultsDialog, {
 import OpenFolderDialog, {
   OpenFolderDialogShortcut,
 } from "./components/sidebar/open-folder-dialog"
-import useFullscreenShortcut from "~/hooks/use-fullscreen-shortcut";
+import useFullscreenShortcut from "~/hooks/use-fullscreen-shortcut"
 
+import { AppWindow } from "lucide-react"
+import { WindowTab } from "~/components/settings/window-tab/window-tab"
 
 function App() {
   const pcExclusiveShortcuts = useShortcutsStore.use.pcExclusiveShortcuts()
@@ -37,9 +39,17 @@ function App() {
       comp: <ShortcutTab extraShortcuts={pcExclusiveShortcuts} />,
     }
 
+    const windowTab = {
+      id: "window",
+      label: "Window",
+      icon: <AppWindow className="h-4 w-4" />,
+      comp: <WindowTab />,
+    }
+
     return [
       ...SETTINGS_TABS.filter((tab) => tab.id !== "shortcuts"),
       newShortcutsTab,
+      windowTab,
     ]
   }, [pcExclusiveShortcuts])
 
@@ -67,7 +77,6 @@ function App() {
           <OpenFolderDialog />
           <OpenFolderDialogShortcut />
         </SidebarProvider>
-
 
         <Toaster />
       </div>

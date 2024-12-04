@@ -1,20 +1,19 @@
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@repo/ui/components/ui/button"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@repo/ui/components/ui/dialog";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { cn, formatThemeName } from "@repo/ui/lib/utils";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@repo/ui/components/ui/dialog"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { applyTheme, cn, formatThemeName } from "@repo/ui/lib/utils"
 
-import { Check, Palette, Search } from "lucide-react";
-import styleList from "@repo/ui/styles/theme-list.json";
-import { applyTheme } from "@repo/ui/lib/utils";
-import { useStyleStore } from "@repo/lib/stores/style-store";
-import { InputWithIcons } from "./ui/input-with-icons";
+import { Check, Palette, Search } from "lucide-react"
+import styleList from "@repo/ui/styles/theme-list.json"
+import { useStyleStore } from "@repo/lib/stores/style-store"
+import { InputWithIcons } from "./ui/input-with-icons"
 
 export const ThemeSwitcherList = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
