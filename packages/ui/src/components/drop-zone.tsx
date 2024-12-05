@@ -2,8 +2,7 @@ import { UploadIcon } from "@radix-ui/react-icons"
 import useUploadNotes from "@repo/lib/hooks/use-upload-notes"
 import { Note } from "@repo/lib/types/types"
 import { guidGenerator } from "@repo/lib/utils/metadata-utils"
-import { toast } from "@repo/ui/hooks/use-toast"
-import { useCallback, useEffect } from "react"
+import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 
 export default function DropZone({
@@ -24,16 +23,7 @@ export default function DropZone({
       const readInNotes: Note[] = []
 
       for (const file of acceptedFiles) {
-        console.log(file.type)
-        if (file.type != "text/plain") {
-          console.log("wrong type")
-          toast({
-            variant: "destructive",
-            title: "Wrong type of file provided",
-            description: `Only text/plain files allowed, you added a ${file.type}.`,
-          })
-          continue
-        }
+        if (file.type !== "text/plain") continue // Shouldn't happen, but just in case
 
         const txt = await file.text()
         readInNotes.push({
@@ -53,7 +43,12 @@ export default function DropZone({
     [uploadNotes, replace]
   )
 
+  // TODO: If toast messages or some feedback system gets implemented they maybe show something about accepted/rejected files, their count or something
+  // can use acceptedFiles, fileRejections
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      "text/plain": [".txt"],
+    },
     onDrop,
   })
 
