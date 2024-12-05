@@ -72,7 +72,7 @@ export default function MainPage() {
           </h2>
           <ErrorBoundary fallback={<SomethingWentWrong />}>
             <NoteListProvider>
-              <div className="mb-40 sm:mb-16 ">
+              <div className="pb-[10rem]">
                 <NoteViewSwitch />
               </div>
               <BottomBar variant={"absolute"} />
