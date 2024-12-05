@@ -3,7 +3,7 @@ import useUploadNotes from "@repo/lib/hooks/use-upload-notes"
 import { Note } from "@repo/lib/types/types"
 import { guidGenerator } from "@repo/lib/utils/metadata-utils"
 import { toast } from "@repo/ui/hooks/use-toast"
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
 
 export default function DropZone({
@@ -66,10 +66,10 @@ export default function DropZone({
         <input {...getInputProps()} className="border" />
         {isDragActive ? (
           <div className="flex justify-center items-center flex-col gap-4 select-none">
-            <div className="p-3 border rounded-full w-fit">
+            <div className="p-3 border rounded-[var(--radius)] w-fit">
               <UploadIcon className="h-8 w-8 text-muted-foreground" />
             </div>
-            <div className="flex items-center justify-center flex-col">
+            <div className="flex items-center justify-center flex-col text-center">
               <p>Drop the files here...</p>
             </div>
           </div>

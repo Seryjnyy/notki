@@ -101,7 +101,8 @@
         "resizable": true,
         "title": "notki",
         "width": 800,
-        "decorations": false
+        "decorations": false,
+        "fileDropEnabled": false
 
       }
     ]
