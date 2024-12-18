@@ -9,7 +9,8 @@ export const PC_APP_EXCLUSIVE_SHORTCUTS = {
   TOGGLE_SIDEBAR: "toggle-sidebar",
   TOGGLE_OPEN_FOLDER: "toggle-open-folder",
   TOGGLE_OPEN_MANAGE_VAULTS: "toggle-open-manage-vaults",
-  TOGGLE_FULLSCREEN:"toggle-fullscreen",
+  TOGGLE_FULLSCREEN: "toggle-fullscreen",
+  TOGGLE_QUICK_SETTINGS: "toggle-quick-settings",
 }
 
 export const AVAILABLE_SHORTCUTS = {
@@ -23,6 +24,7 @@ export const AVAILABLE_SHORTCUTS = {
   COPY_ALL_CONTENT: "copy-all-content",
   TOGGLE_SETTINGS: "toggle-settings",
   TOGGLE_BOTTOM_BAR: "toggle-bottom-bar",
+  REMOVE_CURRENT_NOTE: "remove-current-note",
   ...PC_APP_EXCLUSIVE_SHORTCUTS,
 } as const
 
@@ -115,6 +117,13 @@ const defaults: State = {
       label: "Toggle bottom bar",
       enabled: true,
     },
+    {
+      hotkeys: ["alt+w"],
+      defaultHotkeys: ["alt+w"],
+      id: AVAILABLE_SHORTCUTS.REMOVE_CURRENT_NOTE,
+      label: "Remove current note",
+      enabled: true,
+    },
   ],
   pcExclusiveShortcuts: [
     {
@@ -143,6 +152,13 @@ const defaults: State = {
       defaultHotkeys: ["f11"],
       id: AVAILABLE_SHORTCUTS.TOGGLE_FULLSCREEN,
       label: "Toggle fullscreen",
+      enabled: true,
+    },
+    {
+      hotkeys: ["ctrl+`"],
+      defaultHotkeys: ["ctrl+`"],
+      id: AVAILABLE_SHORTCUTS.TOGGLE_QUICK_SETTINGS,
+      label: "Toggle quick settings",
       enabled: true,
     },
   ],
