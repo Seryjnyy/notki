@@ -13,6 +13,7 @@ import Recents from "./landing/recents"
 import Vaults from "./landing/vaults"
 import BottomBar from "@repo/ui/components/navbar/bottom-bar"
 import { useAppInfo } from "~/hooks/use-app-info.ts"
+import NoteListShortcuts from "@repo/ui/components/display-notes/note-list-shortcuts"
 
 export default function MainPage() {
   const { notes } = useNotes()
@@ -76,6 +77,7 @@ export default function MainPage() {
                 <NoteViewSwitch />
               </div>
               <BottomBar variant={"absolute"} />
+              <NoteListShortcuts />
             </NoteListProvider>
           </ErrorBoundary>
         </section>

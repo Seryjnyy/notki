@@ -9,6 +9,7 @@ import BottomBar from "@repo/ui/components/navbar/bottom-bar"
 import SkipToNavLink from "@repo/ui/components/skip-to-nav-link"
 import SomethingWentWrong from "@repo/ui/components/something-went-wrong"
 import { NoteListProvider } from "@repo/ui/providers/note-list-provider"
+import NoteListShortcuts from "@repo/ui/components/display-notes/note-list-shortcuts"
 
 export default function MainPage() {
   const { notes } = useNotes()
@@ -46,6 +47,7 @@ export default function MainPage() {
                 <NoteViewSwitch />
               </div>
               <BottomBar variant={"fixed"} />
+              <NoteListShortcuts />
             </NoteListProvider>
           </ErrorBoundary>
         </section>

@@ -25,6 +25,7 @@ export const AVAILABLE_SHORTCUTS = {
   TOGGLE_SETTINGS: "toggle-settings",
   TOGGLE_BOTTOM_BAR: "toggle-bottom-bar",
   REMOVE_CURRENT_NOTE: "remove-current-note",
+  COPY_CURRENT_NOTE_CONTENT: "copy-current-note-content",
   ...PC_APP_EXCLUSIVE_SHORTCUTS,
 } as const
 
@@ -122,6 +123,13 @@ const defaults: State = {
       defaultHotkeys: ["alt+w"],
       id: AVAILABLE_SHORTCUTS.REMOVE_CURRENT_NOTE,
       label: "Remove current note",
+      enabled: true,
+    },
+    {
+      hotkeys: ["alt+c"],
+      defaultHotkeys: ["alt+c"],
+      id: AVAILABLE_SHORTCUTS.COPY_CURRENT_NOTE_CONTENT,
+      label: "Copy current note content",
       enabled: true,
     },
   ],

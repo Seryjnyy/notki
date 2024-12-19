@@ -3,6 +3,7 @@ import NoteCard from "@repo/ui/components/display-notes/note-card"
 import UserStyledList from "@repo/ui/components/display-notes/user-styled-list"
 import { useNoteList } from "@repo/ui/providers/note-list-provider"
 import { useRemoveCurrentNoteShortcut } from "@repo/ui/hooks/use-remove-current-note-shortcut"
+import { useCopyCurrentNoteContent } from "@repo/ui/hooks/use-copy-current-note-content"
 
 export default function NoteList({
   removeNote,
@@ -10,8 +11,6 @@ export default function NoteList({
   removeNote: (noteID: string) => void
 }) {
   const { notes, activeIndex, setActiveIndex, getRef } = useNoteList()
-  const currentNote = notes ? notes[activeIndex] : undefined
-  useRemoveCurrentNoteShortcut(currentNote ? currentNote.id : "")
 
   // TODO : rerenders everything every time notes are navigated, could be a issue with lots of notes
   // TODO : should this be virtualized? memoed?
