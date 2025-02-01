@@ -24,6 +24,7 @@ const HeaderTab = () => {
     toggleHeader,
     toggleRemove,
     toggleTitle,
+    toggleTitleSelectable,
     resetHeader,
   } = useNoteHeaderSettings()
 
@@ -50,6 +51,11 @@ const HeaderTab = () => {
           label="Remove visible"
           value={header.remove}
           onChange={toggleRemove}
+        />
+        <CheckSetting
+          label="Title selectable"
+          value={header.titleSelectable}
+          onChange={toggleTitleSelectable}
         />
       </TabContent>
     </>

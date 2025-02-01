@@ -38,8 +38,9 @@ const Header = ({
   return (
     <CardHeader className="flex flex-row items-center justify-between py-0 my-0 pt-2">
       <CardTitle
-        className={cn("text-muted-foreground select-none", {
+        className={cn("text-muted-foreground ", {
           "sr-only": !header.title,
+          "select-none": !header.titleSelectable,
         })}
       >
         <div className="max-w-[8rem] sm:max-w-[20rem] md:max-w-[24rem] lg:max-w-[32rem] xl:max-w-[36rem] overflow-x-clip ">
