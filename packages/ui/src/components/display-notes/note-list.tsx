@@ -2,8 +2,6 @@ import NoteCard from "@repo/ui/components/display-notes/note-card"
 
 import UserStyledList from "@repo/ui/components/display-notes/user-styled-list"
 import { useNoteList } from "@repo/ui/providers/note-list-provider"
-import { useRemoveCurrentNoteShortcut } from "@repo/ui/hooks/use-remove-current-note-shortcut"
-import { useCopyCurrentNoteContent } from "@repo/ui/hooks/use-copy-current-note-content"
 
 export default function NoteList({
   removeNote,
