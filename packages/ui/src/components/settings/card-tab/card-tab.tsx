@@ -15,6 +15,7 @@ import CheckSetting from "../check-setting"
 import { Setting } from "../setting"
 import { TabContent, TabTitle } from "../setting-tab"
 import SliderSetting from "../slider-setting"
+import useNoteStyleSettings from "@repo/lib/hooks/note-settings/use-note-style-settings"
 
 // TODO : is it bad that onChange is ignoring the value and just calling toggle?
 const HeaderTab = () => {
@@ -186,6 +187,27 @@ const PaddingTab = () => {
   )
 }
 
+const StyleTab = () => {
+  const { style, limits, updateElevation, resetElevation, resetStyle } =
+    useNoteStyleSettings()
+
+  return (
+    <>
+      <TabTitle onReset={resetStyle}>Style</TabTitle>
+
+      <TabContent>
+        <SliderSetting
+          label="Card elevation"
+          value={style.elevation}
+          limits={limits.elevation}
+          onChange={updateElevation}
+          onReset={resetElevation}
+        />
+      </TabContent>
+    </>
+  )
+}
+
 export const CardTab = () => {
   const reset = useNoteSettings.use.reset()
 
@@ -223,6 +245,7 @@ export const CardTab = () => {
           <TabsTrigger value="padding" className="w-[3.9rem] sm:w-fit ">
             Padding
           </TabsTrigger>
+          <TabsTrigger value="style">Style</TabsTrigger>
         </TabsList>
         <TabsContent value="header">
           <HeaderTab />
@@ -235,6 +258,9 @@ export const CardTab = () => {
         </TabsContent>
         <TabsContent value="padding">
           <PaddingTab />
+        </TabsContent>
+        <TabsContent value="style">
+          <StyleTab />
         </TabsContent>
       </Tabs>
     </Setting>
