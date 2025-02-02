@@ -157,12 +157,20 @@ export default function NoteCard({
   onDelete?: (id: string) => void
 }) {
   // TODO : how bad is drop shadow for performance? with lots of notes open it could tank it
-
+  // TODO : Added elevation similar to mui Paper component, but this code is hacky.
+  //   The div that provides the background only works when Card has a drop-shadow.
+  //   I do not know why that is, but will leave as is because there is no plan to remove drop-shadow for now, will
+  //   need to re-visit this if that changes.
   return (
-    <Card className="p-0 rounded-[var(--radius)] drop-shadow-md">
+    <Card className="p-0 rounded-[var(--radius)] drop-shadow-sm relative overflow-hidden">
       <Header note={note} onRemove={(note) => onDelete?.(note.id)} />
       <Content note={note} />
       <Footer note={note} />
+      <div
+        className={
+          " w-full h-full absolute top-0 left-0  -z-10 bg-background brightness-[80%]"
+        }
+      ></div>
     </Card>
   )
 }
