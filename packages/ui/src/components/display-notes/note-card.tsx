@@ -155,7 +155,9 @@ const CardBackground = () => {
 
   return (
     <div
-      className={" w-full h-full absolute top-0 left-0 -z-10 bg-background"}
+      className={
+        " w-full h-full absolute top-0 left-0 -z-10 bg-background  rounded-[var(--radius)]"
+      }
       style={{
         filter: `brightness(${style.elevation}%)`,
       }}
@@ -176,7 +178,7 @@ export default function NoteCard({
   //   I do not know why that is, but will leave as is because there is no plan to remove drop-shadow for now, will
   //   need to re-visit this if that changes.
   return (
-    <Card className="p-0 rounded-[var(--radius)] drop-shadow-sm relative overflow-hidden">
+    <Card className="p-0 rounded-[var(--radius)] drop-shadow-sm relative ">
       <Header note={note} onRemove={(note) => onDelete?.(note.id)} />
       <Content note={note} />
       <Footer note={note} />
