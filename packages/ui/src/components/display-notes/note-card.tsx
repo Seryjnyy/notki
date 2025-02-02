@@ -23,6 +23,7 @@ import useNoteFooterSettings from "@repo/lib/hooks/note-settings/use-note-footer
 import useNoteHeaderSettings from "@repo/lib/hooks/note-settings/use-note-header-settings"
 import useNotePaddingSettings from "@repo/lib/hooks/note-settings/use-note-padding-settings"
 import { cn } from "@repo/ui/lib/utils"
+import useNoteStyleSettings from "@repo/lib/hooks/note-settings/use-note-style-settings"
 
 const Header = ({
   note,
@@ -149,6 +150,19 @@ const Content = ({ note }: { note: Note }) => {
   )
 }
 
+const CardBackground = () => {
+  const { style } = useNoteStyleSettings()
+
+  return (
+    <div
+      className={" w-full h-full absolute top-0 left-0 -z-10 bg-background"}
+      style={{
+        filter: `brightness(${style.elevation}%)`,
+      }}
+    ></div>
+  )
+}
+
 export default function NoteCard({
   note,
   onDelete,
@@ -166,11 +180,7 @@ export default function NoteCard({
       <Header note={note} onRemove={(note) => onDelete?.(note.id)} />
       <Content note={note} />
       <Footer note={note} />
-      <div
-        className={
-          " w-full h-full absolute top-0 left-0  -z-10 bg-background brightness-[80%]"
-        }
-      ></div>
+      <CardBackground />
     </Card>
   )
 }
