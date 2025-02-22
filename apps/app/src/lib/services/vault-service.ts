@@ -48,6 +48,10 @@ export const removeVault = async (id: string) => {
   await invoke("remove_vault", { id: id })
 }
 
+export const removeVaultByPath = async (path: string) => {
+  await invoke("remove_vault_by_path", { path: path })
+}
+
 export const editVaultName = async (id: string, name: string) => {
   return (await invoke("edit_vault_name", { id: id, newName: name })) as Config
 }
