@@ -4,6 +4,7 @@ import { Note } from "@repo/lib/types/types"
 import { guidGenerator } from "@repo/lib/utils/metadata-utils"
 import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { useToast } from "@repo/ui/hooks/use-toast"
 
 export default function DropZone({
   onSuccess,
@@ -17,6 +18,7 @@ export default function DropZone({
   desc?: string
 }) {
   const uploadNotes = useUploadNotes()
+  const { toast } = useToast()
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -36,6 +38,11 @@ export default function DropZone({
           filepath: "",
         })
       }
+
+      toast({
+        title: "Reading in notes",
+        description: `Read in ${readInNotes.length} notes out of ${acceptedFiles.length} viable files.`,
+      })
 
       uploadNotes(readInNotes, replace)
       onSuccess?.()
