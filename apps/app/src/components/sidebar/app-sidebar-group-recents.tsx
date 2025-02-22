@@ -13,17 +13,13 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip"
 import * as React from "react"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
-import {
-  Recent,
-  useGetSortedRecents,
-  useRecentsStore,
-} from "~/stores/recents-store"
+import { Recent, useGetSortedRecents } from "~/stores/recents-store"
 import FolderListItem from "../landing/folder-list-item"
 
 import { getFolderNameFromFilepath } from "~/lib/utils"
 import RecentDropdown from "~/components/sidebar/recent-dropdown.tsx"
 import { useSidebarCurrentView } from "~/components/sidebar/app-sidebar-context.tsx"
+import { useUploadNotesFromRecents } from "~/hooks/use-upload-notes-from-recents"
 
 export default function SidebarGroupRecents() {
   const { search } = useSidebarCurrentView()
@@ -57,19 +53,15 @@ const RecentsList = ({ recents }: { recents: Recent[] }) => {
 // Very similar code to the vault list item
 const RecentItem = ({ recent }: { recent: Recent }) => {
   const [showTooltip, setShowTooltip] = React.useState(true)
-  const uploadNoteFromDirs = useUploadNotesFromDirs()
-  const addRecent = useRecentsStore.use.addRecent()
+  const uploadNotesFromRecents = useUploadNotesFromRecents()
 
   // Duplicate code with recent-dropdown
-  const openFolder = (recent: Recent) => {
-    uploadNoteFromDirs({
+  const openFolder = async (recent: Recent) => {
+    await uploadNotesFromRecents({
       dirs: [recent.path],
       recursive: recent.recursive ?? false,
       replace: true,
     })
-
-    // Updates recent entry to new last modified
-    addRecent(recent.path, recent.recursive)
   }
 
   const folderName = React.useMemo(

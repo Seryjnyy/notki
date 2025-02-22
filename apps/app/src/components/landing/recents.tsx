@@ -8,7 +8,6 @@ import {
 } from "@repo/ui/components/ui/tooltip"
 import { Infinity } from "lucide-react"
 import { useState } from "react"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
 
 import {
   Recent,
@@ -21,6 +20,7 @@ import LandingCard from "./landing-card"
 import { getFolderNameFromFilepath } from "~/lib/utils"
 import { OpenFolderDialogTrigger } from "~/components/sidebar/open-folder-dialog.tsx"
 import RecentDropdown from "~/components/sidebar/recent-dropdown.tsx"
+import { useUploadNotesFromRecents } from "~/hooks/use-upload-notes-from-recents"
 
 export default function Recents() {
   const clearRecents = useRecentsStore.use.clearRecents()
@@ -48,22 +48,18 @@ export default function Recents() {
 // unless reads are find, but i doubt it. Last resort can be the tauri persisted permission thingy
 const RecentsList = () => {
   const recents = useGetSortedRecents()
-  const uploadNotesFromDirs = useUploadNotesFromDirs()
-  const addRecent = useRecentsStore.use.addRecent()
+  const uploadNotesFromRecents = useUploadNotesFromRecents()
+
   // TODO : slightly annoying tooltip :/
   // After using dropdown menu and closing it the tooltip stays open
   // showTooltip is used to stop it from showing when dropdown is open, but doesn't fix the above problem
   const [showTooltip, setShowTooltip] = useState(true)
 
   const handleOpenRecent = async (recent: Recent) => {
-    // TODO : This part is repeated throughout the app, should be a single function
-    // to ensure that both are done together
-    // TODO : Should be checking if things were successful
-    await uploadNotesFromDirs({
+    await uploadNotesFromRecents({
       dirs: recent.path,
       recursive: recent.recursive,
     })
-    addRecent(recent.path, recent.recursive)
   }
 
   return recents.map((recent) => (

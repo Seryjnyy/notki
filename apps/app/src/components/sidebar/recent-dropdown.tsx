@@ -16,13 +16,13 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { ComponentPropsWithoutRef } from "react"
-
 import * as React from "react"
+import { ComponentPropsWithoutRef } from "react"
 import { getFolderNameFromFilepath } from "~/lib/utils.ts"
 import { Recent, useRecentsStore } from "~/stores/recents-store.ts"
 import { showInFileExplorer } from "~/lib/services/directory-service.ts"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
+import { useUploadNotesFromRecents } from "~/hooks/use-upload-notes-from-recents"
+
 interface RecentDropdownProps
   extends ComponentPropsWithoutRef<typeof DropdownMenu> {
   recent: Recent
@@ -33,8 +33,7 @@ export default function RecentDropdown({
   ...props
 }: RecentDropdownProps) {
   const removeRecent = useRecentsStore.use.removeRecent()
-  const uploadNoteFromDirs = useUploadNotesFromDirs()
-  const addRecent = useRecentsStore.use.addRecent()
+  const uploadNoteFromRecents = useUploadNotesFromRecents()
 
   const folderName = React.useMemo(
     () => getFolderNameFromFilepath(recent.path),
@@ -42,26 +41,20 @@ export default function RecentDropdown({
   )
 
   // Duplicate code with app-sidebar-recents
-  const openFolder = (recent: Recent) => {
-    uploadNoteFromDirs({
+  const openFolder = async (recent: Recent) => {
+    await uploadNoteFromRecents({
       dirs: [recent.path],
       recursive: recent.recursive ?? false,
       replace: true,
     })
-
-    // Updates recent entry to new last modified
-    addRecent(recent.path, recent.recursive)
   }
 
-  const addNotesFromFolder = (recent: Recent) => {
-    uploadNoteFromDirs({
+  const addNotesFromFolder = async (recent: Recent) => {
+    await uploadNoteFromRecents({
       dirs: [recent.path],
       recursive: recent.recursive ?? false,
       replace: false,
     })
-
-    // Updates recent entry to new last modified
-    addRecent(recent.path, recent.recursive)
   }
 
   const handleOpenInFileExplorer = (path: string) => {
