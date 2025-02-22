@@ -202,6 +202,39 @@ fn remove_vault(id: String) -> serde_json::Value {
 }
 
 #[tauri::command]
+fn remove_vault_by_path(path: String) -> serde_json::Value {
+    // Get existing vaults from the config
+    let mut config = get_config();
+    let vaults = config
+        .get("vaults")
+        .expect("Could not find vaults inside config.");
+    let mut vaults_copy = vaults.clone();
+
+    if let Some(vaults_arr) = vaults_copy.as_array_mut() {
+        vaults_arr.retain(|vault| {
+            vault
+                .get("filepath")
+                .and_then(|v| v.as_str())
+                .map_or(true, |vault_path| vault_path != path)
+        });
+
+        // Save config with new values
+        config["vaults"] = Value::Array(vaults_arr.clone());
+
+        let contents_updated_json =
+            serde_json::to_string_pretty(&config).expect("Failed to serialise content.");
+
+        let path = CONFIG_PATH.lock().unwrap();
+        fs::write(&*path, contents_updated_json)
+            .expect("Failed to write updated opened_tabs config.");
+    }
+
+    println!("{:?}", vaults_copy);
+    return config;
+}
+
+
+#[tauri::command]
 fn get_config() -> serde_json::Value {
     let temp_config_path = CONFIG_PATH.lock().unwrap();
     let file = fs::File::open(temp_config_path.as_path()).expect("file should open read only");
@@ -291,6 +324,7 @@ fn main() {
             add_vault,
             edit_vault_name,
             remove_vault,
+            remove_vault_by_path,
             show_in_explorer,
             get_app_info,
             test_func_see_allowed_scopes
