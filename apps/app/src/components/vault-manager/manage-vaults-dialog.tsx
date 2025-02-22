@@ -60,9 +60,9 @@ import { Vault } from "~/lib/backend-types"
 import { CreateVaultForm } from "./create-vault-form"
 import { cn } from "@repo/ui/lib/utils"
 import { removeVault } from "~/lib/services/vault-service.ts"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { showInFileExplorer } from "~/lib/services/directory-service.ts"
 import EditVaultForm from "~/components/vault-manager/edit-vault-form.tsx"
+import { useUploadNotesFromVaults } from "~/hooks/use-upload-notes-from-vaults"
 
 // TODO : Fast refresh only works when a file only exports components. react-refresh/only-export-components
 
@@ -145,6 +145,8 @@ export const ManageVaultsDialogShortcut = () => {
   return null
 }
 
+// TODO : When vault is first opened here, but then removed some where else then the "target" here doesn't get updated
+//  so the old tab name remains and its a blank page.
 export default function ManageVaultsDialog() {
   const [open, setOpen] = useManageVaultsDialogOpen()
   const addNewVaultButtonRef = useRef<HTMLButtonElement>(null)
@@ -314,11 +316,13 @@ interface VaultTabProps {
   onVaultUpdated: (vault: Vault) => void
 }
 
+// TODO : When vault is removed by outside source the tab doesn't update and stays on a empty tab
+
 // TODO : when the tab is opened it should focus on the tab so that user can skip the navigation list
 // but it doesn't work properly currently, it worked before adding the edit vault form.
 const VaultTab = forwardRef<HTMLDivElement, VaultTabProps>(
   ({ vault, onRemoveVault, onOpenVault, onVaultUpdated }, ref) => {
-    const uploadNoteFromDirs = useUploadNotesFromDirs()
+    const uploadNotesFromVaults = useUploadNotesFromVaults()
     const divRef = useRef<HTMLDivElement>()
 
     useEffect(() => {
@@ -336,7 +340,7 @@ const VaultTab = forwardRef<HTMLDivElement, VaultTabProps>(
 
     // TODO : duplicate code with app-sidebar-vaults
     const handleOpenByReplacing = () => {
-      uploadNoteFromDirs({
+      uploadNotesFromVaults({
         dirs: [vault.filepath],
         recursive: true,
         replace: true,
@@ -345,7 +349,7 @@ const VaultTab = forwardRef<HTMLDivElement, VaultTabProps>(
     }
 
     const handleOpenByAdding = () => {
-      uploadNoteFromDirs({
+      uploadNotesFromVaults({
         dirs: [vault.filepath],
         recursive: true,
         replace: false,

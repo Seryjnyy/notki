@@ -14,11 +14,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/components/ui/tooltip"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs"
 import useVaults from "~/hooks/use-vaults"
 import FolderListItem from "../landing/folder-list-item"
 import { useSidebarCurrentView } from "~/components/sidebar/app-sidebar-context.tsx"
 import VaultDropdown from "~/components/sidebar/vault-dropdown.tsx"
+import { useUploadNotesFromVaults } from "~/hooks/use-upload-notes-from-vaults"
 
 export default function SidebarGroupVaults() {
   const { search } = useSidebarCurrentView()
@@ -47,11 +47,11 @@ export default function SidebarGroupVaults() {
 
 const VaultItem = ({ vault }: { vault: VaultType }) => {
   const [showTooltip, setShowTooltip] = React.useState(true)
-  const uploadNoteFromDirs = useUploadNotesFromDirs()
+  const uploadNotesFromVaults = useUploadNotesFromVaults()
 
   // Vault dropdown also defines this function, duplicate code
   const openVault = (vault: VaultType) => {
-    uploadNoteFromDirs({
+    uploadNotesFromVaults({
       dirs: [vault.filepath],
       recursive: true,
       replace: true,

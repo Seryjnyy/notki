@@ -19,8 +19,8 @@ import {
 import { ComponentPropsWithoutRef, useState } from "react"
 import { Vault as VaultType, Vault } from "~/lib/backend-types.ts"
 import { showInFileExplorer } from "~/lib/services/directory-service.ts"
-import { useUploadNotesFromDirs } from "~/hooks/use-upload-notes-from-dirs.ts"
 import { useOpenVaultInManager } from "~/components/vault-manager/manage-vaults-dialog.tsx"
+import { useUploadNotesFromVaults } from "~/hooks/use-upload-notes-from-vaults"
 
 interface VaultDropdownProps
   extends ComponentPropsWithoutRef<typeof DropdownMenu> {
@@ -28,13 +28,13 @@ interface VaultDropdownProps
 }
 
 export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
-  const uploadNoteFromDirs = useUploadNotesFromDirs()
+  const uploadNotesFromVaults = useUploadNotesFromVaults()
   const openVaultInManager = useOpenVaultInManager(vault)
   const [open, setOpen] = useState<boolean>(false)
 
   // Duplicate code with parent
   const openVault = (vault: VaultType) => {
-    uploadNoteFromDirs({
+    uploadNotesFromVaults({
       dirs: [vault.filepath],
       recursive: true,
       replace: true,
@@ -42,7 +42,7 @@ export default function VaultDropdown({ vault, ...props }: VaultDropdownProps) {
   }
 
   const addNotesFromVault = (vault: VaultType) => {
-    uploadNoteFromDirs({
+    uploadNotesFromVaults({
       dirs: [vault.filepath],
       recursive: true,
       replace: false,
