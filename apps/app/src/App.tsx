@@ -1,5 +1,6 @@
 import { SETTINGS_TABS } from "@repo/ui/components/settings/setting-tabs"
 import { Toaster } from "@repo/ui/components/ui/toaster"
+
 import { useMemo } from "react"
 import Titlebar from "./components/ui/titlebar"
 import { useShortcutsStore } from "@repo/lib/stores/shortcuts-store"
@@ -28,6 +29,10 @@ import { WindowTab } from "~/components/settings/window-tab/window-tab"
 function App() {
   const pcExclusiveShortcuts = useShortcutsStore.use.pcExclusiveShortcuts()
   useFullscreenShortcut()
+
+  // Need to call this because changes to shortcuts in the code, like adding new shortcut, do not update the persisted
+  // values, this function call is a workaround.
+  useShortcutsStore.use.checkShortcuts()()
 
   const interceptedSettingTabs = useMemo(() => {
     const shortcutsTab = SETTINGS_TABS.find((tab) => tab.id === "shortcuts")

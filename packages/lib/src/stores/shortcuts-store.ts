@@ -174,6 +174,7 @@ const defaults: State = {
 
 interface Actions {
   toggleShortcut: (id: string, enabled?: boolean) => void
+  checkShortcuts: () => void
   reset: () => void
 }
 
@@ -192,6 +193,8 @@ const toggleShortcutEnabledHelper = (
   }
   return newShortcuts
 }
+
+let checked = false
 
 const useShortcutsStoreBase = create<State & Actions>()(
   persist(
@@ -234,6 +237,65 @@ const useShortcutsStoreBase = create<State & Actions>()(
         })
       },
       reset: () => set(defaults),
+      checkShortcuts: () => {
+        // This function should be run at least once at the start to refresh the stored shortcuts
+        // I think because they are stored in arrays they don't update properly when the code changes.
+        // So this goes through the default shortcuts and resets everything, keeping only the enabled setting, if the
+        // shortcut existed, and the hotkeys.
+
+        // Only check them once
+        if (checked) return
+
+        set((state) => {
+          {
+            checked = true
+
+            const checkedPcExclusiveShortcuts =
+              defaults.pcExclusiveShortcuts.map((defaultShortcut) => {
+                const storedShortcut = state.pcExclusiveShortcuts.find(
+                  (shortcut) => shortcut.id === defaultShortcut.id
+                )
+
+                if (storedShortcut) {
+                  return {
+                    id: defaultShortcut.id,
+                    label: defaultShortcut.label,
+                    enabled: storedShortcut.enabled,
+                    defaultHotkeys: defaultShortcut.defaultHotkeys,
+                    hotkeys: storedShortcut.defaultHotkeys, // Currently can't change shortcut hotkey, but user can change in local storage, so letting that persist
+                  }
+                } else {
+                  return defaultShortcut
+                }
+              })
+
+            const checkedSharedShortcuts = defaults.sharedShortcuts.map(
+              (defaultShortcut) => {
+                const storedShortcut = state.sharedShortcuts.find(
+                  (shortcut) => shortcut.id === defaultShortcut.id
+                )
+
+                if (storedShortcut) {
+                  return {
+                    id: defaultShortcut.id,
+                    label: defaultShortcut.label,
+                    enabled: storedShortcut.enabled,
+                    defaultHotkeys: defaultShortcut.defaultHotkeys,
+                    hotkeys: storedShortcut.defaultHotkeys, // Currently can't change shortcut hotkey, but user can change in local storage, so letting that persist
+                  }
+                } else {
+                  return defaultShortcut
+                }
+              }
+            )
+
+            return {
+              sharedShortcuts: checkedSharedShortcuts,
+              pcExclusiveShortcuts: checkedPcExclusiveShortcuts,
+            }
+          }
+        })
+      },
     }),
     {
       name: formatLocalStorageKey("shortcuts-store"),
