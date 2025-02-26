@@ -10,7 +10,6 @@ export const PC_APP_EXCLUSIVE_SHORTCUTS = {
   TOGGLE_OPEN_FOLDER: "toggle-open-folder",
   TOGGLE_OPEN_MANAGE_VAULTS: "toggle-open-manage-vaults",
   TOGGLE_FULLSCREEN: "toggle-fullscreen",
-  TOGGLE_QUICK_SETTINGS: "toggle-quick-settings",
 }
 
 export const AVAILABLE_SHORTCUTS = {
@@ -160,13 +159,6 @@ const defaults: State = {
       defaultHotkeys: ["f11"],
       id: AVAILABLE_SHORTCUTS.TOGGLE_FULLSCREEN,
       label: "Toggle fullscreen",
-      enabled: true,
-    },
-    {
-      hotkeys: ["ctrl+`"],
-      defaultHotkeys: ["ctrl+`"],
-      id: AVAILABLE_SHORTCUTS.TOGGLE_QUICK_SETTINGS,
-      label: "Toggle quick settings",
       enabled: true,
     },
   ],
