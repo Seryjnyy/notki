@@ -27,6 +27,12 @@ import {
 } from "@repo/ui/components/ui/tooltip";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, Filter } from "lucide-react";
 import { ReactNode } from "react";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpNarrowWide,
+  Dice5,
+  Filter,
+} from "lucide-react"
 const Order = () => {
     const sortOrder = useNoteFilterStore.use.sortOrder();
     const setSortOrder = useNoteFilterStore.use.setSortOrder();
@@ -96,6 +102,29 @@ const SortBy = () => {
     );
 };
 
+const RandomOrder = () => {
+  const setIsRandomOrder = useNoteFilterStore.use.setIsRandomOrder()
+  const isRandomOrder = useNoteFilterStore.use.isRandomOrder()
+
+  return (
+    <div>
+      <Label htmlFor="randomise-order">Randomise order</Label>
+      <div className="flex items-center gap-2 flex-wrap">
+        <RadioCard
+          id={"randomise-order"}
+          isActive={isRandomOrder}
+          onClick={() => setIsRandomOrder(!isRandomOrder)}
+        >
+          <RadioCardTitle className={"flex items-center gap-2"}>
+            <Dice5 />
+            <span>Randomise</span>
+          </RadioCardTitle>
+        </RadioCard>
+      </div>
+    </div>
+  )
+}
+
 export default function FilterSortDialog() {
     const sortBy = useNoteFilterStore.use.sortBy();
     const toggleFilterSortDialogShortcut = useShortcutInfo(
@@ -147,4 +176,5 @@ export default function FilterSortDialog() {
             </DialogContent>
         </NavigationAwareDialog>
     );
+          <RandomOrder />
 }

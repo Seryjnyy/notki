@@ -29,12 +29,14 @@ type NoteFilterState = {
     sortBy: SortBy;
     sortOrder: SortOrder;
 };
+  isRandomOrder: boolean
 
 interface NoteFilterActions {
     setFilter: (newFilter: string) => void;
     setSortBy: (newSortBy: SortBy) => void;
     setSortOrder: (newSortOrder: SortOrder) => void;
     setSearchIn: (newSearchIn: SearchIn) => void;
+  setIsRandomOrder: (newIsRandomOrder: boolean) => void
 }
 
 const noteFilterDefaults: NoteFilterState = {
@@ -43,6 +45,7 @@ const noteFilterDefaults: NoteFilterState = {
     sortBy: "time",
     sortOrder: "asc",
 };
+  isRandomOrder: false,
 
 // TODO : should this store be persisted? maybe in session storage.
 const useNoteFilterStoreBase = create<NoteFilterState & NoteFilterActions>()(
@@ -54,6 +57,9 @@ const useNoteFilterStoreBase = create<NoteFilterState & NoteFilterActions>()(
         setSearchIn: (searchIn) => set(() => ({ searchIn: searchIn })),
     })
 );
+    setIsRandomOrder: (isRandomOrder) =>
+      set(() => ({ isRandomOrder: isRandomOrder })),
+  })
 
 // TODO : Idk if this is considered best practice, its a normal hook but is okay?
 const useFilteredNotes = () => {
@@ -62,6 +68,11 @@ const useFilteredNotes = () => {
     const sortBy = useNoteFilterStore.use.sortBy();
     const sortOrder = useNoteFilterStore.use.sortOrder();
     const searchIn = useNoteFilterStore.use.searchIn();
+  const isRandomOrder = useNoteFilterStore.use.isRandomOrder()
+
+  if (isRandomOrder) {
+    return shuffle<Note>(notes)
+  }
 
     return notes
         .filter((note) => {
